@@ -19,7 +19,7 @@ void loop() {
 	if (millis() - time >= 500) {
 		time = millis();
 		float avg = 0.0;
-		for (int i = 0; i < buffer.size(); i++) {
+		for (unsigned int i = 0; i < buffer.size(); i++) {
 			avg += buffer[i] / buffer.size();
 		}
 		Serial.print("Average is ");
