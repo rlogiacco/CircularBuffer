@@ -27,7 +27,7 @@ CircularBuffer<T,S>::~CircularBuffer() {
 }
 
 template<typename T, __CB_ST__ S> 
-bool CircularBuffer<T,S>::push(T value) {
+bool CircularBuffer<T,S>::unshift(T value) {
 	if (head == buffer) {
 		head = buffer + S;
 	}
@@ -46,7 +46,7 @@ bool CircularBuffer<T,S>::push(T value) {
 }
 
 template<typename T, __CB_ST__ S> 
-bool CircularBuffer<T,S>::append(T value) {
+bool CircularBuffer<T,S>::push(T value) {
 	if (++tail == buffer + S) {
 		tail = buffer;
 	}
@@ -65,7 +65,7 @@ bool CircularBuffer<T,S>::append(T value) {
 }
 
 template<typename T, __CB_ST__ S> 
-T CircularBuffer<T,S>::pop() {
+T CircularBuffer<T,S>::shift() {
 	T result = *head++;
 	if (head == buffer + S) {
 		head = buffer;
@@ -75,7 +75,7 @@ T CircularBuffer<T,S>::pop() {
 }
 
 template<typename T, __CB_ST__ S> 
-T CircularBuffer<T,S>::pull() {
+T CircularBuffer<T,S>::pop() {
 	T result = *tail--;
 	if (tail == buffer) {
 		tail = buffer + S - 1;
@@ -121,6 +121,7 @@ bool inline CircularBuffer<T,S>::isFull() {
 
 template<typename T, __CB_ST__ S> 
 void inline CircularBuffer<T,S>::clear() {
+	memset(buffer, 0, S);
 	head = tail = buffer;
 	count = 0;
 }

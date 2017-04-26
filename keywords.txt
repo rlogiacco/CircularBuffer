@@ -1,5 +1,5 @@
 #######################################
-# AgileButtons
+# CircularBuffer
 #######################################
 
 #######################################
@@ -13,9 +13,9 @@ CircularBuffer	KEYWORD1
 #######################################
 
 push	KEYWORD2
-append	KEYWORD2
+shift	KEYWORD2
 pop	KEYWORD2
-pull	KEYWORD2
+unshift	KEYWORD2
 first	KEYWORD2
 last	KEYWORD2
 size	KEYWORD2

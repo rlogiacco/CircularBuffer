@@ -1,20 +1,21 @@
 #include <CircularBuffer.h>
 
-CircularBuffer<int, 100> buffer;
+CircularBuffer<int, 10> buffer;
 
 unsigned long time = 0;
 
+#define SAMPLE_PIN A0
+
 void setup() {
 	Serial.begin(9600);
-	pinMode(A0, INPUT);
+	pinMode(SAMPLE_PIN, INPUT);
 	time = millis();
 }
 
-// samples A0 and prints the average of the latest hundred samples to console every 500ms
-
 void loop() {
+	// samples A0 and prints the average of the latest hundred samples to console every 500ms
 	int reading = analogRead(A0);
-	buffer.append(reading);
+	buffer.push(reading);
 
 	if (millis() - time >= 500) {
 		time = millis();

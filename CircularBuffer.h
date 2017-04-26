@@ -36,32 +36,30 @@ public:
 	/**
 	 * Adds an element to the beginning of buffer: the operation returns `false` if the addition caused overwriting an existing element.
 	 */
-	bool push(T value);
+	bool unshift(T value);
 
 	/**
 	 * Adds an element to the end of buffer: the operation returns `false` if the addition caused overwriting an existing element.
 	 */
-	bool append(T value);
+	bool push(T value);
 
 	/**
 	 * Removes an element from the beginning of the buffer.
 	 */
-	T pop();
+	T shift();
 
 	/**
 	 * Removes an element from the end of the buffer.
 	 */
-	T pull();
+	T pop();
 
 	/**
 	 * Returns the element at the beginning of the buffer.
-	 * Like pop(), but it doesn't remove the element.
 	 */
 	T inline first();
 
 	/**
 	 * Returns the element at the end of the buffer.
-	 * Like poll(), but it doesn't remove the element.
 	 */
 	T inline last();
 
