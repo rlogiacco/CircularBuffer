@@ -49,7 +49,7 @@ You can keep adding data beyond the buffer maximum capacity, but you'll lose the
 * since `shift()` adds to the _head_, adding beyond capacity causes the element at _tail_ being overwritten and lost
 * since `push()` adds to the _tail_, adding beyond capacity causes the element at _head_ being overwritten and lost
 
-Both `shift()` and `push()` return `true` if the addition didn't cause any information loss, `false` if an overwrite occurred
+Both `shift()` and `push()` return `true` if the addition didn't cause any information loss, `false` if an overwrite occurred:
 
 ``` cpp
 CircularBuffer<int,5> buffer;
@@ -77,7 +77,7 @@ Non destrucitve read operations are also available:
 * `last()` return the element at _tail_
 * an array-like indexed read operation is also available so you can read any element in the buffer using the `[]` operator
 
-In all cases reading data beyond the buffer actual size has an undefined behaviour and is user responsibility to prevent such boundary violations using the additional operations listed below.
+In all cases reading data beyond the buffer actual size has an undefined behaviour and is user's responsibility to prevent such boundary violations using the _additional operations_ listed in the next section.
 
 ``` cpp
 CircularBuffer<char, 50> buffer; // ['a','b','c','d','e','f','g']
