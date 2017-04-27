@@ -3,9 +3,9 @@ CircularBuffer [![Build Status][travis-status]][travis]
 [travis]: https://travis-ci.org/rlogiacco/CircularBuffer
 [travis-status]: https://travis-ci.org/rlogiacco/CircularBuffer.svg?branch=master
 
-By default the library uses `unsigned int` indexes, allowing for a maximum of 65536 items, but you'll rarely need such a huge store. Defining the `CIRCULAR_BUFFER_XS` macro you can reduce the library indexes to `unsigned short` with no actual impact on the memory used by the library itself, but allowing to squeez out those few extra bytes whenever you perform indexed access, if you do any. Obviously the consequence is having a maximum element capacity of 512 items, still plenty in most cases.
+By default the library uses `unsigned int` indexes, allowing for a maximum of 65536 items, but you'll rarely need such a huge store. Defining the `CIRCULAR_BUFFER_XS` macro you can reduce the library indexes to `unsigned short` with no actual impact on the memory used by the library itself, but allowing you to squeeze out those few extra bytes whenever you perform indexed access, if you do any. Obviously the consequence is having a maximum element capacity of 512 items, still plenty in most cases.
 
-The library itself has an implicit memory consumption of about *0.5Kb*: 580b (max) of code and 8b of memory, to my calculations. That doesn not consider the space used to store the items themselves, obviously.
+The library itself has an implicit memory consumption of about *0.5Kb*: 580b (max) of code and 8b of memory, to my calculations. That does not consider the space used to store the items themselves, obviously.
 
 Usage
 ============
@@ -42,12 +42,12 @@ Please note the reduced memory usage will not occur unless you were using the ar
 2. Store data
 ------------------------
 
-Let's star making things clear: the library doesn't support inserting data in the middle of the buffer.
+Let's start making things clear: the library doesn't support inserting data in the middle of the buffer.
 You can add data to the buffer either before the first element via a `shift()` operation or after the last element via a `push()` operation.
 You can keep adding data beyond the buffer maximum capacity, but you'll lose the least significant information:
 
-* since `shift()` adds to the _head_, adding beyond capacity causes the element at _tail_ being overwritten and lost
-* since `push()` adds to the _tail_, adding beyond capacity causes the element at _head_ being overwritten and lost
+* since `shift()` adds to the _head_, adding beyond capacity causes the element at _tail_ to be overwritten and lost
+* since `push()` adds to the _tail_, adding beyond capacity causes the element at _head_ to be overwritten and lost
 
 Both `shift()` and `push()` return `true` if the addition didn't cause any information loss, `false` if an overwrite occurred:
 
@@ -69,15 +69,15 @@ buffer.push(-5);  // [2,3,2,1,-5] returns false
 3. Retrieve data
 ------------------------
 
-Similarly to data addition, data retrieval can be performed at _tail_ via a `pop()` operation or from _head_ via an `unshift()` operation: both causes the element being read to be removed from the buffer.
+Similarly to data addition, data retrieval can be performed at _tail_ via a `pop()` operation or from _head_ via an `unshift()` operation: both cause the element being read to be removed from the buffer.
 
-Non destrucitve read operations are also available:
+Non-destructive read operations are also available:
 
 * `first()` returns the element at _head_
 * `last()` return the element at _tail_
 * an array-like indexed read operation is also available so you can read any element in the buffer using the `[]` operator
 
-In all cases reading data beyond the buffer actual size has an undefined behaviour and is user's responsibility to prevent such boundary violations using the _additional operations_ listed in the next section.
+In all cases reading data beyond the actual buffer size has an undefined behaviour and is user's responsibility to prevent such boundary violations using the _additional operations_ listed in the next section.
 
 ``` cpp
 CircularBuffer<char, 50> buffer; // ['a','b','c','d','e','f','g']
@@ -100,6 +100,6 @@ buffer[10]; // ['c','d','e'] returned value is undefined
 
 * `isEmpty()` returns `true` only if no data is stored in the buffer
 * `isFull()` returns `true` if no data can be further added to the buffer without causing overwrites/data loss
-* `size()` returns the number of elements currently stored in the buffer; it should be used in conjuction with the `[]` operator to avoid boundary violations: the first element index is always `0` (if buffer is not empty), the last element index is always `size() - 1`
+* `size()` returns the number of elements currently stored in the buffer; it should be used in conjunction with the `[]` operator to avoid boundary violations: the first element index is always `0` (if buffer is not empty), the last element index is always `size() - 1`
 * `available()` returns the number of elements that can be added before saturating the buffer
 * `clear()` resets the whole buffer to its initial state removing all elements
