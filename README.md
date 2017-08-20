@@ -43,26 +43,26 @@ Please note the reduced memory usage will not occur unless you were using the ar
 ------------------------
 
 Let's start making things clear: the library doesn't support inserting data in the middle of the buffer.
-You can add data to the buffer either before the first element via a `shift()` operation or after the last element via a `push()` operation.
+You can add data to the buffer either before the first element via an `unshift()` operation or after the last element via a `push()` operation.
 You can keep adding data beyond the buffer maximum capacity, but you'll lose the least significant information:
 
-* since `shift()` adds to the _head_, adding beyond capacity causes the element at _tail_ to be overwritten and lost
+* since `unshift()` adds to the _head_, adding beyond capacity causes the element at _tail_ to be overwritten and lost
 * since `push()` adds to the _tail_, adding beyond capacity causes the element at _head_ to be overwritten and lost
 
-Both `shift()` and `push()` return `true` if the addition didn't cause any information loss, `false` if an overwrite occurred:
+Both `unshift()` and `push()` return `true` if the addition didn't cause any information loss, `false` if an overwrite occurred:
 
 ``` cpp
-CircularBuffer<int,5> buffer;
+CircularBuffer<int,5> buffer; // buffer capacity is 5
 
 // all of the following return true
 buffer.shift(1); // [1] 
-buffer.shift(2); // [2,1]
-buffer.shift(3); // [3,2,1]
+buffer.unshift(2); // [2,1]
+buffer.unshift(3); // [3,2,1]
 buffer.push(0);  // [3,2,1,0]
 buffer.push(5);  // [3,2,1,0,5]
 
-buffer.shift(2);  // [2,3,2,1,0] returns false
-buffer.shift(10); // [10,2,3,2,1] returns false
+buffer.unshift(2);  // [2,3,2,1,0] returns false
+buffer.unshift(10); // [10,2,3,2,1] returns false
 buffer.push(-5);  // [2,3,2,1,-5] returns false
 ```
 
@@ -87,8 +87,8 @@ buffer.first(); // ['a','b','c','d','e','f','g'] returns 'a'
 buffer.last(); // ['a','b','c','d','e','f','g'] returns 'g'
 buffer.pop(); // ['a','b','c','d','e','f'] returns 'g'
 buffer.pop(); // ['a','b','c','d','e'] returns 'f'
-buffer.unshift(); // ['b','c','d','e'] returns 'a'
-buffer.unshift(); // ['c','d','e'] returns 'b'
+buffer.shift(); // ['b','c','d','e'] returns 'a'
+buffer.shift(); // ['c','d','e'] returns 'b'
 buffer[0]; // ['c','d','e'] returns 'c'
 buffer[1]; // ['c','d','e'] returns 'd'
 buffer[2]; // ['c','d','e'] returns 'e'
