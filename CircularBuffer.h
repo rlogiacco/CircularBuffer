@@ -79,6 +79,11 @@ public:
 	__CB_ST__ inline available();
 
 	/**
+	 * Returns how many elements can be potentially stored into the buffer.
+	 */
+	__CB_ST__ inline capacity();
+
+	/**
 	 * Returns `true` if no elements can be removed from the buffer.
 	 */
 	bool inline isEmpty();

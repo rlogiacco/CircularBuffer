@@ -114,6 +114,11 @@ __CB_ST__ inline CircularBuffer<T,S>::available() {
 }
 
 template<typename T, __CB_ST__ S> 
+__CB_ST__ inline CircularBuffer<T,S>::capacity() {
+	return S;
+}
+
+template<typename T, __CB_ST__ S> 
 bool inline CircularBuffer<T,S>::isEmpty() {
 	return count == 0;
 }
