@@ -69,7 +69,7 @@ T CircularBuffer<T,S>::shift() {
 	void(* crash) (void) = 0;
 	if (count <= 0) crash();
 	T result = *head++;
-	if (head == buffer + S) {
+	if (head >= buffer + S) {
 		head = buffer;
 	}
 	count--;
@@ -81,7 +81,7 @@ T CircularBuffer<T,S>::pop() {
 	void(* crash) (void) = 0;
 	if (count <= 0) crash();
 	T result = *tail--;
-	if (tail == buffer) {
+	if (tail <= buffer) {
 		tail = buffer + S - 1;
 	}
 	count--;
