@@ -99,6 +99,10 @@ public:
 	 */
 	void inline clear();
 
+	#ifdef CIRCULAR_BUFFER_DEBUG
+	void inline debug();
+	#endif
+
 private:
 	T buffer[S];
 	T *head;

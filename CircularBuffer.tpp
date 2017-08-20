@@ -134,3 +134,22 @@ void inline CircularBuffer<T,S>::clear() {
 	head = tail = buffer;
 	count = 0;
 }
+
+#ifdef CIRCULAR_BUFFER_DEBUG
+template<typename T, __CB_ST__ S> 
+void inline CircularBuffer<T,S>::debug() {
+	for (__CB_ST__ i = 0; i < S; i++) {
+		int hex = (int)buffer + i;
+		Serial.print(hex, HEX);
+		Serial.print("  ");
+		Serial.print(*(buffer + i));
+		if (head == buffer + i) {
+			Serial.print(" head");
+		} 
+		if (tail == buffer + i) {
+			Serial.print(" tail");
+		}
+		Serial.println();
+	}
+}
+#endif
