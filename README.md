@@ -55,7 +55,7 @@ Both `unshift()` and `push()` return `true` if the addition didn't cause any inf
 CircularBuffer<int,5> buffer; // buffer capacity is 5
 
 // all of the following return true
-buffer.shift(1); // [1] 
+buffer.unshift(1); // [1] 
 buffer.unshift(2); // [2,1]
 buffer.unshift(3); // [3,2,1]
 buffer.push(0);  // [3,2,1,0]
