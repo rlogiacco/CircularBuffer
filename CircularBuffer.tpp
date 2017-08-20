@@ -66,8 +66,8 @@ bool CircularBuffer<T,S>::push(T value) {
 
 template<typename T, __CB_ST__ S> 
 T CircularBuffer<T,S>::shift() {
-        void(* crash) (void) = 0;
-        if (count <= 0) crash();
+	void(* crash) (void) = 0;
+	if (count <= 0) crash();
 	T result = *head++;
 	if (head == buffer + S) {
 		head = buffer;
@@ -78,8 +78,8 @@ T CircularBuffer<T,S>::shift() {
 
 template<typename T, __CB_ST__ S> 
 T CircularBuffer<T,S>::pop() {
-        void(* crash) (void) = 0;
-        if (count <= 0) crash();
+	void(* crash) (void) = 0;
+	if (count <= 0) crash();
 	T result = *tail--;
 	if (tail == buffer) {
 		tail = buffer + S - 1;
