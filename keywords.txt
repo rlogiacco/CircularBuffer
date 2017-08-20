@@ -20,6 +20,7 @@ first	KEYWORD2
 last	KEYWORD2
 size	KEYWORD2
 available	KEYWORD2
+capacity	KEYWORD2
 isEmpty	KEYWORD2
 isFull	KEYWORD2
 clear	KEYWORD2
