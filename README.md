@@ -72,7 +72,7 @@ Reading from an empty buffer is forbidden (the library will generate a segfault,
 Non-destructive read operations are also available:
 
 * `first()` returns the element at _head_
-* `last()` return the element at _tail_
+* `last()` returns the element at _tail_
 * an array-like indexed read operation is also available so you can read any element in the buffer using the `[]` operator
 
 Reading data beyond the actual buffer size has an undefined behaviour and is user's responsibility to prevent such boundary violations using the _additional operations_ listed in the next section.
@@ -90,7 +90,8 @@ buffer[0]; // ['c','d','e'] returns 'c'
 buffer[1]; // ['c','d','e'] returns 'd'
 buffer[2]; // ['c','d','e'] returns 'e'
 
-buffer[10]; // ['c','d','e'] returned value is undefined
+buffer[10]; // ['c','d','e'] returned value is unpredictable
+buffer[15]; // ['c','d','e'] returned value is unpredictable
 ```
 
 ### Additional operations
