@@ -20,5 +20,7 @@ void loop() {
 			Serial.print("  #");
 			Serial.println(stack.pop());
 		}
+		// the following is unnecessary, still here to demonstrate its use
+		stack.clear();
 	}
 }
