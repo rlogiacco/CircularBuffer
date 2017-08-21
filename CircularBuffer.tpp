@@ -17,6 +17,8 @@
  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+#include <string.h>
+
 template<typename T, __CB_ST__ S> 
 CircularBuffer<T,S>::CircularBuffer() :
 		head(buffer), tail(buffer), count(0) {
@@ -130,7 +132,7 @@ bool inline CircularBuffer<T,S>::isFull() {
 
 template<typename T, __CB_ST__ S> 
 void inline CircularBuffer<T,S>::clear() {
-	memset(buffer, 0, S);
+	memset(buffer, 0, sizeof(buffer));
 	head = tail = buffer;
 	count = 0;
 }
