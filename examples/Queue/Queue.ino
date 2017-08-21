@@ -24,7 +24,7 @@ void loop() {
 		Serial.println("times (or more)");
 		while (!queue.isEmpty()) {
 			Serial.print("  @");
-			Serial.println(queue.shift());
+			Serial.println(queue.pop());
 		}
 	}
 }

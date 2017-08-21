@@ -8,7 +8,7 @@ void setup() {
 	pinMode(SAMPLE_PIN, INPUT);
 }
 
-// stacks up pin state changes printing in reverse order when maxed
+// stacks up pin analog readings then printing in reverse order when maxed
 void loop() {
 	unsigned int sample = analogRead(SAMPLE_PIN);
 	if (sample != stack.last()) {
@@ -17,10 +17,11 @@ void loop() {
 	if (stack.isFull()) {
 		Serial.println("Stack is full:");
 		while (!stack.isEmpty()) {
-			Serial.print("  #");
-			Serial.println(stack.pop());
+			Serial.print("  # ");
+			Serial.println(stack.shift());
 		}
 		// the following is unnecessary, still here to demonstrate its use
 		stack.clear();
 	}
+	delay(50);
 }
