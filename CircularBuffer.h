@@ -100,7 +100,7 @@ public:
 	void inline clear();
 
 	#ifdef CIRCULAR_BUFFER_DEBUG
-	void inline debug();
+	void inline debug(Print* out);
 	#endif
 
 private:

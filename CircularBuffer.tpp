@@ -139,19 +139,19 @@ void inline CircularBuffer<T,S>::clear() {
 
 #ifdef CIRCULAR_BUFFER_DEBUG
 template<typename T, __CB_ST__ S> 
-void inline CircularBuffer<T,S>::debug() {
+void inline CircularBuffer<T,S>::debug(Print* out) {
 	for (__CB_ST__ i = 0; i < S; i++) {
 		int hex = (int)buffer + i;
-		Serial.print(hex, HEX);
-		Serial.print("  ");
-		Serial.print(*(buffer + i));
+		out->print(hex, HEX);
+		out->print("  ");
+		out->print(*(buffer + i));
 		if (head == buffer + i) {
-			Serial.print(" head");
+			out->print(" head");
 		} 
 		if (tail == buffer + i) {
-			Serial.print(" tail");
+			out->print(" tail");
 		}
-		Serial.println();
+		out->println();
 	}
 }
 #endif
