@@ -1,3 +1,5 @@
+#include <Print.h>
+
 #pragma once
 class Record {
 public:
