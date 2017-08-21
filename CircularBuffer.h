@@ -26,6 +26,10 @@
 #define __CB_ST__ uint8_t
 #endif
 
+#ifdef CIRCULAR_BUFFER_DEBUG
+#include <Print.h>
+#endif
+
 template<typename T, __CB_ST__ S> class CircularBuffer {
 public:
 
