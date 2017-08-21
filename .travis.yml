@@ -16,6 +16,7 @@ script:
   - arduino --verify --board ${BOARD} $PWD/examples/CircularBuffer/CircularBuffer.ino
   - arduino --verify --board ${BOARD} $PWD/examples/Queue/Queue.ino
   - arduino --verify --board ${BOARD} $PWD/examples/Stack/Stack.ino
+  - arduino --verify --board ${BOARD} $PWD/examples/Test/Test.ino
   
 notifications:
   email:
