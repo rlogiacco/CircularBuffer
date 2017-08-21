@@ -11,10 +11,6 @@ void setup() {
 	Serial.println("STARTING UP");
 }
 
-void printFn(Print* out, Record* r) {
-	r->print(out);
-}
-
 void loop() {
 	unsigned int sample = analogRead(SAMPLE_PIN);
 	if (sample != buffer.first()->value()) {

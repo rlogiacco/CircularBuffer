@@ -26,10 +26,6 @@ void setup() {
 	Serial.println("STARTING UP");
 }
 
-void printFn(Print* out, data::record r) {
-	out->print(r.time);
-}
-
 void loop() {
 	unsigned int sample = analogRead(SAMPLE_PIN);
 	if (sample != stack.last().value) {
