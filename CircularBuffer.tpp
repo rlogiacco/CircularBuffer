@@ -83,7 +83,7 @@ T CircularBuffer<T,S>::pop() {
 	void(* crash) (void) = 0;
 	if (count <= 0) crash();
 	T result = *tail--;
-	if (tail <= buffer) {
+	if (tail < buffer) {
 		tail = buffer + S - 1;
 	}
 	count--;
