@@ -105,6 +105,7 @@ public:
 
 	#ifdef CIRCULAR_BUFFER_DEBUG
 	void inline debug(Print* out);
+	void inline debugFn(Print* out, void (*printFunction)(Print*, T));
 	#endif
 
 private:

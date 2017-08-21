@@ -154,4 +154,21 @@ void inline CircularBuffer<T,S>::debug(Print* out) {
 		out->println();
 	}
 }
+
+template<typename T, __CB_ST__ S> 
+void inline CircularBuffer<T,S>::debugFn(Print* out, void (*printFunction)(Print*, T)) {
+	for (__CB_ST__ i = 0; i < S; i++) {
+		int hex = (int)buffer + i;
+		out->print(hex, HEX);
+		out->print("  ");
+		printFunction(out, *(buffer + i));
+		if (head == buffer + i) {
+			out->print(" head");
+		} 
+		if (tail == buffer + i) {
+			out->print(" tail");
+		}
+		out->println();
+	}
+}
 #endif
