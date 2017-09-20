@@ -3,7 +3,7 @@ CircularBuffer [![Build Status][travis-status]][travis]
 [travis]: https://travis-ci.org/rlogiacco/CircularBuffer
 [travis-status]: https://travis-ci.org/rlogiacco/CircularBuffer.svg?branch=master
 
-By default the library uses `unsigned int` indexes, allowing for a maximum of 65536 items, but you'll rarely need such a huge store. Defining the `CIRCULAR_BUFFER_XS` macro you can reduce the library indexes to `unsigned short` with no actual impact on the memory used by the library itself, but allowing you to squeeze out those few extra bytes whenever you perform indexed access, if you do any. Obviously the consequence is having a maximum element capacity of 512 items, still plenty in most cases.
+By default the library uses `unsigned int` indexes, allowing for a maximum of 65536 items, but you'll rarely need such a huge store. Defining the `CIRCULAR_BUFFER_XS` macro you can reduce the library indexes to `unsigned short` with no actual impact on the memory used by the library itself, but allowing you to squeeze out those few extra bytes whenever you perform an indexed access, if you do any. Obviously, the consequence is having a maximum element capacity of 512 items, still plenty in most cases.
 
 The library itself has an implicit memory consumption of about *0.5Kb*: 580b (max) of code and 8b of memory, to my calculations. That does not consider the space used to store the items themselves, obviously.
 
@@ -113,7 +113,7 @@ buffer[15]; // ['c','d','e'] returned value is unpredictable
 * `isFull()` returns `true` if no data can be further added to the buffer without causing overwrites/data loss
 * `size()` returns the number of elements currently stored in the buffer; it should be used in conjunction with the `[]` operator to avoid boundary violations: the first element index is always `0` (if buffer is not empty), the last element index is always `size() - 1`
 * `available()` returns the number of elements that can be added before saturating the buffer
-* `capacity()` returns the number of elements the buffer can store, for completeness only as it's user defined and never changes
+* `capacity()` returns the number of elements the buffer can store, for completeness only as it's user-defined and never changes
 * `clear()` resets the whole buffer to its initial state removing all elements
 
 
