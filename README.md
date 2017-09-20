@@ -7,6 +7,19 @@ By default the library uses `unsigned int` indexes, allowing for a maximum of 65
 
 The library itself has an implicit memory consumption of about *0.5Kb*: 580b (max) of code and 8b of memory, to my calculations. That does not consider the space used to store the items themselves, obviously.
 
+<!-- toc -->
+
+- [Usage](#usage)
+    + [Declare and initialize](#declare-and-initialize)
+    + [Store data](#store-data)
+    + [Retrieve data](#retrieve-data)
+    + [Additional operations](#additional-operations)
+- [CHANGE LOG](#change-log)
+      - [1.1.0](#110)
+      - [1.0.0](#100)
+
+<!-- tocstop -->
+
 Usage
 ============
 
@@ -105,7 +118,8 @@ buffer[15]; // ['c','d','e'] returned value is unpredictable
 
 
 ------------------------
-### CHANGE LOG
+CHANGE LOG
+============
 
 #### 1.1.0
 
