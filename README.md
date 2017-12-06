@@ -30,7 +30,7 @@ When declaring your buffer you should specify the data type it must handle and t
 ``` cpp
 #include <CircularBuffer.h>
 
-CircularBuffer<short,100> shorts; // uses 538 bytes 
+CircularBuffer<byte,100> bytes; // uses 538 bytes 
 CircularBuffer<int,100> ints; // uses 638 bytes
 CircularBuffer<long,100> longs; // uses 838 bytes
 CircularBuffer<float,100> floats; // uses 988 bytes
