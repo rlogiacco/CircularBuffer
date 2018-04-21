@@ -30,7 +30,7 @@ When declaring your buffer you should specify the data type it must handle and t
 ``` cpp
 #include <CircularBuffer.h>
 
-CircularBuffer<short,100> shorts; // uses 538 bytes 
+CircularBuffer<byte,100> bytes; // uses 538 bytes 
 CircularBuffer<int,100> ints; // uses 638 bytes
 CircularBuffer<long,100> longs; // uses 838 bytes
 CircularBuffer<float,100> floats; // uses 988 bytes
@@ -79,7 +79,7 @@ buffer.push(-5);  // [2,3,2,1,-5] returns false
 
 ### Retrieve data
 
-Similarly to data addition, data retrieval can be performed at _tail_ via a `pop()` operation or from _head_ via an `unshift()` operation: both cause the element being read to be removed from the buffer.
+Similarly to data addition, data retrieval can be performed at _tail_ via a `pop()` operation or from _head_ via an `shift()` operation: both cause the element being read to be removed from the buffer.
 Reading from an empty buffer is forbidden (the library will generate a segfault, which most probably will crash the program): see the _additional operations_ listed in the next section to verify the status of the buffer.
 
 Non-destructive read operations are also available:
