@@ -100,7 +100,7 @@ public:
 	 * Resets the buffer to a clean status, dropping any reference to current elements
 	 * and making all buffer positions available again.
 	 */
-	void inline clear();
+	void inline clear(bool sweep = true);
 
 	#ifdef CIRCULAR_BUFFER_DEBUG
 	void inline debug(Print* out);
