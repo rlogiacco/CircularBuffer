@@ -111,7 +111,11 @@ private:
 	T buffer[S];
 	T *head;
 	T *tail;
-	uint16_t count;
+#ifndef CIRCULAR_BUFFER_INT_SAFE
+	__CB_ST__ count;
+#else
+	volatile __CB_ST__ count;
+#endif
 };
 
 #include <CircularBuffer.tpp>
