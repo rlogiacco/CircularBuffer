@@ -14,6 +14,7 @@ The library itself has an implicit memory consumption of about *0.5Kb*: 580b (ma
     + [Store data](#store-data)
     + [Retrieve data](#retrieve-data)
     + [Additional operations](#additional-operations)
+  + [Interrupts](#interrupts) 
 - [CHANGE LOG](#change-log)
       - [1.1.0](#110)
       - [1.0.0](#100)
@@ -116,10 +117,48 @@ buffer[15]; // ['c','d','e'] returned value is unpredictable
 * `capacity()` returns the number of elements the buffer can store, for completeness only as it's user-defined and never changes
 * `clear()` resets the whole buffer to its initial state removing all elements
 
+## Interrupts
+
+The library does help working with interrupts defining the `CIRCULAR_BUFFER_INT_SAFE` macro switch, which introduces the `volatile` modifier to the `count` variable, making the whole library more interrupt friendly at the price of disabling some compiler optimizations.
+
+```cpp
+#define CIRCULAR_BUFFER_INT_SAFE
+CircularBuffer<volatile long, 10> times;
+
+void setup() {
+    Serial.begin(9600);
+    attachInterrupt(digitalPinToInterrupt(2), count, RISING);
+}
+
+long time = 0;
+
+void loop() {
+    Serial.print("buffer count is "); Serial.println(times.count());
+    delay(250);
+    if (millis() - time >= 10000 && !times.isEmpty()) {
+        Serial.print("popping "); Serial.println(times.pop());
+        time = millis();
+    }
+}
+
+void count() {
+  times.unshift(millis());
+}
+```
+
+> Please note this does **NOT** make the library interrupt safe, but it does help its usage in interrupt driven firmwares.
 
 ------------------------
 CHANGE LOG
 ============
+
+#### 1.2.0
+
+* Added interrupt macro switch
+
+#### 1.1.1
+
+* Fixed license
 
 #### 1.1.0
 
