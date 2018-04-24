@@ -154,7 +154,7 @@ CHANGE LOG
 
 
 #### 1.2.0
-* Added interrupt macro switch
+* Added interrupt related macro switch `CIRCULAR_BUFFER_INT_SAFE`
 
 #### 1.1.1
 * Added tests
