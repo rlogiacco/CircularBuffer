@@ -115,7 +115,7 @@ buffer[15]; // ['c','d','e'] returned value is unpredictable
 * `size()` returns the number of elements currently stored in the buffer; it should be used in conjunction with the `[]` operator to avoid boundary violations: the first element index is always `0` (if buffer is not empty), the last element index is always `size() - 1`
 * `available()` returns the number of elements that can be added before saturating the buffer
 * `capacity()` returns the number of elements the buffer can store, for completeness only as it's user-defined and never changes
-* `clear()` resets the whole buffer to its initial state, it can either also remove all elements from memory (default behaviour), or leave them where they are
+* `clear()` resets the whole buffer to its initial state
 
 ## Interrupts
 
