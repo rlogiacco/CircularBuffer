@@ -130,10 +130,7 @@ bool inline CircularBuffer<T,S>::isFull() {
 }
 
 template<typename T, __CB_ST__ S> 
-void inline CircularBuffer<T,S>::clear(bool sweep) {
-	if (sweep) 
-		memset(buffer, 0, sizeof(buffer));
-
+void inline CircularBuffer<T,S>::clear() {
 	head = tail = buffer;
 	count = 0;
 }

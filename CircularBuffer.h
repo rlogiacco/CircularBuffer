@@ -97,10 +97,9 @@ public:
 	bool inline isFull();
 
 	/**
-	 * Resets the buffer to a clean status, dropping any reference to current elements
-	 * and making all buffer positions available again.
+	 * Resets the buffer to a clean status, making all buffer positions available.
 	 */
-	void inline clear(bool sweep = true);
+	void inline clear();
 
 	#ifdef CIRCULAR_BUFFER_DEBUG
 	void inline debug(Print* out);
@@ -111,7 +110,11 @@ private:
 	T buffer[S];
 	T *head;
 	T *tail;
-	uint16_t count;
+#ifndef CIRCULAR_BUFFER_INT_SAFE
+	__CB_ST__ count;
+#else
+	volatile __CB_ST__ count;
+#endif
 };
 
 #include <CircularBuffer.tpp>
