@@ -1,3 +1,7 @@
+### &#x26A0; **IMPORTANT**
+ 
+> Please, for support requests use the [CircularBuffer Forum](https://arduinolibs.freeflarum.com/t/circularbuffer), running a search before submitting a new case: do not abuse the Github issue tracker.
+
 CircularBuffer [![Build Status][travis-status]][travis]
 =============
 [travis]: https://travis-ci.org/rlogiacco/CircularBuffer
@@ -16,8 +20,10 @@ The library itself has an implicit memory consumption of about *0.5Kb*: 580b (ma
     + [Additional operations](#additional-operations)
   + [Interrupts](#interrupts) 
 - [CHANGE LOG](#change-log)
-      - [1.1.0](#110)
-      - [1.0.0](#100)
+    + [1.2.0](#120)
+    + [1.1.1](#111)
+    + [1.1.0](#110)
+    + [1.0.0](#100)
 
 <!-- tocstop -->
 
