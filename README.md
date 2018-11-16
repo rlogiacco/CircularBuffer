@@ -1,6 +1,6 @@
 ### &#x26A0; **IMPORTANT**
  
-> Please, for support requests use [Arduino StackExchange](https://arduino.stackexchange.com/questions/tagged/circularbuffer-lib), ensuring to add the `circularbuffer-lib` tag to your question: do not abuse the Github issue tracker.
+> Please, before submitting a support request read carefully this README and check if an answer already exists among [previously answered questions](https://github.com/rlogiacco/CircularBuffer/issues?q=label:question): do not abuse the Github issue tracker.
 
 CircularBuffer [![Build Status][travis-status]][travis]
 =============
