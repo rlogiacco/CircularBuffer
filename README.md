@@ -12,7 +12,6 @@ By default the library uses `unsigned int` indexes, allowing for a maximum of 65
 The library itself has an implicit memory consumption of about *0.5Kb*: 580b (max) of code and 8b of memory, to my calculations. That does not consider the space used to store the items themselves, obviously.
 
 <!-- toc -->
-
 - [Usage](#usage)
     + [Declare and initialize](#declare-and-initialize)
     + [Store data](#store-data)
@@ -24,7 +23,6 @@ The library itself has an implicit memory consumption of about *0.5Kb*: 580b (ma
     + [1.1.1](#111)
     + [1.1.0](#110)
     + [1.0.0](#100)
-
 <!-- tocstop -->
 
 Usage
