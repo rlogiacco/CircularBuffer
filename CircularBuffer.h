@@ -15,26 +15,26 @@
  You should have received a copy of the GNU General Public License
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef __CIRCULAR_BUFFER__
-#define __CIRCULAR_BUFFER__
-#include <inttypes.h>
+#ifndef CIRCULAR_BUFFER_H_
+#define CIRCULAR_BUFFER_H_
+#include <stdint.h>
+#include <stddef.h>
 
 #ifndef CIRCULAR_BUFFER_XS
-#define __CB_ST__ uint16_t
+	using CircBufDefIndex = uint8_t;
 #else
-#define __CB_ST__ uint8_t
+	using CircBufDefIndex = uint16t_t;
 #endif
 
 #ifdef CIRCULAR_BUFFER_DEBUG
 #include <Print.h>
 #endif
 
-template<typename T, __CB_ST__ S> class CircularBuffer {
+template<typename T, size_t S, typename IT = CircBufDefIndex> class CircularBuffer {
 public:
+	static constexpr IT sizeM = static_cast<IT> (S);
 
-	CircularBuffer();
-
-	~CircularBuffer();
+	constexpr CircularBuffer();
 
 	/**
 	 * Adds an element to the beginning of buffer: the operation returns `false` if the addition caused overwriting an existing element.
@@ -69,22 +69,22 @@ public:
 	/**
 	 * Array-like access to buffer
 	 */
-	T operator [] (__CB_ST__ index);
+	T operator [] (IT index);
 
 	/**
 	 * Returns how many elements are actually stored in the buffer.
 	 */
-	__CB_ST__ inline size();
+	IT inline size();
 
 	/**
 	 * Returns how many elements can be safely pushed into the buffer.
 	 */
-	__CB_ST__ inline available();
+	IT inline available();
 
 	/**
 	 * Returns how many elements can be potentially stored into the buffer.
 	 */
-	__CB_ST__ inline capacity();
+	constexpr IT inline capacity();
 
 	/**
 	 * Returns `true` if no elements can be removed from the buffer.
@@ -111,9 +111,9 @@ private:
 	T *head;
 	T *tail;
 #ifndef CIRCULAR_BUFFER_INT_SAFE
-	__CB_ST__ count;
+	IT count;
 #else
-	volatile __CB_ST__ count;
+	volatile IT count;
 #endif
 };
 
