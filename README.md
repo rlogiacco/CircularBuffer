@@ -13,21 +13,20 @@ The library itself has an implicit memory consumption of about *0.5Kb*: 580b (ma
 
 <!-- toc -->
 - [Usage](#usage)
-    + [Declare and initialize](#declare-and-initialize)
-    + [Store data](#store-data)
-    + [Retrieve data](#retrieve-data)
-    + [Additional operations](#additional-operations)
-  + [Interrupts](#interrupts) 
+    - [Declare and initialize](#declare-and-initialize)
+    - [Store data](#store-data)
+    - [Retrieve data](#retrieve-data)
+    - [Additional operations](#additional-operations)
+- [Interrupts](#interrupts)
 - [CHANGE LOG](#change-log)
-    + [1.3.0](#130)
-    + [1.2.0](#120)
-    + [1.1.1](#111)
-    + [1.1.0](#110)
-    + [1.0.0](#100)
+        - [1.3.0 (upcoming)](#130-upcoming)
+        - [1.2.0](#120)
+        - [1.1.1](#111)
+        - [1.1.0](#110)
+        - [1.0.0](#100)
 <!-- tocstop -->
 
-Usage
-============
+## Usage
 
 ### Declare and initialize
 
@@ -162,8 +161,7 @@ void count() {
 > Please note this does **NOT** make the library interrupt safe, but it does help its usage in interrupt driven firmwares.
 
 ------------------------
-CHANGE LOG
-============
+## CHANGE LOG
 
 #### 1.3.0 (upcoming)
 * Slightly reduced both flash and heap footprint
