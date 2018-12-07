@@ -49,5 +49,3 @@ void loop() {
         Serial.println();
     }
 }
-
-```
