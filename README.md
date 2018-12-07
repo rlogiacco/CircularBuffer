@@ -17,6 +17,7 @@ The library itself has an implicit memory consumption of about *0.5Kb*: 580b (ma
     - [Store data](#store-data)
     - [Retrieve data](#retrieve-data)
     - [Additional operations](#additional-operations)
+    - [Examples](#examples)
 - [Interrupts](#interrupts)
 - [CHANGE LOG](#change-log)
     - [1.3.0 (upcoming)](#130-upcoming)
@@ -53,15 +54,15 @@ If you are close to using all your memory you can try to squeeze out a few bytes
 CircularBuffer<short,100> buffer;
 ```
 
-Starting from version `1.3.0` the adviced way to achieve the exact same memory footprint reduction is by specifying a third template parameter: this allows to mix and match circular buffers with low and non low memory footprint in the same sketch on a per instance basis:
+Starting from version `1.3.0` the adviced way to achieve the exact same memory footprint reduction is by specifying a third template parameter: this allows to mix and match circular buffers with low and normal memory footprint in the same sketch on a per instance basis:
 
 ``` cpp
-CircularBuffer<short,100> normalBuffer;                  // standard memory footprint
-CircularBuffer<short,100,unsigned int> smaeNormalBuffer; // standard memory footprint
-CircularBuffer<short,100,byte> optimizedBuffer;          // same as if you define CIRCULAR_BUFFER_XS
+CircularBuffer<short,100> normalBuffer;              // standard memory footprint
+CircularBuffer<short,100,uint16_t> sameNormalBuffer; // also standard memory footprint
+CircularBuffer<short,100,byte> optimizedBuffer;      // same as #define CIRCULAR_BUFFER_XS
 ```
 
-Please note: buffers under low memory usage, either by macro definition or by third template parameter set as `byte`, cannot have a capacity greater than `255`.
+Please note: buffers under low memory usage, either by macro definition or by third template parameter set as `unit8_t`, `byte`, `unsigned char`, cannot have a capacity greater than `255`.
 
 
 ### Store data
@@ -85,6 +86,7 @@ buffer.unshift(3); // [3,2,1]
 buffer.push(0);  // [3,2,1,0]
 buffer.push(5);  // [3,2,1,0,5]
 
+// buffer is now at full capacity, from now on any addition returns false
 buffer.unshift(2);  // [2,3,2,1,0] returns false
 buffer.unshift(10); // [10,2,3,2,1] returns false
 buffer.push(-5);  // [2,3,2,1,-5] returns false
@@ -129,6 +131,17 @@ buffer[15]; // ['c','d','e'] returned value is unpredictable
 * `capacity()` returns the number of elements the buffer can store, for completeness only as it's user-defined and never changes **REMOVED** from `1.3.0` replaced by the read-only member variable `capacity`
 * `clear()` resets the whole buffer to its initial state
 
+### Examples
+
+Multiple examples are available in the `examples` folder of the library:
+
+ * [CircularBuffer.ino](https://github.com/rlogiacco/CircularBuffer/blob/master/examples/CircularBuffer/CircularBuffer.ino) shows how you can use the library to create a continous averaging of the most recent readings
+ * [EventLogging.ino](https://github.com/rlogiacco/CircularBuffer/blob/master/examples/EventLogging/EventLogging.ino) focuses on dumping the buffer when it becomes full and printing the buffer contents periodically at the same time
+ * [Object.ino](https://github.com/rlogiacco/CircularBuffer/blob/master/examples/Object/Object.ino) is meant to demonstrate how to use the buffer to store dynamic structures
+ * [Queue.ino](https://github.com/rlogiacco/CircularBuffer/blob/master/examples/Queue/Queue.ino) is a classical example of a queue, or a FIFO data structure
+ * [Stack.ino](https://github.com/rlogiacco/CircularBuffer/blob/master/examples/Stack/Stack.ino) on the other end shows how to use the library to represent a LIFO data structure
+ * [Struct.ino](https://github.com/rlogiacco/CircularBuffer/blob/master/examples/Struct/Struct.ino) answer to the question _can this library store structured data?_
+ 
 ## Interrupts
 
 The library does help working with interrupts defining the `CIRCULAR_BUFFER_INT_SAFE` macro switch, which introduces the `volatile` modifier to the `count` variable, making the whole library more interrupt friendly at the price of disabling some compiler optimizations.
@@ -142,7 +155,7 @@ void setup() {
     attachInterrupt(digitalPinToInterrupt(2), count, RISING);
 }
 
-long time = 0;
+unsigned long time = 0;
 
 void loop() {
     Serial.print("buffer count is "); Serial.println(times.count());
@@ -158,7 +171,7 @@ void count() {
 }
 ```
 
-> Please note this does **NOT** make the library interrupt safe, but it does help its usage in interrupt driven firmwares.
+> Please note this does **NOT** make the library _interrupt safe_, but it does help its usage in interrupt driven firmwares.
 
 ------------------------
 ## CHANGE LOG
@@ -166,7 +179,8 @@ void count() {
 ### 1.3.0 (upcoming)
 * Slightly reduced both flash and heap footprint
 * Introduced per instance control over index data type
-* Replaced method `capacity()` in favour of instance attribute `capacity`
+* Replaces method `capacity()` in favour of the constant instance attribute `capacity`
+* Adds the `EventLogging` and `Interrupts` examples
 
 ### 1.2.0
 * Added interrupt related macro switch `CIRCULAR_BUFFER_INT_SAFE`
