@@ -9,7 +9,7 @@ CircularBuffer<unsigned long, 10, byte> buffer;
 #define INTERVAL 60000
 
 void setup() {
-    Serial.setup(9600);
+    Serial.begin(9600);
     pinMode(BUTTON_PIN, INPUT_PULLUP);
 }
 unsigned long last = 0;
