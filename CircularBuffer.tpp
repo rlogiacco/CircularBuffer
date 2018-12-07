@@ -26,12 +26,12 @@ constexpr CircularBuffer<T,S,IT>::CircularBuffer() :
 template<typename T, size_t S, typename IT>
 bool CircularBuffer<T,S,IT>::unshift(T value) {
 	if (head == buffer) {
-		head = buffer + sizeM;
+		head = buffer + capacity;
 	}
 	*--head = value;
-	if (count == sizeM) {
+	if (count == capacity) {
 		if (tail-- == buffer) {
-			tail = buffer + sizeM - 1;
+			tail = buffer + capacity - 1;
 		}
 		return false;
 	} else {
@@ -44,12 +44,12 @@ bool CircularBuffer<T,S,IT>::unshift(T value) {
 
 template<typename T, size_t S, typename IT>
 bool CircularBuffer<T,S,IT>::push(T value) {
-	if (++tail == buffer + sizeM) {
+	if (++tail == buffer + capacity) {
 		tail = buffer;
 	}
 	*tail = value;
-	if (count == sizeM) {
-		if (++head == buffer + sizeM) {
+	if (count == capacity) {
+		if (++head == buffer + capacity) {
 			head = buffer;
 		}
 		return false;
@@ -66,7 +66,7 @@ T CircularBuffer<T,S,IT>::shift() {
 	void(* crash) (void) = 0;
 	if (count <= 0) crash();
 	T result = *head++;
-	if (head >= buffer + sizeM) {
+	if (head >= buffer + capacity) {
 		head = buffer;
 	}
 	count--;
@@ -79,7 +79,7 @@ T CircularBuffer<T,S,IT>::pop() {
 	if (count <= 0) crash();
 	T result = *tail--;
 	if (tail < buffer) {
-		tail = buffer + sizeM - 1;
+		tail = buffer + capacity - 1;
 	}
 	count--;
 	return result;
@@ -97,7 +97,7 @@ T inline CircularBuffer<T,S,IT>::last() {
 
 template<typename T, size_t S, typename IT>
 T CircularBuffer<T,S,IT>::operator [](IT index) {
-	return *(buffer + ((head - buffer + index) % sizeM));
+	return *(buffer + ((head - buffer + index) % capacity));
 }
 
 template<typename T, size_t S, typename IT>
@@ -107,12 +107,7 @@ IT inline CircularBuffer<T,S,IT>::size() {
 
 template<typename T, size_t S, typename IT>
 IT inline CircularBuffer<T,S,IT>::available() {
-	return sizeM - count;
-}
-
-template<typename T, size_t S, typename IT>
-constexpr IT inline CircularBuffer<T,S,IT>::capacity() {
-	return sizeM;
+	return capacity - count;
 }
 
 template<typename T, size_t S, typename IT>
@@ -122,7 +117,7 @@ bool inline CircularBuffer<T,S,IT>::isEmpty() {
 
 template<typename T, size_t S, typename IT>
 bool inline CircularBuffer<T,S,IT>::isFull() {
-	return count == sizeM;
+	return count == capacity;
 }
 
 template<typename T, size_t S, typename IT>
@@ -134,7 +129,7 @@ void inline CircularBuffer<T,S,IT>::clear() {
 #ifdef CIRCULAR_BUFFER_DEBUG
 template<typename T, size_t S, typename IT>
 void inline CircularBuffer<T,S,IT>::debug(Print* out) {
-	for (IT i = 0; i < sizeM; i++) {
+	for (IT i = 0; i < capacity; i++) {
 		int hex = (int)buffer + i;
 		out->print(hex, HEX);
 		out->print("  ");
@@ -151,7 +146,7 @@ void inline CircularBuffer<T,S,IT>::debug(Print* out) {
 
 template<typename T, size_t S, typename IT>
 void inline CircularBuffer<T,S,IT>::debugFn(Print* out, void (*printFunction)(Print*, T)) {
-	for (IT i = 0; i < sizeM; i++) {
+	for (IT i = 0; i < capacity; i++) {
 		int hex = (int)buffer + i;
 		out->print(hex, HEX);
 		out->print("  ");

@@ -20,19 +20,19 @@
 #include <stdint.h>
 #include <stddef.h>
 
-#ifndef CIRCULAR_BUFFER_XS
-	using CircBufDefIndex = uint8_t;
+#ifdef CIRCULAR_BUFFER_XS
+	using DefaultIT = uint8_t;
 #else
-	using CircBufDefIndex = uint16t_t;
+	using DefaultIT = uint16_t;
 #endif
 
 #ifdef CIRCULAR_BUFFER_DEBUG
 #include <Print.h>
 #endif
 
-template<typename T, size_t S, typename IT = CircBufDefIndex> class CircularBuffer {
+template<typename T, size_t S, typename IT = DefaultIT> class CircularBuffer {
 public:
-	static constexpr IT sizeM = static_cast<IT> (S);
+	static constexpr IT capacity = static_cast<IT> (S);
 
 	constexpr CircularBuffer();
 
@@ -80,11 +80,6 @@ public:
 	 * Returns how many elements can be safely pushed into the buffer.
 	 */
 	IT inline available();
-
-	/**
-	 * Returns how many elements can be potentially stored into the buffer.
-	 */
-	constexpr IT inline capacity();
 
 	/**
 	 * Returns `true` if no elements can be removed from the buffer.
