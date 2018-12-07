@@ -14,10 +14,12 @@ install:
   
 script:
   - arduino --verify --board ${BOARD} $PWD/examples/CircularBuffer/CircularBuffer.ino
+  - arduino --verify --board ${BOARD} $PWD/examples/EventLogging/EventLogging.ino
   - arduino --verify --board ${BOARD} $PWD/examples/Queue/Queue.ino
   - arduino --verify --board ${BOARD} $PWD/examples/Stack/Stack.ino
   - arduino --verify --board ${BOARD} $PWD/examples/Struct/Struct.ino
   - arduino --verify --board ${BOARD} $PWD/examples/Object/Object.ino
+  - arduino --verify --board ${BOARD} $PWD/examples/Interrupts/Interrupts.ino
   - arduino --verify --board ${BOARD} $PWD/examples/Test/Test.ino
   
 notifications:
