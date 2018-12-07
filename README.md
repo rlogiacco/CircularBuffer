@@ -19,11 +19,11 @@ The library itself has an implicit memory consumption of about *0.5Kb*: 580b (ma
     - [Additional operations](#additional-operations)
 - [Interrupts](#interrupts)
 - [CHANGE LOG](#change-log)
-        - [1.3.0 (upcoming)](#130-upcoming)
-        - [1.2.0](#120)
-        - [1.1.1](#111)
-        - [1.1.0](#110)
-        - [1.0.0](#100)
+    - [1.3.0 (upcoming)](#130-upcoming)
+    - [1.2.0](#120)
+    - [1.1.1](#111)
+    - [1.1.0](#110)
+    - [1.0.0](#100)
 <!-- tocstop -->
 
 ## Usage
@@ -163,26 +163,26 @@ void count() {
 ------------------------
 ## CHANGE LOG
 
-#### 1.3.0 (upcoming)
+### 1.3.0 (upcoming)
 * Slightly reduced both flash and heap footprint
 * Introduced per instance control over index data type
 * Replaced method `capacity()` in favour of instance attribute `capacity`
 
-#### 1.2.0
+### 1.2.0
 * Added interrupt related macro switch `CIRCULAR_BUFFER_INT_SAFE`
 * Dropped unecessary call to `memset` when clearing
 
-#### 1.1.1
+### 1.1.1
 * Added tests
 * Fixed `clear()` function
 * Fixed `pop()` function
 
-#### 1.1.0
+### 1.1.0
 * Improved robustness against access outside the buffer boundaries
 * Fixed `pop()` and `shift()` implementations
 * Added test sketch
 * Added `capacity()` function
 * Added `debug()` function, disabled by pre processor by default
 
-#### 1.0.0
+### 1.0.0
 * Initial implementation
