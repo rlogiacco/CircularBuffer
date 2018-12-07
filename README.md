@@ -19,6 +19,7 @@ The library itself has an implicit memory consumption of about *0.5Kb*: 580b (ma
     + [Additional operations](#additional-operations)
   + [Interrupts](#interrupts) 
 - [CHANGE LOG](#change-log)
+    + [1.3.0](#130)
     + [1.2.0](#120)
     + [1.1.1](#111)
     + [1.1.0](#110)
@@ -35,12 +36,12 @@ When declaring your buffer you should specify the data type it must handle and t
 ``` cpp
 #include <CircularBuffer.h>
 
-CircularBuffer<byte,100> bytes; // uses 538 bytes 
-CircularBuffer<int,100> ints; // uses 638 bytes
-CircularBuffer<long,100> longs; // uses 838 bytes
-CircularBuffer<float,100> floats; // uses 988 bytes
+CircularBuffer<byte,100> bytes;     // uses 538 bytes 
+CircularBuffer<int,100> ints;       // uses 638 bytes
+CircularBuffer<long,100> longs;     // uses 838 bytes
+CircularBuffer<float,100> floats;   // uses 988 bytes
 CircularBuffer<double,100> doubles; // uses 988 bytes
-CircularBuffer<char,100> chars; // uses 538 bytes 
+CircularBuffer<char,100> chars;     // uses 538 bytes 
 CircularBuffer<void*,100> pointers; // uses 638 bytes
 ```
 
@@ -53,7 +54,15 @@ If you are close to using all your memory you can try to squeeze out a few bytes
 CircularBuffer<short,100> buffer;
 ```
 
-Please note the reduced memory usage will not occur unless you were using the array-like access operator **AND** you start using `unsigned int` data type for the index access. 
+Starting from version `1.3.0` the adviced way to achieve the exact same memory footprint reduction is by specifying a third template parameter: this allows to mix and match circular buffers with low and non low memory footprint in the same sketch on a per instance basis:
+
+``` cpp
+CircularBuffer<short,100> normalBuffer;                  // standard memory footprint
+CircularBuffer<short,100,unsigned int> smaeNormalBuffer; // standard memory footprint
+CircularBuffer<short,100,byte> optimizedBuffer;          // same as if you define CIRCULAR_BUFFER_XS
+```
+
+Please note: buffers under low memory usage, either by macro definition or by third template parameter set as `byte`, cannot have a capacity greater than `255`.
 
 
 ### Store data
@@ -118,7 +127,7 @@ buffer[15]; // ['c','d','e'] returned value is unpredictable
 * `isFull()` returns `true` if no data can be further added to the buffer without causing overwrites/data loss
 * `size()` returns the number of elements currently stored in the buffer; it should be used in conjunction with the `[]` operator to avoid boundary violations: the first element index is always `0` (if buffer is not empty), the last element index is always `size() - 1`
 * `available()` returns the number of elements that can be added before saturating the buffer
-* `capacity()` returns the number of elements the buffer can store, for completeness only as it's user-defined and never changes
+* `capacity()` returns the number of elements the buffer can store, for completeness only as it's user-defined and never changes **REMOVED** from `1.3.0` replaced by the read-only member variable `capacity`
 * `clear()` resets the whole buffer to its initial state
 
 ## Interrupts
@@ -156,6 +165,10 @@ void count() {
 CHANGE LOG
 ============
 
+#### 1.3.0 (upcoming)
+* Slightly reduced both flash and heap footprint
+* Introduced per instance control over index data type
+* Replaced method `capacity()` in favour of instance attribute `capacity`
 
 #### 1.2.0
 * Added interrupt related macro switch `CIRCULAR_BUFFER_INT_SAFE`
