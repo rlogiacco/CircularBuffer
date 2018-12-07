@@ -29,10 +29,10 @@ env:
   global:
     - IDE_VERSION=1.6.6
   matrix:
-   - BOARD=arduino:avr:uno IDE_VERSION=1.8.8
-   - BOARD=arduino:avr:uno
-   - BOARD=arduino:avr:nano:cpu=atmega168
-   - BOARD=arduino:avr:nano:cpu=atmega328
-   - BOARD=arduino:avr:mega:cpu=atmega1280
-   - BOARD=arduino:avr:mega:cpu=atmega2560
-   - BOARD=arduino:avr:leonardo
+    - BOARD=arduino:avr:uno IDE_VERSION=1.8.8
+    - BOARD=arduino:avr:uno
+    - BOARD=arduino:avr:nano:cpu=atmega168
+    - BOARD=arduino:avr:nano:cpu=atmega328
+    - BOARD=arduino:avr:mega:cpu=atmega1280
+    - BOARD=arduino:avr:mega:cpu=atmega2560
+    - BOARD=arduino:avr:leonardo
