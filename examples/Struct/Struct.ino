@@ -16,7 +16,7 @@ namespace data {
 	}
 }
 
-CircularBuffer<data::record, 10> stack;
+CircularBuffer<data::record, 10> structs;
 
 #define SAMPLE_PIN A0
 
@@ -28,15 +28,15 @@ void setup() {
 
 void loop() {
 	unsigned int sample = analogRead(SAMPLE_PIN);
-	if (sample != stack.last().value) {
-		stack.push(data::record{millis(), sample, sample > 512});
+	if (sample != structs.last().value) {
+		structs.push(data::record{millis(), sample, sample > 512});
 		Serial.println("---");
 		delay(50);
 	}
-	if (stack.isFull()) {
+	if (structs.isFull()) {
 		Serial.println("Stack is full:");
-		while (!stack.isEmpty()) {
-			data::print(stack.shift());
+		while (!structs.isEmpty()) {
+			data::print(structs.shift());
 			Serial.println();
 		}
 		Serial.println("START AGAIN");

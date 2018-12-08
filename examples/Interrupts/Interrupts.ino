@@ -1,29 +1,22 @@
-#include <CircularBuffer.h>
+#define CIRCULAR_BUFFER_INT_SAFE
+CircularBuffer<volatile long, 10> times;
 
-CircularBuffer<int, 100> buffer;
+void setup() {
+    Serial.begin(9600);
+    attachInterrupt(digitalPinToInterrupt(2), count, RISING);
+}
 
 unsigned long time = 0;
 
-#define SAMPLE_PIN A0
-
-void setup() {
-	Serial.begin(9600);
-	pinMode(SAMPLE_PIN, INPUT);
-	time = millis();
+void loop() {
+    Serial.print("buffer count is "); Serial.println(times.count());
+    delay(250);
+    if (millis() - time >= 10000 && !times.isEmpty()) {
+        Serial.print("popping "); Serial.println(times.pop());
+        time = millis();
+    }
 }
 
-void loop() {
-	// samples A0 and prints the average of the latest hundred samples to console every 500ms
-	int reading = analogRead(A0);
-	buffer.push(reading);
-
-	if (millis() - time >= 500) {
-		time = millis();
-		float avg = 0.0;
-		for (unsigned int i = 0; i < buffer.size(); i++) {
-			avg += buffer[i] / buffer.size();
-		}
-		Serial.print("Average is ");
-		Serial.println(avg);
-	}
+void count() {
+  times.push(millis());
 }
