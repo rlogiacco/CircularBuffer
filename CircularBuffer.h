@@ -20,12 +20,6 @@
 #include <stdint.h>
 #include <stddef.h>
 
-#ifdef CIRCULAR_BUFFER_XS
-	using DefaultIT = uint8_t;
-#else
-	using DefaultIT = uint16_t;
-#endif
-
 #ifdef CIRCULAR_BUFFER_DEBUG
 #include <Print.h>
 #endif
