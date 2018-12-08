@@ -1,15 +1,13 @@
 ### &#x26A0; **IMPORTANT**
  
-> Please, before submitting a support request read carefully this README and check if an answer already exists among [previously answered questions](https://github.com/rlogiacco/CircularBuffer/issues?q=label:question): do not abuse the Github issue tracker.
+> Please, before submitting a support request read carefully this README and check if an answer already exists among [previously answered questions](https://github.com/rlogiacco/CircularBuffer/issues?q=label:question): do not abuse of the Github issue tracker.
 
 CircularBuffer [![Build Status][travis-status]][travis]
 =============
 [travis]: https://travis-ci.org/rlogiacco/CircularBuffer
 [travis-status]: https://travis-ci.org/rlogiacco/CircularBuffer.svg?branch=master
 
-By default the library uses `unsigned int` indexes, allowing for a maximum of 65536 items, but you'll rarely need such a huge store. Defining the `CIRCULAR_BUFFER_XS` macro you can reduce the library indexes to `unsigned short` with no actual impact on the memory used by the library itself, but allowing you to squeeze out those few extra bytes whenever you perform an indexed access, if you do any. Obviously, the consequence is having a maximum element capacity of 512 items, still plenty in most cases.
-
-The library itself has an implicit memory consumption of about *0.5Kb*: 580b (max) of code and 8b of memory, to my calculations. That does not consider the space used to store the items themselves, obviously.
+The library itself has an implicit memory consumption of about *0.5Kb*: 580 bytes (max) of code and 8 bytes of memory, to my calculations. That does not consider the space used to store the items themselves, obviously.
 
 <!-- toc -->
 - [Usage](#usage)
@@ -17,8 +15,12 @@ The library itself has an implicit memory consumption of about *0.5Kb*: 580b (ma
     - [Store data](#store-data)
     - [Retrieve data](#retrieve-data)
     - [Additional operations](#additional-operations)
-    - [Examples](#examples)
-- [Interrupts](#interrupts)
+- [Advanced Usage](#advanced-usage)
+    - [Automatic optimization (`1.3.0+`)](#automatic-optimization-130)
+    - [Legacy optimization](#legacy-optimization)
+    - [Interrupts](#interrupts)
+- [Examples](#examples)
+- [Limitations](#limitations)
 - [CHANGE LOG](#change-log)
     - [1.3.0 (upcoming)](#130-upcoming)
     - [1.2.0](#120)
@@ -36,7 +38,7 @@ When declaring your buffer you should specify the data type it must handle and t
 ``` cpp
 #include <CircularBuffer.h>
 
-CircularBuffer<byte,100> bytes;     // uses 538 bytes 
+CircularBuffer<byte,100> bytes;     // uses 538 bytes
 CircularBuffer<int,100> ints;       // uses 638 bytes
 CircularBuffer<long,100> longs;     // uses 838 bytes
 CircularBuffer<float,100> floats;   // uses 988 bytes
@@ -45,25 +47,7 @@ CircularBuffer<char,100> chars;     // uses 538 bytes
 CircularBuffer<void*,100> pointers; // uses 638 bytes
 ```
 
-If you are close to using all your memory you can try to squeeze out a few bytes by defining `CIRCULAR_BUFFER_XS` **BEFORE** including the library:
-
-``` cpp
-#define CIRCULAR_BUFFER_XS
-#include <CircularBuffer.h>
-
-CircularBuffer<short,100> buffer;
-```
-
-Starting from version `1.3.0` the adviced way to achieve the exact same memory footprint reduction is by specifying a third template parameter: this allows to mix and match circular buffers with low and normal memory footprint in the same sketch on a per instance basis:
-
-``` cpp
-CircularBuffer<short,100> normalBuffer;              // standard memory footprint
-CircularBuffer<short,100,uint16_t> sameNormalBuffer; // also standard memory footprint
-CircularBuffer<short,100,byte> optimizedBuffer;      // same as #define CIRCULAR_BUFFER_XS
-```
-
-Please note: buffers under low memory usage, either by macro definition or by third template parameter set as `unit8_t`, `byte`, `unsigned char`, cannot have a capacity greater than `255`.
-
+**Please note**: the memory usage reported above includes the program memory used by the library code, the heap memory is much less and is comparable to an array of the same size and type of the buffer.
 
 ### Store data
 
@@ -131,18 +115,47 @@ buffer[15]; // ['c','d','e'] returned value is unpredictable
 * `capacity()` returns the number of elements the buffer can store, for completeness only as it's user-defined and never changes **REMOVED** from `1.3.0` replaced by the read-only member variable `capacity`
 * `clear()` resets the whole buffer to its initial state
 
-### Examples
+## Advanced Usage
 
-Multiple examples are available in the `examples` folder of the library:
+### Automatic optimization (`1.3.0+`)
 
- * [CircularBuffer.ino](https://github.com/rlogiacco/CircularBuffer/blob/master/examples/CircularBuffer/CircularBuffer.ino) shows how you can use the library to create a continous averaging of the most recent readings
- * [EventLogging.ino](https://github.com/rlogiacco/CircularBuffer/blob/master/examples/EventLogging/EventLogging.ino) focuses on dumping the buffer when it becomes full and printing the buffer contents periodically at the same time
- * [Object.ino](https://github.com/rlogiacco/CircularBuffer/blob/master/examples/Object/Object.ino) is meant to demonstrate how to use the buffer to store dynamic structures
- * [Queue.ino](https://github.com/rlogiacco/CircularBuffer/blob/master/examples/Queue/Queue.ino) is a classical example of a queue, or a FIFO data structure
- * [Stack.ino](https://github.com/rlogiacco/CircularBuffer/blob/master/examples/Stack/Stack.ino) on the other end shows how to use the library to represent a LIFO data structure
- * [Struct.ino](https://github.com/rlogiacco/CircularBuffer/blob/master/examples/Struct/Struct.ino) answer to the question _can this library store structured data?_
- 
-## Interrupts
+Starting from version `1.3.0` the library is capable to automatically detect which data type should be used for the index based on the specified capacity: `unsigned int` for buffers with a declared capacity greater than `255`, `byte` otherwise.
+
+In addition, you can mix in the same code buffers with small index and buffers with normal index: previously this was not possible.
+
+``` cpp
+CircularBuffer<short,100> optimizedBuffer; // reduced memory footprint, index type is uint8_t (a.k.a. byte)
+CircularBuffer<short,500> normalBuffer;    // standard memory footprint, index type is unit16_t (a.k.a. unsigned int)
+```
+
+### Legacy optimization
+
+_The following applies to versions prior to `1.3.0` only._
+
+By default the library uses `unsigned int` indexes, allowing for a maximum of 65536 items, but you'll rarely need such a huge store.
+
+Defining the `CIRCULAR_BUFFER_XS` macro **BEFORE** including the library you can switch the library indexes to `byte` type: this reduces the memory used by the library itself by only `36` bytes, but allows you to potentially squeeze out much more whenever you perform an indexed access, if you do any, by switching data type.
+
+``` cpp
+#define CIRCULAR_BUFFER_XS
+#include <CircularBuffer.h>
+
+CircularBuffer<short,100> buffer;
+
+void setup() { }
+
+void loop() {
+	// here i should be declared of type byte rather than unsigned int
+    // to maximize the effects of the optimization
+    for (byte i = 0; i < buffer.size() - 1; i++) {
+        Serial.print(buffer[i]);
+    }
+}
+```
+
+**Please note**: this _macro switch_ forces the buffer to use an 8 bits data type as internal index, as such your buffers will be limited to a maximum capacity of `255`.
+
+### Interrupts
 
 The library does help working with interrupts defining the `CIRCULAR_BUFFER_INT_SAFE` macro switch, which introduces the `volatile` modifier to the `count` variable, making the whole library more interrupt friendly at the price of disabling some compiler optimizations.
 
@@ -173,14 +186,30 @@ void count() {
 
 > Please note this does **NOT** make the library _interrupt safe_, but it does help its usage in interrupt driven firmwares.
 
+## Examples
+
+Multiple examples are available in the `examples` folder of the library:
+
+ * [CircularBuffer.ino](https://github.com/rlogiacco/CircularBuffer/blob/master/examples/CircularBuffer/CircularBuffer.ino) shows how you can use the library to create a continous averaging of the most recent readings
+ * [EventLogging.ino](https://github.com/rlogiacco/CircularBuffer/blob/master/examples/EventLogging/EventLogging.ino) focuses on dumping the buffer when it becomes full and printing the buffer contents periodically at the same time
+ * [Object.ino](https://github.com/rlogiacco/CircularBuffer/blob/master/examples/Object/Object.ino) is meant to demonstrate how to use the buffer to store dynamic structures
+ * [Queue.ino](https://github.com/rlogiacco/CircularBuffer/blob/master/examples/Queue/Queue.ino) is a classical example of a queue, or a FIFO data structure
+ * [Stack.ino](https://github.com/rlogiacco/CircularBuffer/blob/master/examples/Stack/Stack.ino) on the other end shows how to use the library to represent a LIFO data structure
+ * [Struct.ino](https://github.com/rlogiacco/CircularBuffer/blob/master/examples/Struct/Struct.ino) answer to the question _can this library store structured data?_
+
+## Limitations
+
+The maximum capacity allowed by the library is `65535`, but I hardly believe this library will be the real limit: you'll hit the memory limits of your microcontroller much earlier.
+
 ------------------------
 ## CHANGE LOG
 
 ### 1.3.0 (upcoming)
-* Slightly reduced both flash and heap footprint
-* Introduced per instance control over index data type
-* Replaces method `capacity()` in favour of the constant instance attribute `capacity`
-* Adds the `EventLogging` and `Interrupts` examples
+* Slightly reduced both flash and heap footprint (thanks to @Erlkoenig90)
+* Introduced _instance based_ control over index data type (thanks to @Erlkoenig90)
+* Replaced method `capacity()` in favour of the constant instance attribute `capacity`
+* Added the `EventLogging` and `Interrupts` examples
+* Dropped the `CIRCULAT_BUFFER_XS` _macro switch_ in favor of automatic index type identification (thanks to @Erlkoenig90)
 
 ### 1.2.0
 * Added interrupt related macro switch `CIRCULAR_BUFFER_INT_SAFE`
