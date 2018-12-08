@@ -30,7 +30,24 @@
 #include <Print.h>
 #endif
 
-template<typename T, size_t S, typename IT = DefaultIT> class CircularBuffer {
+namespace Helper {
+	template <bool Is8, bool Is16>
+	struct GetType {
+		using Type = uint32_t;
+	};
+
+	template<>
+	struct GetType<true, true> {
+		using Type = uint8_t;
+	};
+
+	template<>
+	struct GetType<false, true> {
+		using Type = uint16_t;
+	};
+}
+
+template<typename T, size_t S, typename IT = typename Helper::GetType<(S <= 255), (S <= 65535)>::Type> class CircularBuffer {
 public:
 	static constexpr IT capacity = static_cast<IT> (S);
 
