@@ -133,6 +133,25 @@ CircularBuffer<long,500> normalBuffer;    // standard memory footprint, index ty
 CircularBuffer<int,66000> hugeBuffer;    // extended memory footprint, index type is unit32_t (a.k.a. unsigned long)
 ```
 
+To obtain the maximum advantage of the optimization above, anytime you need to refer to the buffer index you should use the most appropriate type: this can be easily achieved using the `decltype(buffer.capacity)` specifier, like in the following example:
+
+```cpp
+// the iterator variable i is of the correct type, even if  
+// we don't know what's the buffer declared capacity
+for (decltype(buffer.capacity) i = 0; i < buffer.size(); i++) {
+    avg += buffer[i] / buffer.size();
+}
+```
+
+If you prefer you can alias the index type and refer to such alias:
+
+```cpp
+using index_t = decltype(buffer.capacity);
+for (index_t i = 0; i < buffer.size(); i++) {
+    avg += buffer[i] / buffer.size();
+}
+```
+
 ### Legacy optimization
 
 _The following applies to versions prior to `1.3.0` only._

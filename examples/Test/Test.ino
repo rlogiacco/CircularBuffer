@@ -8,7 +8,7 @@ void printBuffer() {
 		Serial.println("empty");
 	} else {
 		Serial.print("[");
-		for (unsigned int i = 0; i < buffer.size() - 1; i++) {
+		for (decltype(buffer.capacity) i = 0; i < buffer.size() - 1; i++) {
 			Serial.print(buffer[i]);
 			Serial.print(",");
 		}

@@ -36,8 +36,13 @@ namespace Helper {
 	template<> struct Index<true, true> {
 		using Type = uint8_t;
 	};
-}
 
+	template <typename T>
+	struct IndexType {
+	  typedef T type;
+	};
+
+}
 template<typename T, size_t S, typename IT = typename Helper::Index<(S <= UINT8_MAX), (S <= UINT16_MAX)>::Type> class CircularBuffer {
 public:
 	static constexpr IT capacity = static_cast<IT>(S);
