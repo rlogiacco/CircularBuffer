@@ -1,4 +1,5 @@
 #define CIRCULAR_BUFFER_INT_SAFE
+#include "CircularBuffer.h"
 CircularBuffer<volatile long, 10> times;
 
 void setup() {

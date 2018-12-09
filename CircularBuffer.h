@@ -24,19 +24,32 @@
 #include <Print.h>
 #endif
 
+#ifdef __AVR__
+	/**
+	 * Overload for operator new for placement-new syntax. In standard C++, this is provided by the standard library header <new>. However, AVR-GCC does not
+	 * provide that header, so we define our own operator new. If any other Arduino library does the same, this might result in a compiler error. In that case,
+	 * please comment this line.
+	 */
+	inline void *operator new(size_t, void *buf) { return buf; }
+#else
+#	include <new>
+#endif
+
 namespace Helper {
-	template<bool XS> struct Index {
+	template<bool FITS8, bool FITS16> struct Index {
+		using Type = uint32_t;
+	};
+
+	template<> struct Index<false, true> {
 		using Type = uint16_t;
 	};
 
-	template<> struct Index<true> {
+	template<> struct Index<true, true> {
 		using Type = uint8_t;
 	};
 }
 
-inline void *operator new(size_t, void *buf) { return buf; }
-	
-template<typename T, size_t S, typename IT = typename Helper::Index<(S <= UINT8_MAX)>::Type> class CircularBuffer {
+template<typename T, size_t S, typename IT = typename Helper::Index<(S <= UINT8_MAX), (S <= UINT16_MAX)>::Type> class CircularBuffer {
 public:
 	static constexpr IT capacity = static_cast<IT>(S);
 
@@ -110,7 +123,12 @@ public:
 	#endif
 
 private:
-	union { T obj; } buffer[S], *head, *tail;
+	union Container {
+		T obj;
+		struct {} dummy;
+		constexpr Container () : dummy {} {}
+		~Container () {}
+	} buffer[S], *head, *tail;
 #ifndef CIRCULAR_BUFFER_INT_SAFE
 	IT count;
 #else
@@ -118,5 +136,5 @@ private:
 #endif
 };
 
-#include "./CircularBuffer.tpp"
+#include <CircularBuffer.tpp>
 #endif

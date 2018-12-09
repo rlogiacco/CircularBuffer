@@ -16,8 +16,6 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <string.h>
-
 template<typename T, size_t S, typename IT>
 constexpr CircularBuffer<T,S,IT>::CircularBuffer() :
 		head(buffer), tail(buffer), count(0) {
@@ -29,7 +27,8 @@ bool CircularBuffer<T,S,IT>::unshift(Obj&& value) {
 	if (head == buffer) {
 		head = buffer + capacity;
 	}
-	// TODO Call Destructor ...
+	--head;
+	if (count == capacity) head->obj.~T ();
 	new (&head->obj) T (static_cast<Obj&&> (value));
 	if (count == capacity) {
 		if (tail-- == buffer) {
@@ -52,7 +51,7 @@ bool CircularBuffer<T,S,IT>::push(Obj&& value) {
 	if (++tail == buffer + capacity) {
 		tail = buffer;
 	}
-	// TODO Call Destructor ...
+	if (count == capacity) tail->obj.~T ();
 	new (&tail->obj) T (static_cast<Obj&&> (value));
 	if (count == capacity) {
 		if (++head == buffer + capacity) {
@@ -69,10 +68,9 @@ bool CircularBuffer<T,S,IT>::push(Obj&& value) {
 
 template<typename T, size_t S, typename IT>
 T CircularBuffer<T,S,IT>::shift() {
-	void(* crash) (void) = 0;
-	if (count <= 0) crash();
-	T result (static_cast<T&&> (*head));
-	head->~T ();
+	if (count <= 0) abort();
+	T result (static_cast<T&&> (head->obj));
+	head->obj.~T ();
 	head++;
 	
 	if (head >= buffer + capacity) {
@@ -84,10 +82,9 @@ T CircularBuffer<T,S,IT>::shift() {
 
 template<typename T, size_t S, typename IT>
 T CircularBuffer<T,S,IT>::pop() {
-	void(* crash) (void) = 0;
-	if (count <= 0) crash();
-	T result (static_cast<T&&> (*tail));
-	tail->~T ();
+	if (count <= 0) abort();
+	T result (static_cast<T&&> (tail->obj));
+	tail->obj.~T ();
 	tail--;
 	if (tail < buffer) {
 		tail = buffer + capacity - 1;
@@ -133,12 +130,18 @@ bool inline CircularBuffer<T,S,IT>::isFull() {
 
 template<typename T, size_t S, typename IT>
 void inline CircularBuffer<T,S,IT>::clear() {
-	// TODO Call Destructor ...
+	auto scan = head;
+	for (IT i = 0; i < count; ++i) {
+		scan->obj.~T ();
+		if (++scan == buffer + capacity)
+			scan = buffer;
+	}
 	head = tail = buffer;
 	count = 0;
 }
 
 #ifdef CIRCULAR_BUFFER_DEBUG
+#include <string.h>
 template<typename T, size_t S, typename IT>
 void inline CircularBuffer<T,S,IT>::debug(Print* out) {
 	for (IT i = 0; i < capacity; i++) {
