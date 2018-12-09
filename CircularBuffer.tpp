@@ -24,11 +24,13 @@ constexpr CircularBuffer<T,S,IT>::CircularBuffer() :
 }
 
 template<typename T, size_t S, typename IT>
-bool CircularBuffer<T,S,IT>::unshift(T value) {
+template <typename Obj>
+bool CircularBuffer<T,S,IT>::unshift(Obj&& value) {
 	if (head == buffer) {
 		head = buffer + capacity;
 	}
-	*--head = value;
+	// TODO Call Destructor ...
+	new (&head->obj) T (static_cast<Obj&&> (value));
 	if (count == capacity) {
 		if (tail-- == buffer) {
 			tail = buffer + capacity - 1;
@@ -42,12 +44,16 @@ bool CircularBuffer<T,S,IT>::unshift(T value) {
 	}
 }
 
+
+
 template<typename T, size_t S, typename IT>
-bool CircularBuffer<T,S,IT>::push(T value) {
+template <typename Obj>
+bool CircularBuffer<T,S,IT>::push(Obj&& value) {
 	if (++tail == buffer + capacity) {
 		tail = buffer;
 	}
-	*tail = value;
+	// TODO Call Destructor ...
+	new (&tail->obj) T (static_cast<Obj&&> (value));
 	if (count == capacity) {
 		if (++head == buffer + capacity) {
 			head = buffer;
@@ -65,7 +71,10 @@ template<typename T, size_t S, typename IT>
 T CircularBuffer<T,S,IT>::shift() {
 	void(* crash) (void) = 0;
 	if (count <= 0) crash();
-	T result = *head++;
+	T result (static_cast<T&&> (*head));
+	head->~T ();
+	head++;
+	
 	if (head >= buffer + capacity) {
 		head = buffer;
 	}
@@ -77,7 +86,9 @@ template<typename T, size_t S, typename IT>
 T CircularBuffer<T,S,IT>::pop() {
 	void(* crash) (void) = 0;
 	if (count <= 0) crash();
-	T result = *tail--;
+	T result (static_cast<T&&> (*tail));
+	tail->~T ();
+	tail--;
 	if (tail < buffer) {
 		tail = buffer + capacity - 1;
 	}
@@ -86,18 +97,18 @@ T CircularBuffer<T,S,IT>::pop() {
 }
 
 template<typename T, size_t S, typename IT>
-T inline CircularBuffer<T,S,IT>::first() {
-	return *head;
+inline T& CircularBuffer<T,S,IT>::first() {
+	return head->obj;
 }
 
 template<typename T, size_t S, typename IT>
-T inline CircularBuffer<T,S,IT>::last() {
-	return *tail;
+inline T& CircularBuffer<T,S,IT>::last() {
+	return tail->obj;
 }
 
 template<typename T, size_t S, typename IT>
-T CircularBuffer<T,S,IT>::operator [](IT index) {
-	return *(buffer + ((head - buffer + index) % capacity));
+T& CircularBuffer<T,S,IT>::operator [](IT index) {
+	return (buffer + ((head - buffer + index) % capacity))->obj;
 }
 
 template<typename T, size_t S, typename IT>
@@ -122,6 +133,7 @@ bool inline CircularBuffer<T,S,IT>::isFull() {
 
 template<typename T, size_t S, typename IT>
 void inline CircularBuffer<T,S,IT>::clear() {
+	// TODO Call Destructor ...
 	head = tail = buffer;
 	count = 0;
 }
@@ -145,7 +157,7 @@ void inline CircularBuffer<T,S,IT>::debug(Print* out) {
 }
 
 template<typename T, size_t S, typename IT>
-void inline CircularBuffer<T,S,IT>::debugFn(Print* out, void (*printFunction)(Print*, T)) {
+void inline CircularBuffer<T,S,IT>::debugFn(Print* out, void (*printFunction)(Print*, const T&)) {
 	for (IT i = 0; i < capacity; i++) {
 		int hex = (int)buffer + i;
 		out->print(hex, HEX);

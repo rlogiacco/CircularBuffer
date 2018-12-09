@@ -34,6 +34,8 @@ namespace Helper {
 	};
 }
 
+inline void *operator new(size_t, void *buf) { return buf; }
+	
 template<typename T, size_t S, typename IT = typename Helper::Index<(S <= UINT8_MAX)>::Type> class CircularBuffer {
 public:
 	static constexpr IT capacity = static_cast<IT>(S);
@@ -43,12 +45,14 @@ public:
 	/**
 	 * Adds an element to the beginning of buffer: the operation returns `false` if the addition caused overwriting an existing element.
 	 */
-	bool unshift(T value);
+	template <typename Obj>
+	bool unshift(Obj&& value);
 
 	/**
 	 * Adds an element to the end of buffer: the operation returns `false` if the addition caused overwriting an existing element.
 	 */
-	bool push(T value);
+	template <typename Obj>
+	bool push(Obj&& value);
 
 	/**
 	 * Removes an element from the beginning of the buffer.
@@ -63,17 +67,17 @@ public:
 	/**
 	 * Returns the element at the beginning of the buffer.
 	 */
-	T inline first();
+	inline T& first();
 
 	/**
 	 * Returns the element at the end of the buffer.
 	 */
-	T inline last();
+	inline T& last();
 
 	/**
 	 * Array-like access to buffer
 	 */
-	T operator [] (IT index);
+	T& operator [] (IT index);
 
 	/**
 	 * Returns how many elements are actually stored in the buffer.
@@ -102,13 +106,11 @@ public:
 
 	#ifdef CIRCULAR_BUFFER_DEBUG
 	void inline debug(Print* out);
-	void inline debugFn(Print* out, void (*printFunction)(Print*, T));
+	void inline debugFn(Print* out, void (*printFunction)(Print*, const T&));
 	#endif
 
 private:
-	T buffer[S];
-	T *head;
-	T *tail;
+	union { T obj; } buffer[S], *head, *tail;
 #ifndef CIRCULAR_BUFFER_INT_SAFE
 	IT count;
 #else
@@ -116,5 +118,5 @@ private:
 #endif
 };
 
-#include <CircularBuffer.tpp>
+#include "./CircularBuffer.tpp"
 #endif
