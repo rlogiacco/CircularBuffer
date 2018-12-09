@@ -10,7 +10,7 @@ void setup() {
 unsigned long time = 0;
 
 void loop() {
-    Serial.print("buffer count is "); Serial.println(times.count());
+    Serial.print("buffer size is "); Serial.println(times.size());
     delay(250);
     if (millis() - time >= 10000 && !times.isEmpty()) {
         Serial.print("popping "); Serial.println(times.pop());
