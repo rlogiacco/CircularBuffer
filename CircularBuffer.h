@@ -25,16 +25,20 @@
 #endif
 
 namespace Helper {
-	template<bool XS> struct Index {
+	template<bool FITS8, bool FITS16> struct Index {
+		using Type = uint32_t;
+	};
+
+	template<> struct Index<false, true> {
 		using Type = uint16_t;
 	};
 
-	template<> struct Index<true> {
+	template<> struct Index<true, true> {
 		using Type = uint8_t;
 	};
 }
 
-template<typename T, size_t S, typename IT = typename Helper::Index<(S <= UINT8_MAX)>::Type> class CircularBuffer {
+template<typename T, size_t S, typename IT = typename Helper::Index<(S <= UINT8_MAX), (S <= UINT16_MAX)>::Type> class CircularBuffer {
 public:
 	static constexpr IT capacity = static_cast<IT>(S);
 

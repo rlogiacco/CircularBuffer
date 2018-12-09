@@ -16,8 +16,6 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <string.h>
-
 template<typename T, size_t S, typename IT>
 constexpr CircularBuffer<T,S,IT>::CircularBuffer() :
 		head(buffer), tail(buffer), count(0) {
@@ -63,8 +61,7 @@ bool CircularBuffer<T,S,IT>::push(T value) {
 
 template<typename T, size_t S, typename IT>
 T CircularBuffer<T,S,IT>::shift() {
-	void(* crash) (void) = 0;
-	if (count <= 0) crash();
+	if (count <= 0) abort();
 	T result = *head++;
 	if (head >= buffer + capacity) {
 		head = buffer;
@@ -75,8 +72,7 @@ T CircularBuffer<T,S,IT>::shift() {
 
 template<typename T, size_t S, typename IT>
 T CircularBuffer<T,S,IT>::pop() {
-	void(* crash) (void) = 0;
-	if (count <= 0) crash();
+	if (count <= 0) abort();
 	T result = *tail--;
 	if (tail < buffer) {
 		tail = buffer + capacity - 1;
@@ -127,6 +123,7 @@ void inline CircularBuffer<T,S,IT>::clear() {
 }
 
 #ifdef CIRCULAR_BUFFER_DEBUG
+#include <string.h>
 template<typename T, size_t S, typename IT>
 void inline CircularBuffer<T,S,IT>::debug(Print* out) {
 	for (IT i = 0; i < capacity; i++) {

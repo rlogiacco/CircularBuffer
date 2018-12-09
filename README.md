@@ -16,13 +16,14 @@ The library itself has an implicit memory consumption of about *0.5Kb*: 580 byte
     - [Retrieve data](#retrieve-data)
     - [Additional operations](#additional-operations)
 - [Advanced Usage](#advanced-usage)
-    - [Automatic optimization (`1.3.0+`)](#automatic-optimization-130)
+    - [Automatic optimization](#automatic-optimization)
     - [Legacy optimization](#legacy-optimization)
     - [Interrupts](#interrupts)
 - [Examples](#examples)
 - [Limitations](#limitations)
+    - [Reclaim memory](#reclaim-memory)
 - [CHANGE LOG](#change-log)
-    - [1.3.0 (upcoming)](#130-upcoming)
+    - [1.3.0](#130)
     - [1.2.0](#120)
     - [1.1.1](#111)
     - [1.1.0](#110)
@@ -117,24 +118,28 @@ buffer[15]; // ['c','d','e'] returned value is unpredictable
 
 ## Advanced Usage
 
-### Automatic optimization (`1.3.0+`)
+### Automatic optimization
 
-Starting from version `1.3.0` the library is capable to automatically detect which data type should be used for the index based on the specified capacity: `unsigned int` for buffers with a declared capacity greater than `255`, `byte` otherwise.
+Starting from version `1.3.0` the library is capable to automatically detect which data type should be used for the index based on the buffer capacity: 
+* if you declare a buffer with a capacity greater than `65535` then your index is going to be an `unsigned long`
+* `unsigned int` for buffers with a declared capacity greater than `255`
+* otherwise a `byte` is going to suffice
 
 In addition, you can mix in the same code buffers with small index and buffers with normal index: previously this was not possible.
 
 ``` cpp
-CircularBuffer<short,100> optimizedBuffer; // reduced memory footprint, index type is uint8_t (a.k.a. byte)
-CircularBuffer<short,500> normalBuffer;    // standard memory footprint, index type is unit16_t (a.k.a. unsigned int)
+CircularBuffer<char,100> optimizedBuffer; // reduced memory footprint, index type is uint8_t (a.k.a. byte)
+CircularBuffer<long,500> normalBuffer;    // standard memory footprint, index type is unit16_t (a.k.a. unsigned int)
+CircularBuffer<int,66000> hugeBuffer;    // extended memory footprint, index type is unit32_t (a.k.a. unsigned long)
 ```
 
 ### Legacy optimization
 
 _The following applies to versions prior to `1.3.0` only._
 
-By default the library uses `unsigned int` indexes, allowing for a maximum of 65536 items, but you'll rarely need such a huge store.
+By default the library uses `unsigned int` indexes, allowing for a maximum of `65535` items, but you'll rarely need such a huge store.
 
-Defining the `CIRCULAR_BUFFER_XS` macro **BEFORE** including the library you can switch the library indexes to `byte` type: this reduces the memory used by the library itself by only `36` bytes, but allows you to potentially squeeze out much more whenever you perform an indexed access, if you do any, by switching data type.
+You can switch the library indexes to `byte` type defining the `CIRCULAR_BUFFER_XS` macro **BEFORE** the `#include` directive: this reduces the memory used by the library itself by only `36` bytes, but allows you to potentially squeeze out much more whenever you perform an indexed access, if you do any, by using the smaller data type.
 
 ``` cpp
 #define CIRCULAR_BUFFER_XS
@@ -146,14 +151,14 @@ void setup() { }
 
 void loop() {
 	// here i should be declared of type byte rather than unsigned int
-    // to maximize the effects of the optimization
+    // in order to maximize the effects of the optimization
     for (byte i = 0; i < buffer.size() - 1; i++) {
         Serial.print(buffer[i]);
     }
 }
 ```
 
-**Please note**: this _macro switch_ forces the buffer to use an 8 bits data type as internal index, as such your buffers will be limited to a maximum capacity of `255`.
+**Please note**: this _macro switch_ forces the buffer to use an 8 bits data type as internal index, as such **all** your buffers will be limited to a maximum capacity of `255`.
 
 ### Interrupts
 
@@ -199,17 +204,28 @@ Multiple examples are available in the `examples` folder of the library:
 
 ## Limitations
 
-The maximum capacity allowed by the library is `65535`, but I hardly believe this library will be the real limit: you'll hit the memory limits of your microcontroller much earlier.
+### Reclaim memory
+
+If you use this library to store dynamically allocated objects, refrain from using the `clear()` method as that will **not** perform memory deallocation: you need to iterate over your buffer content and release memory accordingly to the allocation method used, either by `delete` (if you had used `new`) or `free` (in case of `malloc`):
+
+```cpp
+while (!buffer.isEmpty()) {
+    // pick the correct one
+    delete buffer.pop();
+    free(buffer.pop());
+}
+```
 
 ------------------------
 ## CHANGE LOG
 
-### 1.3.0 (upcoming)
+### 1.3.0
 * Slightly reduced both flash and heap footprint (thanks to @Erlkoenig90)
 * Introduced _instance based_ control over index data type (thanks to @Erlkoenig90)
 * Replaced method `capacity()` in favour of the constant instance attribute `capacity`
 * Added the `EventLogging` and `Interrupts` examples
 * Dropped the `CIRCULAT_BUFFER_XS` _macro switch_ in favor of automatic index type identification (thanks to @Erlkoenig90)
+* Added support for very large buffers (capacity can go up to `UINT32_MAX`)
 
 ### 1.2.0
 * Added interrupt related macro switch `CIRCULAR_BUFFER_INT_SAFE`
