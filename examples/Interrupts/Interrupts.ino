@@ -1,6 +1,11 @@
 #define CIRCULAR_BUFFER_INT_SAFE
 #include "CircularBuffer.h"
-CircularBuffer<volatile long, 10> times;
+CircularBuffer<unsigned long, 10> timings;
+
+
+void count() {
+  timings.push(millis());
+}
 
 void setup() {
     Serial.begin(9600);
@@ -10,14 +15,10 @@ void setup() {
 unsigned long time = 0;
 
 void loop() {
-    Serial.print("buffer size is "); Serial.println(times.size());
+    Serial.print("buffer size is "); Serial.println(timings.size());
     delay(250);
-    if (millis() - time >= 10000 && !times.isEmpty()) {
-        Serial.print("popping "); Serial.println(times.pop());
+    if (millis() - time >= 10000 && !timings.isEmpty()) {
+        Serial.print("popping "); Serial.println(timings.pop());
         time = millis();
     }
-}
-
-void count() {
-  times.push(millis());
 }
