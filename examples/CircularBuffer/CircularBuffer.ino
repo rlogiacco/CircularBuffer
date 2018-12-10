@@ -21,7 +21,7 @@ void loop() {
 		time = millis();
 		float avg = 0.0;
 		// the following ensures using the right type for the index variable
-		using index_t = decltype(buffer.capacity);
+		using index_t = decltype(buffer)::index_t;
 		for (index_t i = 0; i < buffer.size(); i++) {
 			avg += buffer[i] / buffer.size();
 		}
