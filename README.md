@@ -130,7 +130,7 @@ In addition, you can mix in the same code buffers with small index and buffers w
 ``` cpp
 CircularBuffer<char,100> optimizedBuffer; // reduced memory footprint, index type is uint8_t (a.k.a. byte)
 CircularBuffer<long,500> normalBuffer;    // standard memory footprint, index type is unit16_t (a.k.a. unsigned int)
-CircularBuffer<int,66000> hugeBuffer;    // extended memory footprint, index type is unit32_t (a.k.a. unsigned long)
+CircularBuffer<int,66000> hugeBuffer;     // extended memory footprint, index type is unit32_t (a.k.a. unsigned long)
 ```
 
 To obtain the maximum advantage of the optimization above, anytime you need to refer to the buffer index you should use the most appropriate type: this can be easily achieved using the `decltype` specifier, like in the following example:
@@ -185,27 +185,21 @@ The library does help working with interrupts defining the `CIRCULAR_BUFFER_INT_
 
 ```cpp
 #define CIRCULAR_BUFFER_INT_SAFE
-CircularBuffer<volatile long, 10> times;
+CircularBuffer<unsigned long, 10> timings;
+
+void count() {
+  timings.push(millis());
+}
 
 void setup() {
-    Serial.begin(9600);
     attachInterrupt(digitalPinToInterrupt(2), count, RISING);
 }
 
-unsigned long time = 0;
-
 void loop() {
-    Serial.print("buffer count is "); Serial.println(times.count());
+    Serial.print("buffer size is "); Serial.println(timings.size());
     delay(250);
-    if (millis() - time >= 10000 && !times.isEmpty()) {
-        Serial.print("popping "); Serial.println(times.pop());
-        time = millis();
-    }
 }
 
-void count() {
-  times.unshift(millis());
-}
 ```
 
 > Please note this does **NOT** make the library _interrupt safe_, but it does help its usage in interrupt driven firmwares.
@@ -219,7 +213,8 @@ Multiple examples are available in the `examples` folder of the library:
  * [Object.ino](https://github.com/rlogiacco/CircularBuffer/blob/master/examples/Object/Object.ino) is meant to demonstrate how to use the buffer to store dynamic structures
  * [Queue.ino](https://github.com/rlogiacco/CircularBuffer/blob/master/examples/Queue/Queue.ino) is a classical example of a queue, or a FIFO data structure
  * [Stack.ino](https://github.com/rlogiacco/CircularBuffer/blob/master/examples/Stack/Stack.ino) on the other end shows how to use the library to represent a LIFO data structure
- * [Struct.ino](https://github.com/rlogiacco/CircularBuffer/blob/master/examples/Struct/Struct.ino) answer to the question _can this library store structured data?_
+ * [Struct.ino](https://github.com/rlogiacco/CircularBuffer/blob/master/examples/Struct/Struct.ino) answers to the question _can this library store structured data?_
+ * [Interrupts.ino](https://github.com/rlogiacco/CircularBuffer/blob/master/examples/Interrupts/Interrupts.ino) demonstrates the use of the library in interrupt driven code
 
 ## Limitations
 
@@ -239,11 +234,14 @@ while (!buffer.isEmpty()) {
 ## CHANGE LOG
 
 ### 1.3.0
-* Slightly reduced both flash and heap footprint (thanks to @Erlkoenig90)
-* Introduced _instance based_ control over index data type (thanks to @Erlkoenig90)
+
+Most of the major improvements below have been contributed by [Erlkoenig90](https://github.com/Erlkoenig90): thank you Niklas!
+
+* Slightly reduced both flash and heap footprint
+* Introduced _instance based_ control over index data type
 * Replaced method `capacity()` in favour of the constant instance attribute `capacity`
 * Added the `EventLogging` and `Interrupts` examples
-* Dropped the `CIRCULAT_BUFFER_XS` _macro switch_ in favor of automatic index type identification (thanks to @Erlkoenig90)
+* Dropped the `CIRCULAT_BUFFER_XS` _macro switch_ in favor of automatic index type identification
 * Added support for very large buffers (capacity can go up to `UINT32_MAX`)
 
 ### 1.2.0
