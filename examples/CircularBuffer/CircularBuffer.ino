@@ -1,6 +1,6 @@
 #include <CircularBuffer.h>
 
-CircularBuffer<int, 1000> buffer;
+CircularBuffer<int, 500> buffer;
 
 unsigned long time = 0;
 
