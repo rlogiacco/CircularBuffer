@@ -53,7 +53,7 @@ template<typename T, size_t S, typename IT = typename Helper::Index<(S <= UINT8_
 public:
 	static constexpr IT capacity = static_cast<IT>(S);
 
-	constexpr CircularBuffer();
+	CircularBuffer();
 
 	/**
 	 * Adds an element to the beginning of buffer: the operation returns `false` if the addition caused overwriting an existing element.
@@ -105,12 +105,12 @@ public:
 	/**
 	 * Returns `true` if no elements can be removed from the buffer.
 	 */
-	bool inline isEmpty();
+	bool inline isEmpty() const;
 
 	/**
 	 * Returns `true` if no elements can be added to the buffer without overwriting existing elements.
 	 */
-	bool inline isFull();
+	bool inline isFull() const;
 
 	/**
 	 * Resets the buffer to a clean status, making all buffer positions available.
@@ -125,9 +125,6 @@ public:
 private:
 	union Container {
 		T obj;
-		struct {} dummy;
-		constexpr Container () : dummy {} {}
-		~Container () {}
 	} buffer[S], *head, *tail;
 #ifndef CIRCULAR_BUFFER_INT_SAFE
 	IT count;

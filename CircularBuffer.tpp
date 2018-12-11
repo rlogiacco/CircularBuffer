@@ -17,8 +17,8 @@
  */
 
 template<typename T, size_t S, typename IT>
-constexpr CircularBuffer<T,S,IT>::CircularBuffer() :
-		head(buffer), tail(buffer), count(0) {
+CircularBuffer<T,S,IT>::CircularBuffer() :
+	head(buffer), tail(buffer), count(0) {
 }
 
 template<typename T, size_t S, typename IT>
@@ -119,12 +119,12 @@ IT inline CircularBuffer<T,S,IT>::available() {
 }
 
 template<typename T, size_t S, typename IT>
-bool inline CircularBuffer<T,S,IT>::isEmpty() {
+bool inline CircularBuffer<T,S,IT>::isEmpty() const {
 	return count == 0;
 }
 
 template<typename T, size_t S, typename IT>
-bool inline CircularBuffer<T,S,IT>::isFull() {
+bool inline CircularBuffer<T,S,IT>::isFull() const {
 	return count == capacity;
 }
 
