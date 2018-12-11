@@ -22,7 +22,9 @@ void loop() {
 	if (buffer.isFull()) {
 		Serial.println("Queue is full:");
 		while (!buffer.isEmpty()) {
-			buffer.shift()->print(&Serial);
+			Record* record = buffer.shift();
+			record->print(&Serial);
+			delete record;
 			Serial.println();
 		}
 		Serial.println("START AGAIN");

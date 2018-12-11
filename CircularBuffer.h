@@ -51,7 +51,15 @@ namespace Helper {
 
 template<typename T, size_t S, typename IT = typename Helper::Index<(S <= UINT8_MAX), (S <= UINT16_MAX)>::Type> class CircularBuffer {
 public:
+	/**
+	 * The buffer capacity: read only as it cannot ever change.
+	 */
 	static constexpr IT capacity = static_cast<IT>(S);
+
+	/**
+	 * Aliases the index type, can be used to obtain the right index type with `decltype(buffer)::index_t`.
+	 */
+	using index_t = IT;
 
 	CircularBuffer();
 

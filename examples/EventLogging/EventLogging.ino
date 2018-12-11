@@ -41,6 +41,7 @@ void loop() {
         Serial.print(buffer.size());
         Serial.print(" elements: ");
         // iterates over the events in chronological order
+        // you can replace byte with decltype(buffer)::index_t
         for (byte i = 0; i < buffer.size(); i++) {
             // retrieves the i-th element from the buffer without removing it
             Serial.print(buffer[i]);

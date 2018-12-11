@@ -1,6 +1,6 @@
 #include <CircularBuffer.h>
 
-CircularBuffer<int, 100> buffer;
+CircularBuffer<int, 400> buffer;
 
 unsigned long time = 0;
 
@@ -20,7 +20,9 @@ void loop() {
 	if (millis() - time >= 500) {
 		time = millis();
 		float avg = 0.0;
-		for (unsigned int i = 0; i < buffer.size(); i++) {
+		// the following ensures using the right type for the index variable
+		using index_t = decltype(buffer)::index_t;
+		for (index_t i = 0; i < buffer.size(); i++) {
 			avg += buffer[i] / buffer.size();
 		}
 		Serial.print("Average is ");
