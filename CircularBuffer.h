@@ -133,6 +133,8 @@ public:
 private:
 	union Container {
 		T obj;
+		Container () {}
+		~Container () {}
 	} buffer[S], *head, *tail;
 #ifndef CIRCULAR_BUFFER_INT_SAFE
 	IT count;
