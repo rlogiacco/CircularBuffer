@@ -53,6 +53,18 @@ public:
 	constexpr CircularBuffer();
 
 	/**
+	 * Disables copy constructor
+	 */
+	CircularBuffer(const CircularBuffer&) = delete;
+	CircularBuffer(CircularBuffer&&) = delete;
+
+	/**
+	 * Disables assignment operator
+	 */
+	CircularBuffer& operator=(const CircularBuffer&) = delete;
+	CircularBuffer& operator=(CircularBuffer&&) = delete;
+
+	/**
 	 * Adds an element to the beginning of buffer: the operation returns `false` if the addition caused overwriting an existing element.
 	 */
 	bool unshift(T value);
