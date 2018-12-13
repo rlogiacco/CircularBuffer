@@ -82,37 +82,37 @@ T CircularBuffer<T,S,IT>::pop() {
 }
 
 template<typename T, size_t S, typename IT>
-T inline CircularBuffer<T,S,IT>::first() {
+T inline CircularBuffer<T,S,IT>::first() const {
 	return *head;
 }
 
 template<typename T, size_t S, typename IT>
-T inline CircularBuffer<T,S,IT>::last() {
+T inline CircularBuffer<T,S,IT>::last() const {
 	return *tail;
 }
 
 template<typename T, size_t S, typename IT>
-T CircularBuffer<T,S,IT>::operator [](IT index) {
+T CircularBuffer<T,S,IT>::operator [](IT index) const {
 	return *(buffer + ((head - buffer + index) % capacity));
 }
 
 template<typename T, size_t S, typename IT>
-IT inline CircularBuffer<T,S,IT>::size() {
+IT inline CircularBuffer<T,S,IT>::size() const {
 	return count;
 }
 
 template<typename T, size_t S, typename IT>
-IT inline CircularBuffer<T,S,IT>::available() {
+IT inline CircularBuffer<T,S,IT>::available() const {
 	return capacity - count;
 }
 
 template<typename T, size_t S, typename IT>
-bool inline CircularBuffer<T,S,IT>::isEmpty() {
+bool inline CircularBuffer<T,S,IT>::isEmpty() const {
 	return count == 0;
 }
 
 template<typename T, size_t S, typename IT>
-bool inline CircularBuffer<T,S,IT>::isFull() {
+bool inline CircularBuffer<T,S,IT>::isFull() const {
 	return count == capacity;
 }
 

@@ -87,37 +87,37 @@ public:
 	/**
 	 * Returns the element at the beginning of the buffer.
 	 */
-	T inline first();
+	T inline first() const;
 
 	/**
 	 * Returns the element at the end of the buffer.
 	 */
-	T inline last();
+	T inline last() const;
 
 	/**
 	 * Array-like access to buffer
 	 */
-	T operator [] (IT index);
+	T operator [] (IT index) const;
 
 	/**
 	 * Returns how many elements are actually stored in the buffer.
 	 */
-	IT inline size();
+	IT inline size() const;
 
 	/**
 	 * Returns how many elements can be safely pushed into the buffer.
 	 */
-	IT inline available();
+	IT inline available() const;
 
 	/**
 	 * Returns `true` if no elements can be removed from the buffer.
 	 */
-	bool inline isEmpty();
+	bool inline isEmpty() const;
 
 	/**
 	 * Returns `true` if no elements can be added to the buffer without overwriting existing elements.
 	 */
-	bool inline isFull();
+	bool inline isFull() const;
 
 	/**
 	 * Resets the buffer to a clean status, making all buffer positions available.
