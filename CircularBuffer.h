@@ -62,18 +62,28 @@ public:
 	using index_t = IT;
 
 	CircularBuffer();
+	~CircularBuffer ();
+	CircularBuffer(const CircularBuffer& src);
+	CircularBuffer(CircularBuffer&& src);
+	CircularBuffer& operator = (const CircularBuffer& src);
+	CircularBuffer& operator = (CircularBuffer&& src);
+	
 
 	/**
 	 * Adds an element to the beginning of buffer: the operation returns `false` if the addition caused overwriting an existing element.
 	 */
-	template <typename Obj>
-	bool unshift(Obj&& value);
+	bool unshift(const T& value);
+	bool unshift(T&& value);
+	template <typename... Args>
+	bool unshift_emplace(Args&&... args);
 
 	/**
 	 * Adds an element to the end of buffer: the operation returns `false` if the addition caused overwriting an existing element.
 	 */
-	template <typename Obj>
-	bool push(Obj&& value);
+	bool push(const T& value);
+	bool push(T&& value);
+	template <typename... Args>
+	bool push_emplace(Args&&... args);
 
 	/**
 	 * Removes an element from the beginning of the buffer.
@@ -96,19 +106,34 @@ public:
 	inline T& last();
 
 	/**
+	 * Returns the element at the beginning of the buffer.
+	 */
+	inline const T& first() const;
+
+	/**
+	 * Returns the element at the end of the buffer.
+	 */
+	inline const T& last() const;
+
+	/**
 	 * Array-like access to buffer
 	 */
 	T& operator [] (IT index);
 
 	/**
+	 * Array-like access to buffer
+	 */
+	const T& operator [] (IT index) const;
+
+	/**
 	 * Returns how many elements are actually stored in the buffer.
 	 */
-	IT inline size();
+	IT inline size() const;
 
 	/**
 	 * Returns how many elements can be safely pushed into the buffer.
 	 */
-	IT inline available();
+	IT inline available() const;
 
 	/**
 	 * Returns `true` if no elements can be removed from the buffer.
@@ -126,16 +151,19 @@ public:
 	void inline clear();
 
 	#ifdef CIRCULAR_BUFFER_DEBUG
-	void inline debug(Print* out);
-	void inline debugFn(Print* out, void (*printFunction)(Print*, const T&));
+	void inline debug(Print* out) const;
+	void inline debugFn(Print* out, void (*printFunction)(Print*, const T&)) const;
 	#endif
 
 private:
+	T* unshift (bool& res);
+	T* push (bool& res);
 	union Container {
 		T obj;
 		Container () {}
 		~Container () {}
-	} buffer[S], *head, *tail;
+	} buffer[S];
+	size_t head, tail;
 #ifndef CIRCULAR_BUFFER_INT_SAFE
 	IT count;
 #else

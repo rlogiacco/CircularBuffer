@@ -18,63 +18,162 @@
 
 template<typename T, size_t S, typename IT>
 CircularBuffer<T,S,IT>::CircularBuffer() :
-	head(buffer), tail(buffer), count(0) {
+	head(0), tail(0), count(0) {
 }
 
 template<typename T, size_t S, typename IT>
-template <typename Obj>
-bool CircularBuffer<T,S,IT>::unshift(Obj&& value) {
-	if (head == buffer) {
-		head = buffer + capacity;
+CircularBuffer<T,S,IT>::~CircularBuffer () {
+	clear ();
+}
+
+template<typename T, size_t S, typename IT>
+CircularBuffer<T,S,IT>::CircularBuffer(const CircularBuffer& src) : head (src.head), tail (src.tail), count (src.count) {
+	auto scan = head;
+	for (IT i = 0; i < count; ++i) {
+		new (&buffer [scan].obj) T (src.buffer [scan].obj);
+		if (++scan == capacity)
+			scan = 0;
+	}
+}
+
+template<typename T, size_t S, typename IT>
+CircularBuffer<T,S,IT>::CircularBuffer(CircularBuffer&& src) : head (src.head), tail (src.tail), count (src.count) {
+	auto scan = head;
+	for (IT i = 0; i < count; ++i) {
+		new (&buffer [scan].obj) T (static_cast<T&&> (src.buffer [scan].obj));
+		if (++scan == capacity)
+			scan = 0;
+	}
+	src.clear ();
+}
+
+template<typename T, size_t S, typename IT>
+CircularBuffer<T,S,IT>& CircularBuffer<T,S,IT>::operator = (const CircularBuffer& src) {
+	clear ();
+	head = src.head;
+	tail = src.tail;
+	count = src.count;
+	
+	auto scan = head;
+	for (IT i = 0; i < count; ++i) {
+		new (&buffer [scan].obj) T (src.buffer [scan].obj);
+		if (++scan == capacity)
+			scan = 0;
+	}
+	return *this;
+}
+
+template<typename T, size_t S, typename IT>
+CircularBuffer<T,S,IT>& CircularBuffer<T,S,IT>::operator = (CircularBuffer&& src) {
+	clear ();
+	head = src.head;
+	tail = src.tail;
+	count = src.count;
+	
+	auto scan = head;
+	for (IT i = 0; i < count; ++i) {
+		new (&buffer [scan].obj) T (static_cast<T&&> (src.buffer [scan].obj));
+		if (++scan == capacity)
+			scan = 0;
+	}
+	src.clear ();
+	return *this;
+}
+
+template<typename T, size_t S, typename IT>
+T* CircularBuffer<T,S,IT>::unshift (bool& res) {
+	if (head == 0) {
+		head = capacity;
 	}
 	--head;
-	if (count == capacity) head->obj.~T ();
-	new (&head->obj) T (static_cast<Obj&&> (value));
 	if (count == capacity) {
-		if (tail-- == buffer) {
-			tail = buffer + capacity - 1;
+		buffer [head].obj.~T ();
+		if (tail-- == 0) {
+			tail = capacity - 1;
 		}
-		return false;
+		res = false;
 	} else {
 		if (count++ == 0) {
 			tail = head;
 		}
-		return true;
+		res = true;
 	}
+	return &buffer[head].obj;
 }
 
-
-
 template<typename T, size_t S, typename IT>
-template <typename Obj>
-bool CircularBuffer<T,S,IT>::push(Obj&& value) {
-	if (++tail == buffer + capacity) {
-		tail = buffer;
+T* CircularBuffer<T,S,IT>::push (bool& res) {
+	if (++tail == capacity) {
+		tail = 0;
 	}
-	if (count == capacity) tail->obj.~T ();
-	new (&tail->obj) T (static_cast<Obj&&> (value));
 	if (count == capacity) {
-		if (++head == buffer + capacity) {
-			head = buffer;
+		buffer [tail].obj.~T ();
+		if (++head == capacity) {
+			head = 0;
 		}
-		return false;
+		res = false;
 	} else {
 		if (count++ == 0) {
 			head = tail;
 		}
-		return true;
+		res = true;
 	}
+	return &buffer[tail].obj;
+}
+
+template<typename T, size_t S, typename IT>
+bool CircularBuffer<T,S,IT>::unshift(const T& value) {
+	bool res;
+	new (unshift (res)) T (value);
+	return res;
+}
+
+template<typename T, size_t S, typename IT>
+bool CircularBuffer<T,S,IT>::unshift(T&& value) {
+	bool res;
+	new (unshift (res)) T (static_cast<T&&> (value));
+	return res;
+}
+
+template<typename T, size_t S, typename IT>
+template <typename... Args>
+bool CircularBuffer<T,S,IT>::unshift_emplace(Args&&... args) {
+	bool res;
+	new (unshift (res)) T (static_cast<Args&&> (args)...);
+	return res;
+}
+
+template<typename T, size_t S, typename IT>
+bool CircularBuffer<T,S,IT>::push(const T& value) {
+	bool res;
+	new (push (res)) T (value);
+	return res;
+}
+
+template<typename T, size_t S, typename IT>
+bool CircularBuffer<T,S,IT>::push(T&& value) {
+	bool res;
+	new (push (res)) T (static_cast<T&&> (value));
+	return res;
+}
+
+template<typename T, size_t S, typename IT>
+template <typename... Args>
+bool CircularBuffer<T,S,IT>::push_emplace(Args&&... args) {
+	bool res;
+	new (push (res)) T (static_cast<Args&&> (args)...);
+	return res;
 }
 
 template<typename T, size_t S, typename IT>
 T CircularBuffer<T,S,IT>::shift() {
 	if (count <= 0) abort();
-	T result (static_cast<T&&> (head->obj));
-	head->obj.~T ();
+	T result (static_cast<T&&> (buffer [head].obj));
+	buffer [head].obj.~T ();
 	head++;
 	
-	if (head >= buffer + capacity) {
-		head = buffer;
+	if (head >= capacity) {
+		head = 0;
 	}
 	count--;
 	return result;
@@ -83,11 +182,13 @@ T CircularBuffer<T,S,IT>::shift() {
 template<typename T, size_t S, typename IT>
 T CircularBuffer<T,S,IT>::pop() {
 	if (count <= 0) abort();
-	T result (static_cast<T&&> (tail->obj));
-	tail->obj.~T ();
-	tail--;
-	if (tail < buffer) {
-		tail = buffer + capacity - 1;
+	T result (static_cast<T&&> (buffer [tail].obj));
+	buffer [tail].obj.~T ();
+	
+	if (tail == 0) {
+		tail = capacity - 1;
+	} else {
+		--tail;
 	}
 	count--;
 	return result;
@@ -95,27 +196,42 @@ T CircularBuffer<T,S,IT>::pop() {
 
 template<typename T, size_t S, typename IT>
 inline T& CircularBuffer<T,S,IT>::first() {
-	return head->obj;
+	return buffer [head].obj;
 }
 
 template<typename T, size_t S, typename IT>
 inline T& CircularBuffer<T,S,IT>::last() {
-	return tail->obj;
+	return buffer [tail].obj;
+}
+
+template<typename T, size_t S, typename IT>
+inline const T& CircularBuffer<T,S,IT>::first() const {
+	return buffer [head].obj;
+}
+
+template<typename T, size_t S, typename IT>
+inline const T& CircularBuffer<T,S,IT>::last() const {
+	return buffer [tail].obj;
 }
 
 template<typename T, size_t S, typename IT>
 T& CircularBuffer<T,S,IT>::operator [](IT index) {
-	return (buffer + ((head - buffer + index) % capacity))->obj;
+	return buffer [(head + index) % capacity].obj;
 }
 
 template<typename T, size_t S, typename IT>
-IT inline CircularBuffer<T,S,IT>::size() {
+const T& CircularBuffer<T,S,IT>::operator [](IT index) const {
+	return buffer [(head + index) % capacity].obj;
+}
+
+template<typename T, size_t S, typename IT>
+IT inline CircularBuffer<T,S,IT>::size() const {
 	return count;
 }
 
 template<typename T, size_t S, typename IT>
-IT inline CircularBuffer<T,S,IT>::available() {
-	return capacity - count;
+IT inline CircularBuffer<T,S,IT>::available() const {
+	return static_cast<IT> (capacity - count);
 }
 
 template<typename T, size_t S, typename IT>
@@ -132,27 +248,27 @@ template<typename T, size_t S, typename IT>
 void inline CircularBuffer<T,S,IT>::clear() {
 	auto scan = head;
 	for (IT i = 0; i < count; ++i) {
-		scan->obj.~T ();
-		if (++scan == buffer + capacity)
-			scan = buffer;
+		buffer [scan].obj.~T ();
+		if (++scan == capacity)
+			scan = 0;
 	}
-	head = tail = buffer;
+	head = tail = 0;
 	count = 0;
 }
 
 #ifdef CIRCULAR_BUFFER_DEBUG
 #include <string.h>
 template<typename T, size_t S, typename IT>
-void inline CircularBuffer<T,S,IT>::debug(Print* out) {
+void inline CircularBuffer<T,S,IT>::debug(Print* out) const {
 	for (IT i = 0; i < capacity; i++) {
 		int hex = (int)buffer + i;
 		out->print(hex, HEX);
 		out->print("  ");
 		out->print(*(buffer + i));
-		if (head == buffer + i) {
+		if (head == i) {
 			out->print(" head");
 		} 
-		if (tail == buffer + i) {
+		if (tail == i) {
 			out->print(" tail");
 		}
 		out->println();
@@ -160,16 +276,16 @@ void inline CircularBuffer<T,S,IT>::debug(Print* out) {
 }
 
 template<typename T, size_t S, typename IT>
-void inline CircularBuffer<T,S,IT>::debugFn(Print* out, void (*printFunction)(Print*, const T&)) {
+void inline CircularBuffer<T,S,IT>::debugFn(Print* out, void (*printFunction)(Print*, const T&)) const {
 	for (IT i = 0; i < capacity; i++) {
 		int hex = (int)buffer + i;
 		out->print(hex, HEX);
 		out->print("  ");
 		printFunction(out, *(buffer + i));
-		if (head == buffer + i) {
+		if (head == i) {
 			out->print(" head");
 		} 
-		if (tail == buffer + i) {
+		if (tail == i) {
 			out->print(" tail");
 		}
 		out->println();
