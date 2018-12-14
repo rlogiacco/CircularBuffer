@@ -24,6 +24,17 @@
 #include <Print.h>
 #endif
 
+#ifdef __AVR__
+	/**
+	 * Overload for operator new for placement-new syntax. In standard C++, this is provided by the standard library header <new>. However, AVR-GCC does not
+	 * provide that header, so we define our own operator new. If any other Arduino library does the same, this might result in a compiler error. In that case,
+	 * please comment this line.
+	 */
+	inline void *operator new(size_t, void *buf) { return buf; }
+#else
+#	include <new>
+#endif
+
 namespace Helper {
 	template<bool FITS8, bool FITS16> struct Index {
 		using Type = uint32_t;
@@ -50,7 +61,13 @@ public:
 	 */
 	using index_t = IT;
 
-	constexpr CircularBuffer();
+	CircularBuffer();
+	~CircularBuffer ();
+	CircularBuffer(const CircularBuffer& src);
+	CircularBuffer(CircularBuffer&& src);
+	CircularBuffer& operator = (const CircularBuffer& src);
+	CircularBuffer& operator = (CircularBuffer&& src);
+	
 
 	/**
 	 * Disables copy constructor
@@ -67,12 +84,18 @@ public:
 	/**
 	 * Adds an element to the beginning of buffer: the operation returns `false` if the addition caused overwriting an existing element.
 	 */
-	bool unshift(T value);
+	bool unshift(const T& value);
+	bool unshift(T&& value);
+	template <typename... Args>
+	bool unshift_emplace(Args&&... args);
 
 	/**
 	 * Adds an element to the end of buffer: the operation returns `false` if the addition caused overwriting an existing element.
 	 */
-	bool push(T value);
+	bool push(const T& value);
+	bool push(T&& value);
+	template <typename... Args>
+	bool push_emplace(Args&&... args);
 
 	/**
 	 * Removes an element from the beginning of the buffer.
@@ -87,17 +110,33 @@ public:
 	/**
 	 * Returns the element at the beginning of the buffer.
 	 */
-	T inline first() const;
+
+	inline T& first();
 
 	/**
 	 * Returns the element at the end of the buffer.
 	 */
-	T inline last() const;
+	inline T& last();
+
+	/**
+	 * Returns the element at the beginning of the buffer.
+	 */
+	inline const T& first() const;
+
+	/**
+	 * Returns the element at the end of the buffer.
+	 */
+	inline const T& last() const;
 
 	/**
 	 * Array-like access to buffer
 	 */
-	T operator [] (IT index) const;
+	T& operator [] (IT index);
+
+	/**
+	 * Array-like access to buffer
+	 */
+	const T& operator [] (IT index) const;
 
 	/**
 	 * Returns how many elements are actually stored in the buffer.
@@ -125,14 +164,19 @@ public:
 	void inline clear();
 
 	#ifdef CIRCULAR_BUFFER_DEBUG
-	void inline debug(Print* out);
-	void inline debugFn(Print* out, void (*printFunction)(Print*, T));
+	void inline debug(Print* out) const;
+	void inline debugFn(Print* out, void (*printFunction)(Print*, const T&)) const;
 	#endif
 
 private:
-	T buffer[S];
-	T *head;
-	T *tail;
+	T* unshift (bool& res);
+	T* push (bool& res);
+	union Container {
+		T obj;
+		Container () {}
+		~Container () {}
+	} buffer[S];
+	size_t head, tail;
 #ifndef CIRCULAR_BUFFER_INT_SAFE
 	IT count;
 #else
