@@ -70,6 +70,18 @@ public:
 	
 
 	/**
+	 * Disables copy constructor
+	 */
+	CircularBuffer(const CircularBuffer&) = delete;
+	CircularBuffer(CircularBuffer&&) = delete;
+
+	/**
+	 * Disables assignment operator
+	 */
+	CircularBuffer& operator=(const CircularBuffer&) = delete;
+	CircularBuffer& operator=(CircularBuffer&&) = delete;
+
+	/**
 	 * Adds an element to the beginning of buffer: the operation returns `false` if the addition caused overwriting an existing element.
 	 */
 	bool unshift(const T& value);
@@ -98,6 +110,7 @@ public:
 	/**
 	 * Returns the element at the beginning of the buffer.
 	 */
+
 	inline T& first();
 
 	/**
