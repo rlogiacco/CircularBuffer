@@ -10,19 +10,21 @@ CircularBuffer [![Build Status][travis-status]][travis]
 The library itself has an implicit memory consumption of about *0.5Kb*: 580 bytes (max) of code and 8 bytes of memory, to my calculations. That does not consider the space used to store the items themselves, obviously.
 
 <!-- toc -->
-- [Usage](#usage)
-    - [Declare and initialize](#declare-and-initialize)
-    - [Store data](#store-data)
-    - [Retrieve data](#retrieve-data)
-    - [Additional operations](#additional-operations)
-- [Advanced Usage](#advanced-usage)
-    - [Automatic optimization](#automatic-optimization)
-    - [Legacy optimization](#legacy-optimization)
-    - [Interrupts](#interrupts)
-- [Examples](#examples)
-- [Limitations](#limitations)
-    - [Reclaim memory](#reclaim-memory)
-- [CHANGE LOG](#change-log)
+- [CircularBuffer [![Build Status][travis-status]][travis]](#CircularBuffer-Build-Statustravis-statustravis)
+  - [Usage](#Usage)
+    - [Declare and initialize](#Declare-and-initialize)
+    - [Store data](#Store-data)
+    - [Retrieve data](#Retrieve-data)
+    - [Additional operations](#Additional-operations)
+  - [Advanced Usage](#Advanced-Usage)
+    - [Automatic optimization](#Automatic-optimization)
+    - [Legacy optimization](#Legacy-optimization)
+    - [Interrupts](#Interrupts)
+  - [Examples](#Examples)
+  - [Limitations](#Limitations)
+    - [Reclaim memory](#Reclaim-memory)
+  - [CHANGE LOG](#CHANGE-LOG)
+    - [1.3.1](#131)
     - [1.3.0](#130)
     - [1.2.0](#120)
     - [1.1.1](#111)
@@ -232,6 +234,9 @@ while (!buffer.isEmpty()) {
 
 ------------------------
 ## CHANGE LOG
+
+### 1.3.1
+* Fixes #21 _call to `abort()` is AVR-specific
 
 ### 1.3.0
 
