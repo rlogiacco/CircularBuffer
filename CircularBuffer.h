@@ -76,11 +76,13 @@ public:
 
 	/**
 	 * Removes an element from the beginning of the buffer.
+	 * *WARNING* calling this operation on an empty buffer has an unpredictable behaviour.
 	 */
 	T shift();
 
 	/**
 	 * Removes an element from the end of the buffer.
+	 * *WARNING* calling this operation on an empty buffer has an unpredictable behaviour.
 	 */
 	T pop();
 

@@ -61,7 +61,6 @@ bool CircularBuffer<T,S,IT>::push(T value) {
 
 template<typename T, size_t S, typename IT>
 T CircularBuffer<T,S,IT>::shift() {
-	if (count <= 0) abort();
 	T result = *head++;
 	if (head >= buffer + capacity) {
 		head = buffer;
@@ -72,7 +71,6 @@ T CircularBuffer<T,S,IT>::shift() {
 
 template<typename T, size_t S, typename IT>
 T CircularBuffer<T,S,IT>::pop() {
-	if (count <= 0) abort();
 	T result = *tail--;
 	if (tail < buffer) {
 		tail = buffer + capacity - 1;
