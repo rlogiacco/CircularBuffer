@@ -183,10 +183,11 @@ void loop() {
 
 ### Interrupts
 
-The library does help working with interrupts defining the `CIRCULAR_BUFFER_INT_SAFE` macro switch, which introduces the `volatile` modifier to the `count` variable, making the whole library more interrupt friendly at the price of disabling some compiler optimizations.
+The library does help working with interrupts defining the `CIRCULAR_BUFFER_INT_SAFE` macro switch, which introduces the `volatile` modifier to the `count` variable, making the whole library more interrupt friendly at the price of disabling some compiler optimizations. The `#define` statement needs to be put somewhere before the `#include` statement:
 
 ```cpp
 #define CIRCULAR_BUFFER_INT_SAFE
+#include <CircularBuffer.h>
 CircularBuffer<unsigned long, 10> timings;
 
 void count() {
