@@ -93,7 +93,7 @@ T inline CircularBuffer<T,S,IT>::last() const {
 
 template<typename T, size_t S, typename IT>
 T CircularBuffer<T,S,IT>::operator [](IT index) const {
-	if (index >= capacity) return *tail;
+	if (index >= size) return *tail;
 	return *(buffer + ((head - buffer + index) % capacity));
 }
 

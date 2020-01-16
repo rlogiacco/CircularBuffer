@@ -76,13 +76,13 @@ public:
 
 	/**
 	 * Removes an element from the beginning of the buffer.
-	 * *WARNING* calling this operation on an empty buffer has an unpredictable behaviour.
+	 * *WARNING* Calling this operation on an empty buffer has an unpredictable behaviour.
 	 */
 	T shift();
 
 	/**
 	 * Removes an element from the end of the buffer.
-	 * *WARNING* calling this operation on an empty buffer has an unpredictable behaviour.
+	 * *WARNING* Calling this operation on an empty buffer has an unpredictable behaviour.
 	 */
 	T pop();
 
@@ -97,7 +97,9 @@ public:
 	T inline last() const;
 
 	/**
-	 * Array-like access to buffer
+	 * Array-like access to buffer.
+	 * Calling this operation using and index value greater than `size - 1` returns the tail element.
+	 * *WARNING* Calling this operation on an empty buffer has an unpredictable behaviour.
 	 */
 	T operator [] (IT index) const;
 
