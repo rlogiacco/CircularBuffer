@@ -2,6 +2,7 @@
  
 > Please, before submitting a support request read carefully this README and check if an answer already exists among [previously answered questions](https://github.com/rlogiacco/CircularBuffer/issues?q=label:question): do not abuse of the Github issue tracker.
 
+<!-- omit in toc -->
 CircularBuffer [![Build Status][travis-status]][travis]
 =============
 [travis]: https://travis-ci.org/rlogiacco/CircularBuffer
@@ -10,27 +11,26 @@ CircularBuffer [![Build Status][travis-status]][travis]
 The library itself has an implicit memory consumption of about *0.5Kb*: 580 bytes (max) of code and 8 bytes of memory, to my calculations. That does not consider the space used to store the items themselves, obviously.
 
 <!-- toc -->
-- [CircularBuffer [![Build Status][travis-status]][travis]](#circularbuffer-build-statustravis)
-  - [Usage](#usage)
-    - [Declare and initialize](#declare-and-initialize)
-    - [Store data](#store-data)
-    - [Retrieve data](#retrieve-data)
-    - [Additional operations](#additional-operations)
-  - [Advanced Usage](#advanced-usage)
-    - [Automatic optimization](#automatic-optimization)
-    - [Legacy optimization](#legacy-optimization)
-    - [Interrupts](#interrupts)
-  - [Examples](#examples)
-  - [Limitations](#limitations)
-    - [Reclaim memory](#reclaim-memory)
-  - [CHANGE LOG](#change-log)
-    - [1.3.2](#132)
-    - [1.3.1](#131)
-    - [1.3.0](#130)
-    - [1.2.0](#120)
-    - [1.1.1](#111)
-    - [1.1.0](#110)
-    - [1.0.0](#100)
+- [Usage](#usage)
+  - [Declare and initialize](#declare-and-initialize)
+  - [Store data](#store-data)
+  - [Retrieve data](#retrieve-data)
+  - [Additional operations](#additional-operations)
+- [Advanced Usage](#advanced-usage)
+  - [Automatic optimization](#automatic-optimization)
+  - [Legacy optimization](#legacy-optimization)
+  - [Interrupts](#interrupts)
+- [Examples](#examples)
+- [Limitations](#limitations)
+  - [Reclaim memory](#reclaim-memory)
+- [CHANGE LOG](#change-log)
+  - [1.3.2](#132)
+  - [1.3.1](#131)
+  - [1.3.0](#130)
+  - [1.2.0](#120)
+  - [1.1.1](#111)
+  - [1.1.0](#110)
+  - [1.0.0](#100)
 <!-- tocstop -->
 
 ## Usage
