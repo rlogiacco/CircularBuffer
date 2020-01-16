@@ -15,7 +15,7 @@ void setup() {
 // enqueue button press dequeueing every 2 seconds
 void loop() {
 	if (digitalRead(BUTTON_PIN) == HIGH) {
-		queue.push(millis());
+		queue.unshift(millis());
 	}
 	if (millis() - time >= 2000) {
 		time = millis();

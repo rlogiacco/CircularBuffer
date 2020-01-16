@@ -18,7 +18,7 @@ void loop() {
 		Serial.println("Stack is full:");
 		while (!stack.isEmpty()) {
 			Serial.print("  # ");
-			Serial.println(stack.shift());
+			Serial.println(stack.pop());
 		}
 		// the following is unnecessary, still here to demonstrate its use
 		stack.clear();
