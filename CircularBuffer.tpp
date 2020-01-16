@@ -126,14 +126,15 @@ template<typename T, size_t S, typename IT>
 void inline CircularBuffer<T,S,IT>::debug(Print* out) {
 	for (IT i = 0; i < capacity; i++) {
 		int hex = (int)buffer + i;
+		out->print("[");
 		out->print(hex, HEX);
-		out->print("  ");
+		out->print("] ");
 		out->print(*(buffer + i));
 		if (head == buffer + i) {
-			out->print(" head");
+			out->print("<-head");
 		} 
 		if (tail == buffer + i) {
-			out->print(" tail");
+			out->print("<-tail");
 		}
 		out->println();
 	}
@@ -143,14 +144,15 @@ template<typename T, size_t S, typename IT>
 void inline CircularBuffer<T,S,IT>::debugFn(Print* out, void (*printFunction)(Print*, T)) {
 	for (IT i = 0; i < capacity; i++) {
 		int hex = (int)buffer + i;
+		out->print("[");
 		out->print(hex, HEX);
-		out->print("  ");
+		out->print("] ");
 		printFunction(out, *(buffer + i));
 		if (head == buffer + i) {
-			out->print(" head");
+			out->print("<-head");
 		} 
 		if (tail == buffer + i) {
-			out->print(" tail");
+			out->print("<-tail");
 		}
 		out->println();
 	}
