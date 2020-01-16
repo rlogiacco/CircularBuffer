@@ -22,7 +22,7 @@ The library itself has an implicit memory consumption of about *0.5Kb*: 580 byte
   - [Interrupts](#interrupts)
 - [Examples](#examples)
 - [Limitations](#limitations)
-  - [Reclaim memory](#reclaim-memory)
+  - [Reclaim dynamic memory](#reclaim-dynamic-memory)
 - [CHANGE LOG](#change-log)
   - [1.3.2](#132)
   - [1.3.1](#131)
@@ -222,15 +222,29 @@ Multiple examples are available in the `examples` folder of the library:
 
 ## Limitations
 
-### Reclaim memory
+### Reclaim dynamic memory
 
-If you use this library to store dynamically allocated objects, refrain from using the `clear()` method as that will **not** perform memory deallocation: you need to iterate over your buffer content and release memory accordingly to the allocation method used, either by `delete` (if you had used `new`) or `free` (in case of `malloc`):
+If you use this library to store dynamically allocated objects, refrain from using the `clear()` method as that will **not** perform memory deallocation: you need to iterate over your buffer content and release memory accordingly to the allocation method used, either via `delete` (if you had used `new`) or `free` (in case of `malloc`):
 
 ```cpp
 while (!buffer.isEmpty()) {
     // pick the correct one
     delete buffer.pop();
     free(buffer.pop());
+}
+```
+
+The very same applies for the `pop()` and `shift()` operations as any dynamically allocated object is only _detached_ from the buffer, but the memory it uses is **not** automagically released (see the [Object.ino](https://github.com/rlogiacco/CircularBuffer/blob/master/examples/Object/Object.ino) example)
+
+```cpp
+Record* record = new Record(millis(), sample);  // a dynamically allocated object
+buffer.push(record);
+
+// somewhere else
+if (!buffer.isEmpty()) {
+    Record* current = buffer.pop();
+    Serial.println(current.value());
+    delete current; // not doing this will leaves the object in memory!!!
 }
 ```
 
