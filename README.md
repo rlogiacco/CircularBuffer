@@ -24,6 +24,7 @@ The library itself has an implicit memory consumption of about *0.5Kb*: 580 byte
 - [Limitations](#limitations)
   - [Reclaim dynamic memory](#reclaim-dynamic-memory)
 - [CHANGE LOG](#change-log)
+  - [1.3.3](#133)
   - [1.3.2](#132)
   - [1.3.1](#131)
   - [1.3.0](#130)
@@ -250,6 +251,9 @@ if (!buffer.isEmpty()) {
 
 ------------------------
 ## CHANGE LOG
+
+### 1.3.3
+* Fixes #27 compilation error
 
 ### 1.3.2
 * Fixes #2 preventing `shift()` and `pop()` operations misuse to mess up the buffer
