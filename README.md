@@ -3,35 +3,45 @@
 > Please, before submitting a support request read carefully this README and check if an answer already exists among [previously answered questions](https://github.com/rlogiacco/CircularBuffer/issues?q=label:question): do not abuse of the Github issue tracker.
 
 <!-- omit in toc -->
-CircularBuffer [![Build Status][travis-status]][travis]
+CircularBuffer
+[![GitHub stars](https://img.shields.io/github/stars/rlogiacco/CircularBuffer.svg?style=social&label=Star)](https://github.com/rlogiacco/CircularBuffer/stargazers) 
+[![GitHub forks](https://img.shields.io/github/forks/rlogiacco/CircularBuffer.svg?style=social&label=Fork)](https://github.com/rlogiacco/CircularBuffer/network)
+[![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=Roll%20your%20data%20on%20embedded%20devices%20easily!&url=https://github.com/rlogiacco/CircularBuffer&hashtags=IoT,Arduino,ESP8266,ESP32)
 =============
-[travis]: https://travis-ci.org/rlogiacco/CircularBuffer
-[travis-status]: https://travis-ci.org/rlogiacco/CircularBuffer.svg?branch=master
+
+[![GitHub version](https://img.shields.io/github/release/rlogiacco/CircularBuffer.svg)](https://github.com/rlogiacco/CircularBuffer/releases)
+[![GitHub download](https://img.shields.io/github/downloads/rlogiacco/CircularBuffer/total.svg)](https://github.com/rlogiacco/CircularBuffer/releases/latest)
+[![GitHub stars](https://img.shields.io/github/stars/rlogiacco/CircularBuffer.svg)](https://github.com/rlogiacco/CircularBuffer/stargazers)
+[![GitHub issues](https://img.shields.io/github/issues/rlogiacco/CircularBuffer.svg)](https://github.com/rlogiacco/CircularBuffer/issues)
+[![Build Status](https://img.shields.io/travis/rlogiacco/CircularBuffer.svg?branch=master)](https://travis-ci.org/rlogiacco/CircularBuffer)
+[![License](https://img.shields.io/badge/license-LGPL%203-blue.svg)](https://github.com/rlogiacco/CircularBuffer/blob/master/LICENSE)
+
 
 The library itself has an implicit memory consumption of about *0.5Kb*: 580 bytes (max) of code and 8 bytes of memory, to my calculations. That does not consider the space used to store the items themselves, obviously.
 
 <!-- toc -->
-- [Usage](#usage)
-  - [Declare and initialize](#declare-and-initialize)
-  - [Store data](#store-data)
-  - [Retrieve data](#retrieve-data)
-  - [Additional operations](#additional-operations)
-- [Advanced Usage](#advanced-usage)
-  - [Automatic optimization](#automatic-optimization)
-  - [Legacy optimization](#legacy-optimization)
-  - [Interrupts](#interrupts)
-- [Examples](#examples)
-- [Limitations](#limitations)
-  - [Reclaim dynamic memory](#reclaim-dynamic-memory)
-- [CHANGE LOG](#change-log)
-  - [1.3.3](#133)
-  - [1.3.2](#132)
-  - [1.3.1](#131)
-  - [1.3.0](#130)
-  - [1.2.0](#120)
-  - [1.1.1](#111)
-  - [1.1.0](#110)
-  - [1.0.0](#100)
+- [![Tweet](https://twitter.com/intent/tweet?text=Roll%20your%20data%20on%20embedded%20devices%20easily!&url=https://github.com/rlogiacco/CircularBuffer&hashtags=IoT,Arduino,ESP8266,ESP32)](#img-src%22httpstwittercomintenttweettextroll20your20data20on20embedded20devices20easilyurlhttpsgithubcomrlogiaccocircularbufferhashtagsiotarduinoesp8266esp32%22-alt%22tweet%22)
+  - [Usage](#usage)
+    - [Declare and initialize](#declare-and-initialize)
+    - [Store data](#store-data)
+    - [Retrieve data](#retrieve-data)
+    - [Additional operations](#additional-operations)
+  - [Advanced Usage](#advanced-usage)
+    - [Automatic optimization](#automatic-optimization)
+    - [Legacy optimization](#legacy-optimization)
+    - [Interrupts](#interrupts)
+  - [Examples](#examples)
+  - [Limitations](#limitations)
+    - [Reclaim dynamic memory](#reclaim-dynamic-memory)
+  - [CHANGE LOG](#change-log)
+    - [1.3.3](#133)
+    - [1.3.2](#132)
+    - [1.3.1](#131)
+    - [1.3.0](#130)
+    - [1.2.0](#120)
+    - [1.1.1](#111)
+    - [1.1.0](#110)
+    - [1.0.0](#100)
 <!-- tocstop -->
 
 ## Usage
@@ -84,7 +94,7 @@ buffer.push(-5);  // [2,3,2,1,-5] returns false
 ### Retrieve data
 
 Similarly to data addition, data retrieval can be performed at _tail_ via a `pop()` operation or from _head_ via an `shift()` operation: both cause the element being read to be removed from the buffer.
-Reading from an empty buffer is forbidden (the library will generate a segfault, which most probably will crash the program): see the _additional operations_ listed in the next section to verify the status of the buffer.
+Reading from an empty buffer is forbidden (the library will behave differently depending on the data type and allocation method): see the _additional operations_ listed in the next section to verify the status of the buffer.
 
 Non-destructive read operations are also available:
 
@@ -173,7 +183,7 @@ CircularBuffer<short,100> buffer;
 void setup() { }
 
 void loop() {
-	// here i should be declared of type byte rather than unsigned int
+	  // here i should be declared of type byte rather than unsigned int
     // in order to maximize the effects of the optimization
     for (byte i = 0; i < buffer.size() - 1; i++) {
         Serial.print(buffer[i]);
