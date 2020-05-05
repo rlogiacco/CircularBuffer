@@ -127,7 +127,7 @@ buffer[15]; // ['c','d','e'] returned value is unpredictable
 * `size()` returns the number of elements currently stored in the buffer; it should be used in conjunction with the `[]` operator to avoid boundary violations: the first element index is always `0` (if buffer is not empty), the last element index is always `size() - 1`
 * `available()` returns the number of elements that can be added before saturating the buffer
 * `capacity()` returns the number of elements the buffer can store, for completeness only as it's user-defined and never changes **REMOVED** from `1.3.0` replaced by the read-only member variable `capacity`
-* `clear()` resets the whole buffer to its initial state
+* `clear()` resets the whole buffer to its initial state (pay attention though, if you had dynamically allocated objects in your buffer, memory used by such object is *not* released: iterate over the buffer contents and release object accordingly to their allocation method)
 
 ## Advanced Usage
 
