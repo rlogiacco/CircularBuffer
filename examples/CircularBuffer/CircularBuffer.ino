@@ -23,7 +23,7 @@ void loop() {
 		// the following ensures using the right type for the index variable
 		using index_t = decltype(buffer)::index_t;
 		for (index_t i = 0; i < buffer.size(); i++) {
-			avg += buffer[i] / buffer.size();
+			avg += buffer[i] / (float)buffer.size();
 		}
 		Serial.print("Average is ");
 		Serial.println(avg);
