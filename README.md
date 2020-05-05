@@ -20,7 +20,6 @@ CircularBuffer
 The library itself has an implicit memory consumption of about *0.5Kb*: 580 bytes (max) of code and 8 bytes of memory, to my calculations. That does not consider the space used to store the items themselves, obviously.
 
 <!-- toc -->
-- [![Tweet](https://twitter.com/intent/tweet?text=Roll%20your%20data%20on%20embedded%20devices%20easily!&url=https://github.com/rlogiacco/CircularBuffer&hashtags=IoT,Arduino,ESP8266,ESP32)](#img-src%22httpstwittercomintenttweettextroll20your20data20on20embedded20devices20easilyurlhttpsgithubcomrlogiaccocircularbufferhashtagsiotarduinoesp8266esp32%22-alt%22tweet%22)
   - [Usage](#usage)
     - [Declare and initialize](#declare-and-initialize)
     - [Store data](#store-data)
