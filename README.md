@@ -94,7 +94,8 @@ buffer.push(-5);  // [2,3,2,1,-5] returns false
 ### Retrieve data
 
 Similarly to data addition, data retrieval can be performed at _tail_ via a `pop()` operation or from _head_ via an `shift()` operation: both cause the element being read to be removed from the buffer.
-Reading from an empty buffer is forbidden (the library will behave differently depending on the data type and allocation method): see the _additional operations_ listed in the next section to verify the status of the buffer.
+
+> &#x26A0; Reading data beyond the actual buffer size has an undefined behaviour and is user's responsibility to prevent such boundary violations using the [_additional operations_](#additional-operations) listed in the next section. The library will behave differently depending on the data type and allocation method, but you can safely assume your program will crash if you don't watch your steps.
 
 Non-destructive read operations are also available:
 
@@ -102,7 +103,6 @@ Non-destructive read operations are also available:
 * `last()` returns the element at _tail_
 * an array-like indexed read operation is also available so you can read any element in the buffer using the `[]` operator
 
-Reading data beyond the actual buffer size has an undefined behaviour and is user's responsibility to prevent such boundary violations using the [_additional operations_](#additional-operations) listed in the next section.
 
 ``` cpp
 CircularBuffer<char, 50> buffer; // ['a','b','c','d','e','f','g']
