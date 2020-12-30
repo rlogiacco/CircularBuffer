@@ -254,7 +254,7 @@ buffer.push(record);
 if (!buffer.isEmpty()) {
     Record* current = buffer.pop();
     Serial.println(current.value());
-    delete current; // not doing this will leaves the object in memory!!!
+    delete current; // if you don't do this the object memory is lost!!!
 }
 ```
 
