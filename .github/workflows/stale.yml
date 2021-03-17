@@ -1,0 +1,24 @@
+name: Mark stale issues and pull requests
+
+on:
+  schedule:
+  - cron: "30 1 * * *"
+
+jobs:
+  stale:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/stale@v3
+      with:
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        any-of-labels: waiting-feedback
+        stale-issue-label: 'stale'
+        stale-issue-message: 'This issue is being marked as stale as it has not been updated in the past 15 days and it will be closed in a week unless it receives the requested attention.'
+        close-issue-message: 'Issue is being closed due to lack of interaction'
+        stale-pr-message: 'This PR is being marked as stale as it has not been updated in the past 15 days and it will be closed in a week unless it receives the requested attention.'
+        stale-pr-label: 'Due to lack of interaction this PR being automatically closed'
+        days-before-stale: 15
+        days-before-close: 7
+        
