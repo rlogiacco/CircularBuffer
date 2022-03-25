@@ -25,14 +25,17 @@
 #endif
 
 namespace Helper {
+	/** @private */
 	template<bool FITS8, bool FITS16> struct Index {
 		using Type = uint32_t;
 	};
 
+	/** @private */
 	template<> struct Index<false, true> {
 		using Type = uint16_t;
 	};
 
+	/** @private */
 	template<> struct Index<true, true> {
 		using Type = uint8_t;
 	};
@@ -43,7 +46,7 @@ namespace Helper {
  *
  * @tparam T The type of the data to store in the buffer.
  * @tparam S The maximum number of elements that can be stored in the buffer.
- * @tparam IT The data type of the index.
+ * @tparam IT The data type of the index. Typically should be left as default.
  */
 template<typename T, size_t S, typename IT = typename Helper::Index<(S <= UINT8_MAX), (S <= UINT16_MAX)>::Type> class CircularBuffer {
 public:
@@ -61,14 +64,21 @@ public:
 	 */
 	using index_t = IT;
 
+	/**
+	 * @brief Create an empty circular buffer.
+	 */
 	constexpr CircularBuffer();
 
 	// disable the copy constructor
+	/** @private */
 	CircularBuffer(const CircularBuffer&) = delete;
+	/** @private */
 	CircularBuffer(CircularBuffer&&) = delete;
 
 	// disable the assignment operator
+	/** @private */
 	CircularBuffer& operator=(const CircularBuffer&) = delete;
+	/** @private */
 	CircularBuffer& operator=(CircularBuffer&&) = delete;
 
 	/**
