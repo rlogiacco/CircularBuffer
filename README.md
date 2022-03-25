@@ -182,7 +182,7 @@ CircularBuffer<short,100> buffer;
 void setup() { }
 
 void loop() {
-	  // here i should be declared of type byte rather than unsigned int
+    // here i should be declared of type byte rather than unsigned int
     // in order to maximize the effects of the optimization
     for (byte i = 0; i < buffer.size() - 1; i++) {
         Serial.print(buffer[i]);
