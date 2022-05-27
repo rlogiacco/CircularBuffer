@@ -1,13 +1,14 @@
-### &#x26A0; **IMPORTANT**
- 
+### ⚠ **IMPORTANT**
+
 > Please, before submitting a support request read carefully this README and check if an answer already exists among [previously answered questions](https://github.com/rlogiacco/CircularBuffer/discussions): do not abuse of the Github issue tracker.
 
 <!-- omit in toc -->
-CircularBuffer
-[![GitHub stars](https://img.shields.io/github/stars/rlogiacco/CircularBuffer.svg?style=social&label=Star)](https://github.com/rlogiacco/CircularBuffer/stargazers) 
-[![GitHub forks](https://img.shields.io/github/forks/rlogiacco/CircularBuffer.svg?style=social&label=Fork)](https://github.com/rlogiacco/CircularBuffer/network)
-[![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=Roll%20your%20data%20on%20embedded%20devices%20easily!&url=https://github.com/rlogiacco/CircularBuffer&hashtags=IoT,Arduino,ESP8266,ESP32)
-=============
+<h1>
+  CircularBuffer
+  <a href=https://github.com/rlogiacco/CircularBuffer/stargazers><img alt="GitHub stars" src=https://img.shields.io/github/stars/rlogiacco/CircularBuffer.svg?style=social&label=Star /></a>
+  <a href=https://github.com/rlogiacco/CircularBuffer/network><img alt="GitHub forks" src=https://img.shields.io/github/forks/rlogiacco/CircularBuffer.svg?style=social&label=Fork /></a>
+  <a href=https://twitter.com/intent/tweet?text=Roll%20your%20data%20on%20embedded%20devices%20easily!&url=https://github.com/rlogiacco/CircularBuffer&hashtags=IoT,Arduino,ESP8266,ESP32><img alt="Tweet" src=https://img.shields.io/twitter/url/http/shields.io.svg?style=social /></a>
+</h1>
 
 [![GitHub version](https://img.shields.io/github/release/rlogiacco/CircularBuffer.svg)](https://github.com/rlogiacco/CircularBuffer/releases)
 [![GitHub download](https://img.shields.io/github/downloads/rlogiacco/CircularBuffer/total.svg)](https://github.com/rlogiacco/CircularBuffer/releases/latest)
@@ -94,7 +95,7 @@ buffer.push(-5);  // [2,3,2,1,-5] returns false
 
 Similarly to data addition, data retrieval can be performed at _tail_ via a `pop()` operation or from _head_ via an `shift()` operation: both cause the element being read to be removed from the buffer.
 
-> &#x26A0; Reading data beyond the actual buffer size has an undefined behaviour and is user's responsibility to prevent such boundary violations using the [_additional operations_](#additional-operations) listed in the next section. The library will behave differently depending on the data type and allocation method, but you can safely assume your program will crash if you don't watch your steps.
+> ⚠ Reading data beyond the actual buffer size has an undefined behaviour and is user's responsibility to prevent such boundary violations using the [_additional operations_](#additional-operations) listed in the next section. The library will behave differently depending on the data type and allocation method, but you can safely assume your program will crash if you don't watch your steps.
 
 Non-destructive read operations are also available:
 
@@ -182,7 +183,7 @@ CircularBuffer<short,100> buffer;
 void setup() { }
 
 void loop() {
-	  // here i should be declared of type byte rather than unsigned int
+    // here i should be declared of type byte rather than unsigned int
     // in order to maximize the effects of the optimization
     for (byte i = 0; i < buffer.size() - 1; i++) {
         Serial.print(buffer[i]);

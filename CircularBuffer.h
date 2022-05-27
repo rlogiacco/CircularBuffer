@@ -25,106 +25,146 @@
 #endif
 
 namespace Helper {
+	/** @private */
 	template<bool FITS8, bool FITS16> struct Index {
 		using Type = uint32_t;
 	};
 
+	/** @private */
 	template<> struct Index<false, true> {
 		using Type = uint16_t;
 	};
 
+	/** @private */
 	template<> struct Index<true, true> {
 		using Type = uint8_t;
 	};
 }
 
+/**
+ * @brief Implements a circular buffer that supports LIFO and FIFO operations.
+ *
+ * @tparam T The type of the data to store in the buffer.
+ * @tparam S The maximum number of elements that can be stored in the buffer.
+ * @tparam IT The data type of the index. Typically should be left as default.
+ */
 template<typename T, size_t S, typename IT = typename Helper::Index<(S <= UINT8_MAX), (S <= UINT16_MAX)>::Type> class CircularBuffer {
 public:
 	/**
-	 * The buffer capacity: read only as it cannot ever change.
+	 * @brief The buffer capacity.
+	 *
+	 * Read only as it cannot ever change.
 	 */
 	static constexpr IT capacity = static_cast<IT>(S);
 
 	/**
-	 * Aliases the index type, can be used to obtain the right index type with `decltype(buffer)::index_t`.
+	 * @brief Aliases the index type.
+	 *
+	 * Can be used to obtain the right index type with `decltype(buffer)::index_t`.
 	 */
 	using index_t = IT;
 
+	/**
+	 * @brief Create an empty circular buffer.
+	 */
 	constexpr CircularBuffer();
 
-	/**
-	 * Disables copy constructor
-	 */
+	// disable the copy constructor
+	/** @private */
 	CircularBuffer(const CircularBuffer&) = delete;
+	/** @private */
 	CircularBuffer(CircularBuffer&&) = delete;
 
-	/**
-	 * Disables assignment operator
-	 */
+	// disable the assignment operator
+	/** @private */
 	CircularBuffer& operator=(const CircularBuffer&) = delete;
+	/** @private */
 	CircularBuffer& operator=(CircularBuffer&&) = delete;
 
 	/**
-	 * Adds an element to the beginning of buffer: the operation returns `false` if the addition caused overwriting an existing element.
+	 * @brief Adds an element to the beginning of buffer.
+	 *
+	 * @return `false` iff the addition caused overwriting to an existing element.
 	 */
 	bool unshift(T value);
 
 	/**
-	 * Adds an element to the end of buffer: the operation returns `false` if the addition caused overwriting an existing element.
+	 * @brief Adds an element to the end of buffer.
+	 *
+	 * @return `false` iff the addition caused overwriting to an existing element.
 	 */
 	bool push(T value);
 
 	/**
-	 * Removes an element from the beginning of the buffer.
-	 * *WARNING* Calling this operation on an empty buffer has an unpredictable behaviour.
+	 * @brief Removes an element from the beginning of the buffer.
+	 *
+	 * @warning Calling this operation on an empty buffer has an unpredictable behaviour.
 	 */
 	T shift();
 
 	/**
-	 * Removes an element from the end of the buffer.
-	 * *WARNING* Calling this operation on an empty buffer has an unpredictable behaviour.
+	 * @brief Removes an element from the end of the buffer.
+	 *
+	 * @warning Calling this operation on an empty buffer has an unpredictable behaviour.
 	 */
 	T pop();
 
 	/**
-	 * Returns the element at the beginning of the buffer.
+	 * @brief Returns the element at the beginning of the buffer.
+	 *
+	 * @return The element at the beginning of the buffer.
 	 */
 	T inline first() const;
 
 	/**
-	 * Returns the element at the end of the buffer.
+	 * @brief Returns the element at the end of the buffer.
+	 *
+	 * @return The element at the end of the buffer.
 	 */
 	T inline last() const;
 
 	/**
-	 * Array-like access to buffer.
+	 * @brief Array-like access to buffer.
+	 *
 	 * Calling this operation using and index value greater than `size - 1` returns the tail element.
-	 * *WARNING* Calling this operation on an empty buffer has an unpredictable behaviour.
+	 *
+	 * @warning Calling this operation on an empty buffer has an unpredictable behaviour.
 	 */
 	T operator [] (IT index) const;
 
 	/**
-	 * Returns how many elements are actually stored in the buffer.
+	 * @brief Returns how many elements are actually stored in the buffer.
+	 *
+	 * @return The number of elements stored in the buffer.
 	 */
 	IT inline size() const;
 
 	/**
-	 * Returns how many elements can be safely pushed into the buffer.
+	 * @brief Returns how many elements can be safely pushed into the buffer.
+	 *
+	 * @return The number of elements that can be safely pushed into the buffer.
 	 */
 	IT inline available() const;
 
 	/**
-	 * Returns `true` if no elements can be removed from the buffer.
+	 * @brief Check if the buffer is empty.
+	 *
+	 * @return `true` iff no elements can be removed from the buffer.
 	 */
 	bool inline isEmpty() const;
 
 	/**
-	 * Returns `true` if no elements can be added to the buffer without overwriting existing elements.
+	 * @brief Check if the buffer is full.
+	 *
+	 * @return `true` if no elements can be added to the buffer without overwriting existing elements.
 	 */
 	bool inline isFull() const;
 
 	/**
-	 * Resets the buffer to a clean status, making all buffer positions available.
+	 * @brief Resets the buffer to a clean status, making all buffer positions available.
+	 *
+	 * @note This does not clean up any dynamically allocated memory stored in the buffer.
+	 * Clearing a buffer that points to heap-allocated memory may cause a memory leak, if it's not properly cleaned up.
 	 */
 	void inline clear();
 
