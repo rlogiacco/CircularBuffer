@@ -41,12 +41,12 @@ namespace Helper {
 	};
 
 	/** @private */
-	template<typename T, bool USEREF> struct Param {
+	template<typename T, bool USEREF> struct Input {
 		using Type = T;
 	};
 
 	/** @private */
-	template<typename T> struct Param<T, true> {
+	template<typename T> struct Input<T, true> {
 		using Type = const T &;
 	};
 }
@@ -60,7 +60,7 @@ namespace Helper {
  * @tparam TIn Input type to push() and unshift().
  */
 template<typename T, size_t S, typename IT = typename Helper::Index<(S <= UINT8_MAX), (S <= UINT16_MAX)>::Type,
-typename TIn = typename Helper::Param<T, (sizeof(T) > 2 * sizeof(void *))>::Type>
+typename TIn = typename Helper::Input<T, (sizeof(T) > 2 * sizeof(void *))>::Type>
 class CircularBuffer {
 public:
 	/**
