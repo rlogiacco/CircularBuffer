@@ -71,6 +71,19 @@ T CircularBuffer<T,S,IT, TIn>::shift() {
 }
 
 template<typename T, size_t S, typename IT, typename TIn>
+void CircularBuffer<T,S,IT, TIn>::shift(T &result) {
+	if (count == 0) {
+		result = *head;
+	} else {
+		result = *head++;
+		if (head >= buffer + capacity) {
+			head = buffer;
+		}
+		count--;
+	}
+}
+
+template<typename T, size_t S, typename IT, typename TIn>
 T CircularBuffer<T,S,IT, TIn>::pop() {
 	if (count == 0) return *tail;
 	T result = *tail--;
@@ -79,6 +92,19 @@ T CircularBuffer<T,S,IT, TIn>::pop() {
 	}
 	count--;
 	return result;
+}
+
+template<typename T, size_t S, typename IT, typename TIn>
+void CircularBuffer<T,S,IT, TIn>::pop(T &result) {
+	if (count == 0) {
+		result = *tail;
+	} else {
+		result = *tail--;
+		if (tail < buffer) {
+			tail = buffer + capacity - 1;
+		}
+		count--;
+	}
 }
 
 template<typename T, size_t S, typename IT, typename TIn>
