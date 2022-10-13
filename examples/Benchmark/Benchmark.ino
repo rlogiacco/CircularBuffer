@@ -60,7 +60,7 @@ void testPush()
   {
     Serial.println("Error!");
   }
-  
+
   // Prevent compiler from optimizing things out
   dummyByte = b.buf[0];
 
@@ -212,6 +212,16 @@ void setup() {
   testPopRef<16>();
 
   Serial.println();
+
+  // Output on a Arduino Mega clone
+  // Push By Value Timings
+  // 64,68,72,78,166,181,210,227,250,267,292,298,321,336,359,374,
+  // Push By Reference Timings
+  // 59,60,64,68,86,120,127,134,145,148,155,162,169,176,183,190,
+  // Pop By Value Timings
+  // 47,53,61,73,209,221,247,268,301,324,347,359,380,401,422,443,
+  // Pop By Reference Timings
+  // 37,41,45,49,67,90,97,104,111,118,125,132,139,146,153,160,
 }
 
 void loop() {
