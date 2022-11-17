@@ -1,5 +1,5 @@
 /*
- CircularBuffer.h - Circular buffer library for Arduino.
+ RLG_CircularBuffer.h - Circular buffer library for Arduino.
  Copyright (c) 2017 Roberto Lo Giacco.
 
  This program is free software: you can redistribute it and/or modify
@@ -15,12 +15,12 @@
  You should have received a copy of the GNU General Public License
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef CIRCULAR_BUFFER_H_
-#define CIRCULAR_BUFFER_H_
+#ifndef RLG_CIRCULAR_BUFFER_H_
+#define RLG_CIRCULAR_BUFFER_H_
 #include <stdint.h>
 #include <stddef.h>
 
-#ifdef CIRCULAR_BUFFER_DEBUG
+#ifdef RLG_CIRCULAR_BUFFER_DEBUG
 #include <Print.h>
 #endif
 
@@ -48,7 +48,7 @@ namespace Helper {
  * @tparam S The maximum number of elements that can be stored in the buffer.
  * @tparam IT The data type of the index. Typically should be left as default.
  */
-template<typename T, size_t S, typename IT = typename Helper::Index<(S <= UINT8_MAX), (S <= UINT16_MAX)>::Type> class CircularBuffer {
+template<typename T, size_t S, typename IT = typename Helper::Index<(S <= UINT8_MAX), (S <= UINT16_MAX)>::Type> class RLG_CircularBuffer {
 public:
 	/**
 	 * @brief The buffer capacity.
@@ -67,19 +67,19 @@ public:
 	/**
 	 * @brief Create an empty circular buffer.
 	 */
-	constexpr CircularBuffer();
+	constexpr RLG_CircularBuffer();
 
 	// disable the copy constructor
 	/** @private */
-	CircularBuffer(const CircularBuffer&) = delete;
+	RLG_CircularBuffer(const RLG_CircularBuffer&) = delete;
 	/** @private */
-	CircularBuffer(CircularBuffer&&) = delete;
+	RLG_CircularBuffer(RLG_CircularBuffer&&) = delete;
 
 	// disable the assignment operator
 	/** @private */
-	CircularBuffer& operator=(const CircularBuffer&) = delete;
+	RLG_CircularBuffer& operator=(const RLG_CircularBuffer&) = delete;
 	/** @private */
-	CircularBuffer& operator=(CircularBuffer&&) = delete;
+	RLG_CircularBuffer& operator=(RLG_CircularBuffer&&) = delete;
 
 	/**
 	 * @brief Adds an element to the beginning of buffer.
@@ -184,5 +184,5 @@ private:
 #endif
 };
 
-#include <CircularBuffer.tpp>
+#include <RLG_CircularBuffer.tpp>
 #endif
