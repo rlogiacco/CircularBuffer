@@ -168,7 +168,7 @@ public:
 	 */
 	void inline clear();
 
-	#ifdef CIRCULAR_BUFFER_DEBUG
+	#ifdef RLG_CIRCULAR_BUFFER_DEBUG
 	void inline debug(Print* out);
 	void inline debugFn(Print* out, void (*printFunction)(Print*, T));
 	#endif
@@ -177,7 +177,7 @@ private:
 	T buffer[S];
 	T *head;
 	T *tail;
-#ifndef CIRCULAR_BUFFER_INT_SAFE
+#ifndef RLG_CIRCULAR_BUFFER_INT_SAFE
 	IT count;
 #else
 	volatile IT count;

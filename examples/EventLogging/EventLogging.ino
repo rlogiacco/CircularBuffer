@@ -1,9 +1,9 @@
-#include "CircularBuffer.h"
+#include "RLG_CircularBuffer.h"
 
 // the type of the record is unsigned long: we intend to store milliseconds
 // the buffer can contain up to 10 records
 // the buffer will use a byte for its index to reduce memory footprint
-CircularBuffer<unsigned long, 10> buffer;
+RLG_CircularBuffer<unsigned long, 10> buffer;
 
 #define BUTTON_PIN A0
 #define INTERVAL 60000

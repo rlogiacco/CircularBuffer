@@ -1,6 +1,6 @@
-#include <CircularBuffer.h>
+#include <RLG_CircularBuffer.h>
 
-CircularBuffer<unsigned int, 100> stack;
+RLG_CircularBuffer<unsigned int, 100> stack;
 
 #define SAMPLE_PIN A0
 void setup() {

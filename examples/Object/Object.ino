@@ -1,7 +1,7 @@
-#include <CircularBuffer.h>
+#include <RLG_CircularBuffer.h>
 #include "Record.h"
 
-CircularBuffer<Record*, 10> buffer;
+RLG_CircularBuffer<Record*, 10> buffer;
 
 #define SAMPLE_PIN A0
 

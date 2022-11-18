@@ -1,4 +1,4 @@
-#include <CircularBuffer.h>
+#include <RLG_CircularBuffer.h>
 
 namespace data {
 	typedef struct {
@@ -16,7 +16,7 @@ namespace data {
 	}
 }
 
-CircularBuffer<data::record, 10> structs;
+RLG_CircularBuffer<data::record, 10> structs;
 
 #define SAMPLE_PIN A0
 

@@ -1,7 +1,7 @@
-#define CIRCULAR_BUFFER_DEBUG
-#include <CircularBuffer.h>
+#define RLG_CIRCULAR_BUFFER_DEBUG
+#include <RLG_CircularBuffer.h>
 
-CircularBuffer<char, 10> buffer;
+RLG_CircularBuffer<char, 10> buffer;
 
 void printBuffer() {
 	if (buffer.isEmpty()) {

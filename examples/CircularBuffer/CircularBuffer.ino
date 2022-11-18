@@ -1,6 +1,6 @@
-#include <CircularBuffer.h>
+#include <RLG_CircularBuffer.h>
 
-CircularBuffer<int, 100> buffer;
+RLG_CircularBuffer<int, 100> buffer;
 
 unsigned long time = 0;
 

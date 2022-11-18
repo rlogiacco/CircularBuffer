@@ -1,4 +1,4 @@
-#define CIRCULAR_BUFFER_INT_SAFE
+#define RLG_CIRCULAR_BUFFER_INT_SAFE
 #include "CircularBuffer.h"
 CircularBuffer<unsigned long, 10> timings;
 
