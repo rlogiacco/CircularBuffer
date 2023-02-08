@@ -1,5 +1,5 @@
 /*
- CircularBuffer.h - Circular buffer library for Arduino.
+ CircularBuffer.hpp - Circular buffer library for Arduino.
  Copyright (c) 2017 Roberto Lo Giacco.
 
  This program is free software: you can redistribute it and/or modify
