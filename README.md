@@ -64,6 +64,13 @@ CircularBuffer<void*,100> pointers; // uses 638 bytes
 
 **Please note**: the memory usage reported above includes the program memory used by the library code, the heap memory is much less and is comparable to an array of the same size and type of the buffer.
 
+### ⚠ **IMPORTANT**
+If you are strugglying to have your toolchain pick up the library (issues reported on Arduino Mbed and Nano33 BLE boards, but might apply to others as well) try specifying the exact path to your library, like in the following example:
+
+``` cpp
+#include <C:\Users\username\Documents\Arduino\libraries\CircularBuffer\CircularBuffer.h>
+```
+
 ### Store data
 
 Let's start making things clear: the library doesn't support inserting data in the middle of the buffer.
