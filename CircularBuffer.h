@@ -15,14 +15,18 @@
  You should have received a copy of the GNU General Public License
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef CIRCULAR_BUFFER_H_
-#define CIRCULAR_BUFFER_H_
+#ifndef CIRCULAR_BUFFER_STATISTICS_H_
+#define CIRCULAR_BUFFER_STATISTICS_H_
 #include <stdint.h>
 #include <stddef.h>
+
+// #define zzfloat32_t float		// may be different based on your architecture
+// #define zzfloat64_t double
 
 #ifdef CIRCULAR_BUFFER_DEBUG
 #include <Print.h>
 #endif
+
 
 namespace Helper {
 	/** @private */
@@ -41,6 +45,7 @@ namespace Helper {
 	};
 }
 
+
 /**
  * @brief Implements a circular buffer that supports LIFO and FIFO operations.
  *
@@ -48,6 +53,11 @@ namespace Helper {
  * @tparam S The maximum number of elements that can be stored in the buffer.
  * @tparam IT The data type of the index. Typically should be left as default.
  */
+
+
+
+
+
 template<typename T, size_t S, typename IT = typename Helper::Index<(S <= UINT8_MAX), (S <= UINT16_MAX)>::Type> class CircularBuffer {
 public:
 	/**
@@ -56,6 +66,13 @@ public:
 	 * Read only as it cannot ever change.
 	 */
 	static constexpr IT capacity = static_cast<IT>(S);
+
+	/**
+	 * @brief Statistics error flag.
+	 *
+	 * True when statistics elements overflow.
+	 */
+	bool errorFlag = false;
 
 	/**
 	 * @brief Aliases the index type.
@@ -122,7 +139,7 @@ public:
 	 * @return The element at the end of the buffer.
 	 */
 	T inline last() const;
-
+  
 	/**
 	 * @brief Array-like access to buffer.
 	 *
@@ -168,6 +185,76 @@ public:
 	 */
 	void inline clear();
 
+	/**
+	 * @brief Minimum value in the buffer
+	 *
+	 * @note Order(n) search of the buffer to return the minimum value
+	 */
+	T inline minimum();
+
+	/**
+	 * @brief Minimum value in the buffer greater then the supplied value
+	 *
+	 * @note Order(n) search of the buffer.
+	 */
+	T inline minimum(T);
+
+	/**
+	 * @brief Maximum value in the buffer
+	 *
+	 * @note Order(n) search of the buffer to return the maximum value
+	 */
+	T inline maximum();
+
+	/**
+	 * @brief Clears statistics elements.
+ 	 * @note O(n)
+	 */
+	void clearStats();
+
+	/**
+	 * @brief Returns the element corresponding to the given rank.  Lowest first.
+	 */
+	T inline rank(uint8_t);
+
+	/**
+	 * @brief Returns mean.
+ 	 * @note O(n)
+	 */
+	double inline mean();
+
+	/**
+	 * @brief Returns average.
+ 	 * @note O(1)
+	 */
+	double inline average();
+	
+	/**
+	 * @brief Returns variance
+ 	 * @note O(1)
+	 */
+	double inline variance();
+	
+	/**
+	 * @brief Returns standard deviation
+ 	 * @note O(1)
+	 */
+	double inline stdev();
+	
+	/**
+	 * @brief Returns standard error
+ 	 * @note O(1)
+	 */
+	double inline cbstderr();
+
+	/**
+	 * @brief Returns how many elements were inserted into the buffer.  
+	 * Decremented when elements are removed.  
+	 * Not modified when elements are overwritten.
+	 * @note not the same as size().  Used for interim statistical calculations.
+	 */
+	// IT inline inserted();
+
 	#ifdef CIRCULAR_BUFFER_DEBUG
 	void inline debug(Print* out);
 	void inline debugFn(Print* out, void (*printFunction)(Print*, T));
@@ -177,10 +264,29 @@ private:
 	T buffer[S];
 	T *head;
 	T *tail;
+	double _sum;		// Teensy up to 3.6 only does float natively.  Teensy 4.0 will do double.
+	double _average;
+	double _ssqdif;		    // sum of squares difference
+	double _store;	// temporary variable
+	double _mean;
+	double _msRun;
+
+	/** 
+	 * Call after adding the element to update statistics
+	 */
+	void inline wasAdded(T val);
+
+	/**
+	 * Call before removing element to update statistics
+	 */
+	void inline toRemove(T val);
+
 #ifndef CIRCULAR_BUFFER_INT_SAFE
 	IT count;
+	IT insertedCnt;
 #else
 	volatile IT count;
+	volatile IT inserted;
 #endif
 };
 
