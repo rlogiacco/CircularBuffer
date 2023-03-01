@@ -28,7 +28,7 @@ constexpr CircularBuffer<T,S,IT>::CircularBuffer() :
 
 template<typename T, size_t S, typename IT> 
 bool CircularBuffer<T,S,IT>::unshift(T value) {
-	if (isnan((float)value))		errorFlag = true;
+	if (isnan((float32_t)value))		errorFlag = true;
 	insertedCnt++;
 	if (head == buffer) {
 		head = buffer + capacity;
@@ -54,7 +54,7 @@ bool CircularBuffer<T,S,IT>::unshift(T value) {
 
 template<typename T, size_t S, typename IT> 
 bool CircularBuffer<T,S,IT>::push(T value) {
-	if (isnan((float)value))		errorFlag = true;
+	if (isnan((float32_t)value))		errorFlag = true;
 	insertedCnt++;
 	if (++tail == buffer + capacity) {
 		tail = buffer;
@@ -81,23 +81,23 @@ bool CircularBuffer<T,S,IT>::push(T value) {
 template<typename T, size_t S, typename IT> 
 T CircularBuffer<T,S,IT>::shift() {
 	insertedCnt--;
-	void(* crash) (void) = 0;
-	if (count <= 0) crash();
-	// toRemove(*head);
+	// void(* crash) (void) = 0;
+	// if (count <= 0) crash();
+	toRemove(*head);
 	T result = *head++;
 	if (head >= buffer + capacity) {
 		head = buffer;
 	}
 	count--;
-	if (isnan((float)result))		errorFlag = true;
+	if (isnan((float32_t)result))		errorFlag = true;
 	return result;
 }
 
 template<typename T, size_t S, typename IT> 
 T CircularBuffer<T,S,IT>::pop() {
 	insertedCnt--;
-	void(* crash) (void) = 0;
-	if (count <= 0) crash();	// locks up.. Maybe return NaN instead?
+	// void(* crash) (void) = 0;
+	// if (count <= 0) crash();	// locks up.. Maybe return NaN instead?
 	toRemove(*tail);
 	T result = *tail--;
 	if (tail < buffer) {
@@ -158,8 +158,8 @@ void CircularBuffer<T,S,IT>::clear() {
 template<typename T, size_t S, typename IT>
 void CircularBuffer<T,S,IT>::wasAdded(T val) {
 	_sum = _sum + val;
-    double nextM = _mean + ((val - _mean) / this->size());
-	if (isnan((double)nextM)) errorFlag = true;
+    float64_t nextM = _mean + ((val - _mean) / this->size());
+	if (isnan((float64_t)nextM)) errorFlag = true;
     _msRun = _msRun + ((val - _mean) * (val - nextM));
     _mean = nextM;
 	if (isnan(_msRun)) errorFlag = true;
@@ -176,7 +176,7 @@ void  CircularBuffer<T,S,IT>::toRemove(T val) {
         _sum = 0.0; _mean = 0.0; _msRun = 0.0;
     } else {
 		_sum = _sum - val;
-        double mMOld = (size() * _mean - val)/(size()-1);
+        float64_t mMOld = (size() * _mean - val)/(size()-1);
 		if (isnan(mMOld)) errorFlag = true;
         _msRun = _msRun - ((val - _mean) * (val - mMOld));
         _mean = mMOld;
@@ -186,18 +186,18 @@ void  CircularBuffer<T,S,IT>::toRemove(T val) {
 }
 
 template<typename T, size_t S, typename IT>
-double inline CircularBuffer<T,S,IT>::mean() {
+float64_t inline CircularBuffer<T,S,IT>::mean() {
 	return _mean;
 }
 
 template<typename T, size_t S, typename IT>
-double CircularBuffer<T,S,IT>::average() {
+float64_t CircularBuffer<T,S,IT>::average() {
 	return _sum / this->size();
 }
 
 template<typename T, size_t S, typename IT>
-double CircularBuffer<T,S,IT>::variance() {
-	double ret = 0.0;
+float64_t CircularBuffer<T,S,IT>::variance() {
+	float64_t ret = 0.0;
 	if (this->size() > 1) {
 		ret = _msRun / (this->size()-1);
 	}
@@ -206,8 +206,8 @@ double CircularBuffer<T,S,IT>::variance() {
 }
 
 template<typename T, size_t S, typename IT>
-double CircularBuffer<T,S,IT>::cbstderr() {
-	double ret = 0.0;
+float64_t CircularBuffer<T,S,IT>::cbstderr() {
+	float64_t ret = 0.0;
 	if (this->size() > 1) {
 		ret = stdev() / sqrt(this->size());
 	}
@@ -216,8 +216,8 @@ double CircularBuffer<T,S,IT>::cbstderr() {
 }
 
 template<typename T, size_t S, typename IT>
-double CircularBuffer<T,S,IT>::stdev() {
-	double ret = 0.0;
+float64_t CircularBuffer<T,S,IT>::stdev() {
+	float64_t ret = 0.0;
     if (this->size() < 2) return NAN; // otherwise DIV0 error
     ret = sqrt( this->variance() );
 	if (isnan(ret) || ret < 0)		errorFlag = true;

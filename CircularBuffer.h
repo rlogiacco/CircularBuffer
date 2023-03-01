@@ -20,8 +20,12 @@
 #include <stdint.h>
 #include <stddef.h>
 
-// #define zzfloat32_t float		// may be different based on your architecture
-// #define zzfloat64_t double
+#ifndef float32_t
+#define float32_t float		// may be different based on your architecture
+#endif
+#ifndef float64_t
+#define float64_t double		// may be different based on your architecture
+#endif
 
 #ifdef CIRCULAR_BUFFER_DEBUG
 #include <Print.h>
@@ -221,31 +225,31 @@ public:
 	 * @brief Returns mean.
  	 * @note O(n)
 	 */
-	double inline mean();
+	float64_t inline mean();
 
 	/**
 	 * @brief Returns average.
  	 * @note O(1)
 	 */
-	double inline average();
+	float64_t inline average();
 	
 	/**
 	 * @brief Returns variance
  	 * @note O(1)
 	 */
-	double inline variance();
+	float64_t inline variance();
 	
 	/**
 	 * @brief Returns standard deviation
  	 * @note O(1)
 	 */
-	double inline stdev();
+	float64_t inline stdev();
 	
 	/**
 	 * @brief Returns standard error
  	 * @note O(1)
 	 */
-	double inline cbstderr();
+	float64_t inline cbstderr();
 
 	/**
 	 * @brief Returns how many elements were inserted into the buffer.  
@@ -253,7 +257,7 @@ public:
 	 * Not modified when elements are overwritten.
 	 * @note not the same as size().  Used for interim statistical calculations.
 	 */
-	// IT inline inserted();
+	IT inline inserted();
 
 	#ifdef CIRCULAR_BUFFER_DEBUG
 	void inline debug(Print* out);
@@ -264,12 +268,12 @@ private:
 	T buffer[S];
 	T *head;
 	T *tail;
-	double _sum;		// Teensy up to 3.6 only does float natively.  Teensy 4.0 will do double.
-	double _average;
-	double _ssqdif;		    // sum of squares difference
-	double _store;	// temporary variable
-	double _mean;
-	double _msRun;
+	float64_t _sum;		// Teensy up to 3.6 only does float natively.  Teensy 4.0 will do double.
+	float64_t _average;
+	float64_t _ssqdif;		    // sum of squares difference
+	float64_t _store;	// temporary variable
+	float64_t _mean;
+	float64_t _msRun;
 
 	/** 
 	 * Call after adding the element to update statistics
