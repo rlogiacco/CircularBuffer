@@ -80,9 +80,12 @@ bool CircularBuffer<T,S,IT>::push(T value) {
 
 template<typename T, size_t S, typename IT> 
 T CircularBuffer<T,S,IT>::shift() {
+	// set an error condition if the buffer is empty
+	if (count <= 0) {
+		errorFlag = true;
+		return 0;
+	}
 	insertedCnt--;
-	// void(* crash) (void) = 0;
-	// if (count <= 0) crash();
 	toRemove(*head);
 	T result = *head++;
 	if (head >= buffer + capacity) {
@@ -95,9 +98,12 @@ T CircularBuffer<T,S,IT>::shift() {
 
 template<typename T, size_t S, typename IT> 
 T CircularBuffer<T,S,IT>::pop() {
+	// set an error condition if the buffer is empty
+	if (count <= 0) {
+		errorFlag = true;
+		return 0;
+	}
 	insertedCnt--;
-	// void(* crash) (void) = 0;
-	// if (count <= 0) crash();	// locks up.. Maybe return NaN instead?
 	toRemove(*tail);
 	T result = *tail--;
 	if (tail < buffer) {
@@ -153,8 +159,6 @@ void CircularBuffer<T,S,IT>::clear() {
 	errorFlag = false;
 }
 
-// call after adding the element
-// Approximates the mean of the buffer for statistics
 template<typename T, size_t S, typename IT>
 void CircularBuffer<T,S,IT>::wasAdded(T val) {
 	_sum = _sum + val;
@@ -166,7 +170,6 @@ void CircularBuffer<T,S,IT>::wasAdded(T val) {
 	if (_msRun < 0) errorFlag = true;
 }
 
-// Call before removing element
 template<typename T, size_t S, typename IT>
 void  CircularBuffer<T,S,IT>::toRemove(T val) {
 	if (size() == 0) {

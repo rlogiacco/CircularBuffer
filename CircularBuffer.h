@@ -56,6 +56,9 @@ namespace Helper {
  * @tparam T The type of the data to store in the buffer.
  * @tparam S The maximum number of elements that can be stored in the buffer.
  * @tparam IT The data type of the index. Typically should be left as default.
+ * 
+ * Statistics operations closely estimate the characteristics of the elements in 
+ * the buffer.  For critical measurements, use a different library.
  */
 
 
@@ -74,7 +77,7 @@ public:
 	/**
 	 * @brief Statistics error flag.
 	 *
-	 * True when statistics elements overflow.
+	 * True when statistics elements overflow, or shift() or pop() are called on an empty buffer.
 	 */
 	bool errorFlag = false;
 
@@ -119,14 +122,14 @@ public:
 	/**
 	 * @brief Removes an element from the beginning of the buffer.
 	 *
-	 * @warning Calling this operation on an empty buffer has an unpredictable behaviour.
+	 * @warning Calling this operation on an empty buffer always returns 0, and sets the errorFlag.
 	 */
 	T shift();
 
 	/**
 	 * @brief Removes an element from the end of the buffer.
 	 *
-	 * @warning Calling this operation on an empty buffer has an unpredictable behaviour.
+	 * @warning Calling this operation on an empty buffer always returns 0, and sets the errorFlag.
 	 */
 	T pop();
 
@@ -211,19 +214,15 @@ public:
 	T inline maximum();
 
 	/**
-	 * @brief Clears statistics elements.
- 	 * @note O(n)
-	 */
-	void clearStats();
-
-	/**
 	 * @brief Returns the element corresponding to the given rank.  Lowest first.
+	 * 
+	 * @note Order(n^2)
 	 */
 	T inline rank(uint8_t);
 
 	/**
 	 * @brief Returns mean.
- 	 * @note O(n)
+ 	 * @note O(1)
 	 */
 	float64_t inline mean();
 
@@ -251,14 +250,6 @@ public:
 	 */
 	float64_t inline cbstderr();
 
-	/**
-	 * @brief Returns how many elements were inserted into the buffer.  
-	 * Decremented when elements are removed.  
-	 * Not modified when elements are overwritten.
-	 * @note not the same as size().  Used for interim statistical calculations.
-	 */
-	IT inline inserted();
-
 	#ifdef CIRCULAR_BUFFER_DEBUG
 	void inline debug(Print* out);
 	void inline debugFn(Print* out, void (*printFunction)(Print*, T));
@@ -277,11 +268,13 @@ private:
 
 	/** 
 	 * Call after adding the element to update statistics
+	 * Approximates the mean of the buffer for statistics
 	 */
 	void inline wasAdded(T val);
 
 	/**
 	 * Call before removing element to update statistics
+	 * Approximates the mean of the buffer for statistics
 	 */
 	void inline toRemove(T val);
 
