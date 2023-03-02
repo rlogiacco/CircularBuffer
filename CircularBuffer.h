@@ -1,6 +1,7 @@
 /*
  CircularBuffer.h - Circular buffer library for Arduino.
  Copyright (c) 2017 Roberto Lo Giacco.
+ Statistics added by Brian Michalk.
 
  This program is free software: you can redistribute it and/or modify
  it under the terms of the GNU Lesser General Public License as 
@@ -15,8 +16,7 @@
  You should have received a copy of the GNU General Public License
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef CIRCULAR_BUFFER_STATISTICS_H_
-#define CIRCULAR_BUFFER_STATISTICS_H_
+#pragma once
 #include <stdint.h>
 #include <stddef.h>
 
@@ -288,4 +288,3 @@ private:
 };
 
 #include <CircularBuffer.tpp>
-#endif
