@@ -69,6 +69,11 @@ public:
 	 */
 	constexpr CircularBuffer();
 
+	/**
+	 * @brief Destroy circular buffer.
+	 */
+	~CircularBuffer();
+
 	// disable the copy constructor
 	/** @private */
 	CircularBuffer(const CircularBuffer&) = delete;
@@ -174,7 +179,7 @@ public:
 	#endif
 
 private:
-	T buffer[S];
+	T *buffer;
 	T *head;
 	T *tail;
 #ifndef CIRCULAR_BUFFER_INT_SAFE

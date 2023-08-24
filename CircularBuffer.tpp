@@ -18,7 +18,12 @@
 
 template<typename T, size_t S, typename IT>
 constexpr CircularBuffer<T,S,IT>::CircularBuffer() :
-		head(buffer), tail(buffer), count(0) {
+		buffer(new T[S]), head(buffer), tail(buffer), count(0) {
+}
+
+template<typename T, size_t S, typename IT>
+CircularBuffer<T,S,IT>::~CircularBuffer() {
+	delete buffer;
 }
 
 template<typename T, size_t S, typename IT>
