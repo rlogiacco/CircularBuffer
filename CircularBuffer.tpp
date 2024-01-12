@@ -123,6 +123,31 @@ void inline CircularBuffer<T,S,IT>::clear() {
 	count = 0;
 }
 
+template<typename T, size_t S, typename IT>
+void inline CircularBuffer<T,S,IT>::copyToArray(T* out) const {
+    const T* bufEnd = buffer + capacity;
+    const T* outEnd = out + count;
+    for (const T* t = head; t < bufEnd && out < outEnd; t++, out++) {
+        *out = *t;
+    }
+    for (const T* t = buffer; t <= tail && out < outEnd; t++, out++) {
+        *out = *t;
+    }
+}
+
+template<typename T, size_t S, typename IT>
+template<typename R>
+void inline CircularBuffer<T,S,IT>::copyToArray(R* out, R (&convert)(const T&)) const {
+    const T* bufEnd = buffer + capacity;
+    const R* outEnd = out + count;
+    for (const T* t = head; t < bufEnd && out < outEnd; t++, out++) {
+        *out = convert(*t);
+    }
+    for (const T* t = buffer; t <= tail && out < outEnd; t++, out++) {
+        *out = convert(*t);
+    }
+}
+
 #ifdef CIRCULAR_BUFFER_DEBUG
 #include <string.h>
 template<typename T, size_t S, typename IT>
