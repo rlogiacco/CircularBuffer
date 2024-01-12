@@ -136,6 +136,7 @@ buffer[15]; // ['c','d','e'] returned value is unpredictable
 * `available()` returns the number of elements that can be added before saturating the buffer
 * `capacity()` returns the number of elements the buffer can store, for completeness only as it's user-defined and never changes **REMOVED** from `1.3.0` replaced by the read-only member variable `capacity`
 * `clear()` resets the whole buffer to its initial state (pay attention though, if you had dynamically allocated objects in your buffer, memory used by such object is *not* released: iterate over the buffer contents and release object accordingly to their allocation method)
+* `copyToArray(array)` copies the contents of the circular buffer to a standard array `array`. The array must be large enough to hold all the elements in the buffer. 
 
 ## Advanced Usage
 
@@ -237,6 +238,7 @@ Multiple examples are available in the `examples` folder of the library:
  * [Stack.ino](https://github.com/rlogiacco/CircularBuffer/blob/master/examples/Stack/Stack.ino) on the other end shows how to use the library to represent a LIFO data structure
  * [Struct.ino](https://github.com/rlogiacco/CircularBuffer/blob/master/examples/Struct/Struct.ino) answers to the question _can this library store structured data?_
  * [Interrupts.ino](https://github.com/rlogiacco/CircularBuffer/blob/master/examples/Interrupts/Interrupts.ino) demonstrates the use of the library in interrupt driven code
+ * [Arrays.ino]() demonstrates the use of the copyToArray() function. 
 
 ## Limitations
 

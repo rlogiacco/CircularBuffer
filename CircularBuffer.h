@@ -173,6 +173,11 @@ public:
 	void inline debugFn(Print* out, void (*printFunction)(Print*, T));
 	#endif
 
+    void copyToArray(T* out) const;
+    
+    template<typename R>
+    void copyToArray(R* out, R (&convert)(const T&)) const;
+
 private:
 	T buffer[S];
 	T *head;
