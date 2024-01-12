@@ -6,7 +6,7 @@ CircularBuffer<int, bufferSize> buffer;
 
 void setup() {
     // start serial
-	Serial.begin(9600);
+    Serial.begin(9600);
     while(!Serial); // Wait for the serial port to come online
 
     // Add some values to the buffer
