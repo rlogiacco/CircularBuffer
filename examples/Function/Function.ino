@@ -1,6 +1,6 @@
 #include <CircularBuffer.h>
 
-typedef uint8_t (*func_t)(void)
+typedef uint8_t (*func_t)(void);
 CircularBuffer<func_t, 10> buffer;
 
 #define SAMPLE_PIN A0
