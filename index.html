@@ -92,6 +92,7 @@ $(function() {
 </ul>
 </li>
 <li><a href="#change-log">CHANGE LOG</a><ul>
+<li><a href="#140">1.4.0</a></li>
 <li><a href="#133">1.3.3</a></li>
 <li><a href="#132">1.3.2</a></li>
 <li><a href="#131">1.3.1</a></li>
@@ -257,7 +258,7 @@ Examples</h1>
 <li><a href="https://github.com/rlogiacco/CircularBuffer/blob/master/examples/Stack/Stack.ino">Stack.ino</a> on the other end shows how to use the library to represent a LIFO data structure</li>
 <li><a href="https://github.com/rlogiacco/CircularBuffer/blob/master/examples/Struct/Struct.ino">Struct.ino</a> answers to the question <em>can this library store structured data?</em></li>
 <li><a href="https://github.com/rlogiacco/CircularBuffer/blob/master/examples/Interrupts/Interrupts.ino">Interrupts.ino</a> demonstrates the use of the library in interrupt driven code</li>
-<li>[Arrays.ino]() demonstrates the use of the copyToArray() functions.</li>
+<li>[Arrays.ino]() demonstrates the use of the <code>copyToArray()</code> functions.</li>
 </ul>
 <h1><a class="anchor" id="autotoc_md11"></a>
 Limitations</h1>
@@ -283,22 +284,28 @@ Reclaim dynamic memory</h2>
  <h1><a class="anchor" id="autotoc_md14"></a>
 CHANGE LOG</h1>
 <h2><a class="anchor" id="autotoc_md15"></a>
+1.4.0</h2>
+<ul>
+<li>Resolves #52 adding two new additional methods <code>copyToArray(array)</code> and <code>copyToArray(array, convertFn)</code></li>
+<li>Fixes #28 adding compatibility with Nano 33 BLE by switching for <code>.h</code> header extension to <code>.hpp</code></li>
+</ul>
+<h2><a class="anchor" id="autotoc_md16"></a>
 1.3.3</h2>
 <ul>
 <li>Fixes #27 compilation error</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md16"></a>
+<h2><a class="anchor" id="autotoc_md17"></a>
 1.3.2</h2>
 <ul>
 <li>Fixes #2 preventing <code>shift()</code> and <code>pop()</code> operations misuse to mess up the buffer</li>
 <li>Fixes #2 preventing <em>out of boundary</em> access using the <code>[]</code> operator</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md17"></a>
+<h2><a class="anchor" id="autotoc_md18"></a>
 1.3.1</h2>
 <ul>
 <li>Fixes #21 _call to <code>abort()</code> is AVR-specific</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md18"></a>
+<h2><a class="anchor" id="autotoc_md19"></a>
 1.3.0</h2>
 <p >Most of the major improvements below have been contributed by <a href="https://github.com/Erlkoenig90">Erlkoenig90</a>: thank you Niklas!</p>
 <ul>
@@ -309,20 +316,20 @@ CHANGE LOG</h1>
 <li>Dropped the <code>CIRCULAT_BUFFER_XS</code> <em>macro switch</em> in favor of automatic index type identification</li>
 <li>Added support for very large buffers (capacity can go up to <code>UINT32_MAX</code>)</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md19"></a>
+<h2><a class="anchor" id="autotoc_md20"></a>
 1.2.0</h2>
 <ul>
 <li>Added interrupt related macro switch <code>CIRCULAR_BUFFER_INT_SAFE</code></li>
 <li>Dropped unecessary call to <code>memset</code> when clearing</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md20"></a>
+<h2><a class="anchor" id="autotoc_md21"></a>
 1.1.1</h2>
 <ul>
 <li>Added tests</li>
 <li>Fixed <code>clear()</code> function</li>
 <li>Fixed <code>pop()</code> function</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md21"></a>
+<h2><a class="anchor" id="autotoc_md22"></a>
 1.1.0</h2>
 <ul>
 <li>Improved robustness against access outside the buffer boundaries</li>
@@ -331,7 +338,7 @@ CHANGE LOG</h1>
 <li>Added <code>capacity()</code> function</li>
 <li>Added <code>debug()</code> function, disabled by pre processor by default</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md22"></a>
+<h2><a class="anchor" id="autotoc_md23"></a>
 1.0.0</h2>
 <ul>
 <li>Initial implementation </li>

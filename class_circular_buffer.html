@@ -125,6 +125,13 @@ constexpr&#160;</td><td class="memItemRight" valign="bottom"><b>CircularBuffer</
 <tr class="memitem:acef199d78df0e0d0ee3996ad251ad90c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_circular_buffer.html#acef199d78df0e0d0ee3996ad251ad90c">clear</a> ()</td></tr>
 <tr class="memdesc:acef199d78df0e0d0ee3996ad251ad90c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resets the buffer to a clean status, making all buffer positions available.  <a href="class_circular_buffer.html#acef199d78df0e0d0ee3996ad251ad90c">More...</a><br /></td></tr>
 <tr class="separator:acef199d78df0e0d0ee3996ad251ad90c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4b21c32bc92aa54560a49c5fc72b2cf1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_circular_buffer.html#a4b21c32bc92aa54560a49c5fc72b2cf1">copyToArray</a> (T *out) const</td></tr>
+<tr class="memdesc:a4b21c32bc92aa54560a49c5fc72b2cf1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copies the buffer content into the provided array.  <a href="class_circular_buffer.html#a4b21c32bc92aa54560a49c5fc72b2cf1">More...</a><br /></td></tr>
+<tr class="separator:a4b21c32bc92aa54560a49c5fc72b2cf1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae9b317d2673db8674924d686da31977d"><td class="memTemplParams" colspan="2">template&lt;typename R &gt; </td></tr>
+<tr class="memitem:ae9b317d2673db8674924d686da31977d"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="class_circular_buffer.html#ae9b317d2673db8674924d686da31977d">copyToArray</a> (R *out, R(&amp;convertFn)(const T &amp;)) const</td></tr>
+<tr class="memdesc:ae9b317d2673db8674924d686da31977d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copies the buffer content into the provided array calling the provided conversion function for each and every element of the buffer.  <a href="class_circular_buffer.html#ae9b317d2673db8674924d686da31977d">More...</a><br /></td></tr>
+<tr class="separator:ae9b317d2673db8674924d686da31977d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-attribs" name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
@@ -221,6 +228,70 @@ template&lt;typename T , size_t S, typename IT  = typename Helper::Index&lt;(S &
 
 <p>Resets the buffer to a clean status, making all buffer positions available. </p>
 <dl class="section note"><dt>Note</dt><dd>This does not clean up any dynamically allocated memory stored in the buffer. Clearing a buffer that points to heap-allocated memory may cause a memory leak, if it's not properly cleaned up. </dd></dl>
+
+</div>
+</div>
+<a id="ae9b317d2673db8674924d686da31977d" name="ae9b317d2673db8674924d686da31977d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae9b317d2673db8674924d686da31977d">&#9670;&nbsp;</a></span>copyToArray() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T , size_t S, typename IT  = typename Helper::Index&lt;(S &lt;= UINT8_MAX), (S &lt;= UINT16_MAX)&gt;::Type&gt; </div>
+<div class="memtemplate">
+template&lt;typename R &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="class_circular_buffer.html">CircularBuffer</a>&lt; T, S, IT &gt;::copyToArray </td>
+          <td>(</td>
+          <td class="paramtype">R *&#160;</td>
+          <td class="paramname"><em>out</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">R(&amp;)(const T &amp;)&#160;</td>
+          <td class="paramname"><em>convertFn</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Copies the buffer content into the provided array calling the provided conversion function for each and every element of the buffer. </p>
+<dl class="section note"><dt>Note</dt><dd>No verification is done about the provided array length, it's the user responsibility to ensure the array provides enough space to accomodate all the elements currently stored in the buffer. After the function returns the elements in the buffer can be found starting at index 0 and up to the buffer <a class="el" href="class_circular_buffer.html#a7d7c41366af671a452391f1553b0a1ca" title="Returns how many elements are actually stored in the buffer.">size()</a> at the moment of the copyToArray function call.</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">convertFn</td><td>the conversion function to call for each item stored in the buffer </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a4b21c32bc92aa54560a49c5fc72b2cf1" name="a4b21c32bc92aa54560a49c5fc72b2cf1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4b21c32bc92aa54560a49c5fc72b2cf1">&#9670;&nbsp;</a></span>copyToArray() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T , size_t S, typename IT  = typename Helper::Index&lt;(S &lt;= UINT8_MAX), (S &lt;= UINT16_MAX)&gt;::Type&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="class_circular_buffer.html">CircularBuffer</a>&lt; T, S, IT &gt;::copyToArray </td>
+          <td>(</td>
+          <td class="paramtype">T *&#160;</td>
+          <td class="paramname"><em>out</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Copies the buffer content into the provided array. </p>
+<dl class="section note"><dt>Note</dt><dd>No verification is done about the provided array length, it's the user responsibility to ensure the array provides enough space to accomodate all the elements currently stored in the buffer. After the function returns the elements in the buffer can be found starting at index 0 and up to the buffer <a class="el" href="class_circular_buffer.html#a7d7c41366af671a452391f1553b0a1ca" title="Returns how many elements are actually stored in the buffer.">size()</a> at the moment of the copyToArray function call. </dd></dl>
 
 </div>
 </div>
