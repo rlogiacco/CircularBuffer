@@ -4,6 +4,11 @@
 const int bufferSize = 10;
 CircularBuffer<int, bufferSize> buffer;
 
+
+char convert(int i) {
+    return (char)i;
+}
+
 void setup() {
     // start serial
     Serial.begin(9600);
@@ -70,8 +75,4 @@ void setup() {
 
 void loop() {
   // Nothing to do here
-}
-
-char convert(int i) {
-    return (char)i;
 }
