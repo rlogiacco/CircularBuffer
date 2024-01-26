@@ -168,6 +168,26 @@ public:
 	 */
 	void inline clear();
 
+
+    /**
+	 * @brief Copies the buffer content into the provided array.
+	 *
+	 * @note No verification is done about the provided array length, it's the user responsibility to ensure the array provides enough space to accomodate
+	 * all the elements currently stored in the buffer. After the function returns the elements in the buffer can be found starting at index 0 and up to the buffer size() at the moment of the copyToArray function call.
+	 */
+	void copyToArray(T* out) const;
+    
+    /**
+	 * @brief Copies the buffer content into the provided array calling the provided conversion function for each and every element of the buffer.
+	 *
+	 * @note No verification is done about the provided array length, it's the user responsibility to ensure the array provides enough space to accomodate
+	 * all the elements currently stored in the buffer. After the function returns the elements in the buffer can be found starting at index 0 and up to the buffer size() at the moment of the copyToArray function call.
+	 * 
+	 * @param convertFn the conversion function to call for each item stored in the buffer
+	 */
+	template<typename R>
+    void copyToArray(R* out, R (&convertFn)(const T&)) const;
+
 	#ifdef CIRCULAR_BUFFER_DEBUG
 	void inline debug(Print* out);
 	void inline debugFn(Print* out, void (*printFunction)(Print*, T));
