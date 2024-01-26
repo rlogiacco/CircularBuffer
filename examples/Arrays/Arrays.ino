@@ -10,18 +10,43 @@ void setup() {
     while(!Serial); // Wait for the serial port to come online
 
     // Add some values to the buffer
-    for (int i = 0; i < 10; ++i) {
-        buffer.push(2*i);
+    for (int i = 65; i < 65 + 6; i++) {
+        buffer.push(i);
     }
+    
+    Serial.print("Size:");
+    Serial.println(buffer.size());
 
     // Create an array to hold the buffer's contents
-    int array[bufferSize];
+    int subArray[buffer.size()];
+
+    // Copy the buffer's contents to the array
+    buffer.copyToArray(subArray);
+
+    // Now array contains the same values as the buffer
+    for (int i = 0; i < buffer.size(); ++i) {
+        Serial.print("Buffer: ");
+        Serial.print(buffer[i]); 
+        Serial.print(", Array: ");
+        Serial.println(subArray[i]);
+    }
+
+    // Add some more values to the buffer
+    for (int i = 65 + 6; i < 65 + 14; i++) {
+        buffer.push(i);
+    }
+
+    Serial.print("Size:");
+    Serial.println(buffer.size());
+    
+    // Create an array to hold the buffer's contents
+    int array[buffer.size()];
 
     // Copy the buffer's contents to the array
     buffer.copyToArray(array);
 
     // Now array contains the same values as the buffer
-    for (int i = 0; i < bufferSize; ++i) {
+    for (int i = 0; i < buffer.size(); ++i) {
         Serial.print("Buffer: ");
         Serial.print(buffer[i]); 
         Serial.print(", Array: ");
