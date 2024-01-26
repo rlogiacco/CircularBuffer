@@ -2,7 +2,7 @@
 
 CircularBuffer<int, 100> buffer;
 
-unsigned long time = 0;
+unsigned long _time = 0;
 
 #define SAMPLE_PIN A0
 
