@@ -51,7 +51,7 @@ The library itself has an implicit memory consumption of about *0.5Kb*: 580 byte
 When declaring your buffer you should specify the data type it must handle and the buffer capacity: those two parameters will influence the memory consumed by the buffer.
 
 ``` cpp
-#include <CircularBuffer.h>
+#include <CircularBuffer.hpp>
 
 CircularBuffer<byte,100> bytes;     // uses 538 bytes
 CircularBuffer<int,100> ints;       // uses 638 bytes
@@ -63,13 +63,6 @@ CircularBuffer<void*,100> pointers; // uses 638 bytes
 ```
 
 **Please note**: the memory usage reported above includes the program memory used by the library code, the heap memory is much less and is comparable to an array of the same size and type of the buffer.
-
-### ⚠ **IMPORTANT**
-If you are strugglying to have your toolchain pick up the library (issues reported on Arduino Mbed and Nano33 BLE boards, but might apply to others as well) try specifying the exact path to your library, like in the following example:
-
-``` cpp
-#include <C:\Users\username\Documents\Arduino\libraries\CircularBuffer\CircularBuffer.h>
-```
 
 ### Store data
 

@@ -1,5 +1,5 @@
 #define CIRCULAR_BUFFER_INT_SAFE
-#include "CircularBuffer.h"
+#include "CircularBuffer.hpp"
 CircularBuffer<unsigned long, 10> timings;
 
 

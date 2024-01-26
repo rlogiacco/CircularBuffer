@@ -1,4 +1,4 @@
-#include <CircularBuffer.h>
+#include <CircularBuffer.hpp>
 
 typedef uint8_t (*func_t)(void);
 CircularBuffer<func_t, 10> buffer;
