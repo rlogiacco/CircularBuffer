@@ -1,4 +1,4 @@
-#include <CircularBuffer.h>
+#include <CircularBuffer.hpp>
 #include "Record.h"
 
 CircularBuffer<Record*, 10> buffer;
