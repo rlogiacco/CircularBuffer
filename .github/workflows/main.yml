@@ -37,6 +37,29 @@ jobs:
             - examples/Stack
             - examples/Struct
             - examples/Test
+  build-retro:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        fqbn:
+          - arduino:avr:uno
+          - arduino:avr:nano:cpu=atmega168
+          - arduino:avr:nano:cpu=atmega328
+          - arduino:avr:mega:cpu=atmega1280
+          - arduino:avr:mega:cpu=atmega2560
+          - arduino:avr:leonardo
+          - arduino:samd:nano_33_iot
+          - arduino:megaavr:uno2018:mode=on
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: arduino/compile-sketches@v1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          fqbn: ${{ matrix.fqbn }}
+          sketch-paths: |
+            - examples/RetroCompatibility
           
   build-for-esp32:
     runs-on: ubuntu-latest
