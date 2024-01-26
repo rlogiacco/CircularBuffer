@@ -62,14 +62,14 @@ void setup() {
     char chars[buffer.size()];
 
     // Copy and convert the buffer's contents to the array
-    buffer.copyToArray(convert, chars);
+    buffer.copyToArray(chars, convert);
 
      // Now array contains the same values as the buffer
     for (int i = 0; i < buffer.size(); ++i) {
         Serial.print("Buffer: ");
-        Serial.print(itoa(buffer[i])); 
+        Serial.print((char)buffer[i]); 
         Serial.print(", Array: ");
-        Serial.println(array[i]);
+        Serial.println(chars[i]);
     }
 }
 
