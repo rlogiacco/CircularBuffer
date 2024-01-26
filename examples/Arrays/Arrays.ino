@@ -57,7 +57,7 @@ void setup() {
     char chars[buffer.size()];
 
     // Copy and convert the buffer's contents to the array
-    buffer.copyToArray(conv, chars);
+    buffer.copyToArray(convert, chars);
 
      // Now array contains the same values as the buffer
     for (int i = 0; i < buffer.size(); ++i) {
