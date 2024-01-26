@@ -108,7 +108,7 @@ Usage</h1>
 <h2><a class="anchor" id="autotoc_md2"></a>
 Declare and initialize</h2>
 <p >When declaring your buffer you should specify the data type it must handle and the buffer capacity: those two parameters will influence the memory consumed by the buffer.</p>
-<div class="fragment"><div class="line">#include &lt;CircularBuffer.h&gt;</div>
+<div class="fragment"><div class="line">#include &lt;CircularBuffer.hpp&gt;</div>
 <div class="line"> </div>
 <div class="line">CircularBuffer&lt;byte,100&gt; bytes;     // uses 538 bytes</div>
 <div class="line">CircularBuffer&lt;int,100&gt; ints;       // uses 638 bytes</div>
@@ -119,10 +119,6 @@ Declare and initialize</h2>
 <div class="line">CircularBuffer&lt;void*,100&gt; pointers; // uses 638 bytes</div>
 </div><!-- fragment --><p ><b>Please note</b>: the memory usage reported above includes the program memory used by the library code, the heap memory is much less and is comparable to an array of the same size and type of the buffer.</p>
 <h2><a class="anchor" id="autotoc_md3"></a>
-⚠ &lt;strong&gt;IMPORTANT&lt;/strong&gt;</h2>
-<p >If you are strugglying to have your toolchain pick up the library (issues reported on Arduino Mbed and Nano33 BLE boards, but might apply to others as well) try specifying the exact path to your library, like in the following example:</p>
-<div class="fragment"><div class="line">#include &lt;C:\Users\username\Documents\Arduino\libraries\CircularBuffer\CircularBuffer.h&gt;</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md4"></a>
 Store data</h2>
 <p >Let's start making things clear: the library doesn't support inserting data in the middle of the buffer. You can add data to the buffer either before the first element via an <code>unshift()</code> operation or after the last element via a <code>push()</code> operation. You can keep adding data beyond the buffer maximum capacity, but you'll lose the least significant information:</p>
 <ul>
@@ -143,7 +139,7 @@ Store data</h2>
 <div class="line">buffer.unshift(2);  // [2,3,2,1,0] returns false</div>
 <div class="line">buffer.unshift(10); // [10,2,3,2,1] returns false</div>
 <div class="line">buffer.push(-5);  // [2,3,2,1,-5] returns false</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md5"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md4"></a>
 Retrieve data</h2>
 <p >Similarly to data addition, data retrieval can be performed at <em>tail</em> via a <code>pop()</code> operation or from <em>head</em> via an <code>shift()</code> operation: both cause the element being read to be removed from the buffer.</p>
 <blockquote class="doxtable">
@@ -169,7 +165,7 @@ Retrieve data</h2>
 <div class="line"> </div>
 <div class="line">buffer[10]; // [&#39;c&#39;,&#39;d&#39;,&#39;e&#39;] returned value is unpredictable</div>
 <div class="line">buffer[15]; // [&#39;c&#39;,&#39;d&#39;,&#39;e&#39;] returned value is unpredictable</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md6"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md5"></a>
 Additional operations</h2>
 <ul>
 <li><code>isEmpty()</code> returns <code>true</code> only if no data is stored in the buffer</li>
@@ -178,10 +174,12 @@ Additional operations</h2>
 <li><code>available()</code> returns the number of elements that can be added before saturating the buffer</li>
 <li><code>capacity()</code> returns the number of elements the buffer can store, for completeness only as it's user-defined and never changes <b>REMOVED</b> from <code>1.3.0</code> replaced by the read-only member variable <code>capacity</code></li>
 <li><code>clear()</code> resets the whole buffer to its initial state (pay attention though, if you had dynamically allocated objects in your buffer, memory used by such object is <em>not</em> released: iterate over the buffer contents and release object accordingly to their allocation method)</li>
+<li><code>copyToArray(array)</code> copies the contents of the buffer to a standard array <code>array</code>. The array must be large enough to hold all the elements currently in the buffer.</li>
+<li><code>copyToArray(conversionFn, array)</code> copies the contents of the buffer to a standard array <code>array</code> executing a function on each element, usually a type conversion. The array must be large enough to hold all the elements currently in the buffer.</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md7"></a>
+<h1><a class="anchor" id="autotoc_md6"></a>
 Advanced Usage</h1>
-<h2><a class="anchor" id="autotoc_md8"></a>
+<h2><a class="anchor" id="autotoc_md7"></a>
 Automatic optimization</h2>
 <p >Starting from version <code>1.3.0</code> the library is capable to automatically detect which data type should be used for the index based on the buffer capacity:</p><ul>
 <li>if you declare a buffer with a capacity greater than <code>65535</code> then your index is going to be an <code>unsigned long</code></li>
@@ -203,7 +201,7 @@ Automatic optimization</h2>
 <div class="line"><span class="keywordflow">for</span> (index_t i = 0; i &lt; buffer.size(); i++) {</div>
 <div class="line">    avg += buffer[i] / buffer.size();</div>
 <div class="line">}</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md9"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md8"></a>
 Legacy optimization</h2>
 <p ><em>The following applies to versions prior to <code>1.3.0</code> only.</em></p>
 <p >By default the library uses <code>unsigned int</code> indexes, allowing for a maximum of <code>65535</code> items, but you'll rarely need such a huge store.</p>
@@ -223,7 +221,7 @@ Legacy optimization</h2>
 <div class="line">    }</div>
 <div class="line">}</div>
 </div><!-- fragment --><p ><b>Please note</b>: this <em>macro switch</em> forces the buffer to use an 8 bits data type as internal index, as such <b>all</b> your buffers will be limited to a maximum capacity of <code>255</code>.</p>
-<h2><a class="anchor" id="autotoc_md10"></a>
+<h2><a class="anchor" id="autotoc_md9"></a>
 Interrupts</h2>
 <p >The library does help working with interrupts defining the <code>CIRCULAR_BUFFER_INT_SAFE</code> macro switch, which introduces the <code>volatile</code> modifier to the <code>count</code> variable, making the whole library more interrupt friendly at the price of disabling some compiler optimizations. The <code>#define</code> statement needs to be put somewhere before the <code>#include</code> statement:</p>
 <div class="fragment"><div class="line"><span class="preprocessor">#define CIRCULAR_BUFFER_INT_SAFE</span></div>
@@ -242,13 +240,13 @@ Interrupts</h2>
 <div class="line">    Serial.print(<span class="stringliteral">&quot;buffer size is &quot;</span>); Serial.println(timings.<a class="code hl_function" href="class_circular_buffer.html#a7d7c41366af671a452391f1553b0a1ca">size</a>());</div>
 <div class="line">    delay(250);</div>
 <div class="line">}</div>
-<div class="ttc" id="aclass_circular_buffer_html"><div class="ttname"><a href="class_circular_buffer.html">CircularBuffer</a></div><div class="ttdoc">Implements a circular buffer that supports LIFO and FIFO operations.</div><div class="ttdef"><b>Definition:</b> CircularBuffer.h:51</div></div>
+<div class="ttc" id="aclass_circular_buffer_html"><div class="ttname"><a href="class_circular_buffer.html">CircularBuffer</a></div><div class="ttdoc">Implements a circular buffer that supports LIFO and FIFO operations.</div><div class="ttdef"><b>Definition:</b> CircularBuffer.hpp:51</div></div>
 <div class="ttc" id="aclass_circular_buffer_html_a0b18f285fe95646b0c665d5ab31d9116"><div class="ttname"><a href="class_circular_buffer.html#a0b18f285fe95646b0c665d5ab31d9116">CircularBuffer::push</a></div><div class="ttdeci">bool push(T value)</div><div class="ttdoc">Adds an element to the end of buffer.</div></div>
 <div class="ttc" id="aclass_circular_buffer_html_a7d7c41366af671a452391f1553b0a1ca"><div class="ttname"><a href="class_circular_buffer.html#a7d7c41366af671a452391f1553b0a1ca">CircularBuffer::size</a></div><div class="ttdeci">IT size() const</div><div class="ttdoc">Returns how many elements are actually stored in the buffer.</div></div>
 </div><!-- fragment --><blockquote class="doxtable">
 <p >Please note this does <b>NOT</b> make the library <em>interrupt safe</em>, but it does help its usage in interrupt driven firmwares. </p>
 </blockquote>
-<h1><a class="anchor" id="autotoc_md11"></a>
+<h1><a class="anchor" id="autotoc_md10"></a>
 Examples</h1>
 <p >Multiple examples are available in the <code>examples</code> folder of the library:</p>
 <ul>
@@ -259,10 +257,11 @@ Examples</h1>
 <li><a href="https://github.com/rlogiacco/CircularBuffer/blob/master/examples/Stack/Stack.ino">Stack.ino</a> on the other end shows how to use the library to represent a LIFO data structure</li>
 <li><a href="https://github.com/rlogiacco/CircularBuffer/blob/master/examples/Struct/Struct.ino">Struct.ino</a> answers to the question <em>can this library store structured data?</em></li>
 <li><a href="https://github.com/rlogiacco/CircularBuffer/blob/master/examples/Interrupts/Interrupts.ino">Interrupts.ino</a> demonstrates the use of the library in interrupt driven code</li>
+<li>[Arrays.ino]() demonstrates the use of the copyToArray() functions.</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md12"></a>
+<h1><a class="anchor" id="autotoc_md11"></a>
 Limitations</h1>
-<h2><a class="anchor" id="autotoc_md13"></a>
+<h2><a class="anchor" id="autotoc_md12"></a>
 Reclaim dynamic memory</h2>
 <p >If you use this library to store dynamically allocated objects, refrain from using the <code>clear()</code> method as that will <b>not</b> perform memory deallocation: you need to iterate over your buffer content and release memory accordingly to the allocation method used, either via <code>delete</code> (if you had used <code>new</code>) or <code>free</code> (in case of <code>malloc</code>):</p>
 <div class="fragment"><div class="line"><span class="keywordflow">while</span> (!buffer.isEmpty()) {</div>
@@ -281,25 +280,25 @@ Reclaim dynamic memory</h2>
 <div class="line">    <span class="keyword">delete</span> current; <span class="comment">// if you don&#39;t do this the object memory is lost!!!</span></div>
 <div class="line">}</div>
 </div><!-- fragment --><hr  />
- <h1><a class="anchor" id="autotoc_md15"></a>
+ <h1><a class="anchor" id="autotoc_md14"></a>
 CHANGE LOG</h1>
-<h2><a class="anchor" id="autotoc_md16"></a>
+<h2><a class="anchor" id="autotoc_md15"></a>
 1.3.3</h2>
 <ul>
 <li>Fixes #27 compilation error</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md17"></a>
+<h2><a class="anchor" id="autotoc_md16"></a>
 1.3.2</h2>
 <ul>
 <li>Fixes #2 preventing <code>shift()</code> and <code>pop()</code> operations misuse to mess up the buffer</li>
 <li>Fixes #2 preventing <em>out of boundary</em> access using the <code>[]</code> operator</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md18"></a>
+<h2><a class="anchor" id="autotoc_md17"></a>
 1.3.1</h2>
 <ul>
 <li>Fixes #21 _call to <code>abort()</code> is AVR-specific</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md19"></a>
+<h2><a class="anchor" id="autotoc_md18"></a>
 1.3.0</h2>
 <p >Most of the major improvements below have been contributed by <a href="https://github.com/Erlkoenig90">Erlkoenig90</a>: thank you Niklas!</p>
 <ul>
@@ -310,20 +309,20 @@ CHANGE LOG</h1>
 <li>Dropped the <code>CIRCULAT_BUFFER_XS</code> <em>macro switch</em> in favor of automatic index type identification</li>
 <li>Added support for very large buffers (capacity can go up to <code>UINT32_MAX</code>)</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md20"></a>
+<h2><a class="anchor" id="autotoc_md19"></a>
 1.2.0</h2>
 <ul>
 <li>Added interrupt related macro switch <code>CIRCULAR_BUFFER_INT_SAFE</code></li>
 <li>Dropped unecessary call to <code>memset</code> when clearing</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md21"></a>
+<h2><a class="anchor" id="autotoc_md20"></a>
 1.1.1</h2>
 <ul>
 <li>Added tests</li>
 <li>Fixed <code>clear()</code> function</li>
 <li>Fixed <code>pop()</code> function</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md22"></a>
+<h2><a class="anchor" id="autotoc_md21"></a>
 1.1.0</h2>
 <ul>
 <li>Improved robustness against access outside the buffer boundaries</li>
@@ -332,7 +331,7 @@ CHANGE LOG</h1>
 <li>Added <code>capacity()</code> function</li>
 <li>Added <code>debug()</code> function, disabled by pre processor by default</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md23"></a>
+<h2><a class="anchor" id="autotoc_md22"></a>
 1.0.0</h2>
 <ul>
 <li>Initial implementation </li>
