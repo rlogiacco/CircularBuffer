@@ -141,10 +141,10 @@ void inline CircularBuffer<T,S,IT>::copyToArray(R* out, R (&convertFn)(const T&)
     const T* bufEnd = buffer + capacity;
     const R* outEnd = out + count;
     for (const T* current = head; current < bufEnd && out < outEnd; current++, out++) {
-        *out = convert(*current);
+        *out = convertFn(*current);
     }
     for (const T* current = buffer; current <= tail && out < outEnd; current++, out++) {
-        *out = convert(*current);
+        *out = convertFn(*current);
     }
 }
 
