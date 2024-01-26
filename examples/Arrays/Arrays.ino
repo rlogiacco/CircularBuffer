@@ -5,7 +5,7 @@ const int bufferSize = 10;
 CircularBuffer<int, bufferSize> buffer;
 
 
-char convert(int i) {
+char convert(const int i) {
     return (char)i;
 }
 
