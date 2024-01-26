@@ -21,27 +21,28 @@
 The library itself has an implicit memory consumption of about *0.5Kb*: 580 bytes (max) of code and 8 bytes of memory, to my calculations. That does not consider the space used to store the items themselves, obviously.
 
 <!-- toc -->
-  - [Usage](#usage)
-    - [Declare and initialize](#declare-and-initialize)
-    - [Store data](#store-data)
-    - [Retrieve data](#retrieve-data)
-    - [Additional operations](#additional-operations)
-  - [Advanced Usage](#advanced-usage)
-    - [Automatic optimization](#automatic-optimization)
-    - [Legacy optimization](#legacy-optimization)
-    - [Interrupts](#interrupts)
-  - [Examples](#examples)
-  - [Limitations](#limitations)
-    - [Reclaim dynamic memory](#reclaim-dynamic-memory)
-  - [CHANGE LOG](#change-log)
-    - [1.3.3](#133)
-    - [1.3.2](#132)
-    - [1.3.1](#131)
-    - [1.3.0](#130)
-    - [1.2.0](#120)
-    - [1.1.1](#111)
-    - [1.1.0](#110)
-    - [1.0.0](#100)
+- [Usage](#usage)
+  - [Declare and initialize](#declare-and-initialize)
+  - [Store data](#store-data)
+  - [Retrieve data](#retrieve-data)
+  - [Additional operations](#additional-operations)
+- [Advanced Usage](#advanced-usage)
+  - [Automatic optimization](#automatic-optimization)
+  - [Legacy optimization](#legacy-optimization)
+  - [Interrupts](#interrupts)
+- [Examples](#examples)
+- [Limitations](#limitations)
+  - [Reclaim dynamic memory](#reclaim-dynamic-memory)
+- [CHANGE LOG](#change-log)
+  - [1.4.0](#140)
+  - [1.3.3](#133)
+  - [1.3.2](#132)
+  - [1.3.1](#131)
+  - [1.3.0](#130)
+  - [1.2.0](#120)
+  - [1.1.1](#111)
+  - [1.1.0](#110)
+  - [1.0.0](#100)
 <!-- tocstop -->
 
 ## Usage
@@ -232,7 +233,7 @@ Multiple examples are available in the `examples` folder of the library:
  * [Stack.ino](https://github.com/rlogiacco/CircularBuffer/blob/master/examples/Stack/Stack.ino) on the other end shows how to use the library to represent a LIFO data structure
  * [Struct.ino](https://github.com/rlogiacco/CircularBuffer/blob/master/examples/Struct/Struct.ino) answers to the question _can this library store structured data?_
  * [Interrupts.ino](https://github.com/rlogiacco/CircularBuffer/blob/master/examples/Interrupts/Interrupts.ino) demonstrates the use of the library in interrupt driven code
- * [Arrays.ino]() demonstrates the use of the copyToArray() functions. 
+ * [Arrays.ino]() demonstrates the use of the `copyToArray()` functions. 
 
 ## Limitations
 
@@ -264,6 +265,10 @@ if (!buffer.isEmpty()) {
 
 ------------------------
 ## CHANGE LOG
+
+### 1.4.0
+* Resolves #52 adding two new additional methods `copyToArray(array)` and `copyToArray(array, convertFn)`
+* Fixes #28 adding compatibility with Nano 33 BLE by switching for `.h` header extension to `.hpp`
 
 ### 1.3.3
 * Fixes #27 compilation error
