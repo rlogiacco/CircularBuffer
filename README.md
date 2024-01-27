@@ -14,7 +14,7 @@
 [![GitHub download](https://img.shields.io/github/downloads/rlogiacco/CircularBuffer/total.svg)](https://github.com/rlogiacco/CircularBuffer/releases/latest)
 [![GitHub stars](https://img.shields.io/github/stars/rlogiacco/CircularBuffer.svg)](https://github.com/rlogiacco/CircularBuffer/stargazers)
 [![GitHub issues](https://img.shields.io/github/issues/rlogiacco/CircularBuffer.svg)](https://github.com/rlogiacco/CircularBuffer/issues)
-[![Build Status](https://img.shields.io/travis/rlogiacco/CircularBuffer.svg?branch=master)](https://travis-ci.org/rlogiacco/CircularBuffer)
+[![Build Status](https://github.com/rlogiacco/CircularBuffer/actions/workflows/main.yml/badge.svg)](https://github.com/rlogiacco/CircularBuffer/actions/workflows/main.yml)
 [![License](https://img.shields.io/badge/license-LGPL%203-blue.svg)](https://github.com/rlogiacco/CircularBuffer/blob/master/LICENSE)
 
 
