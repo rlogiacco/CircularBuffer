@@ -6,7 +6,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
         fqbn:
@@ -20,7 +19,6 @@ jobs:
           - arduino:megaavr:uno2018:mode=on
           - arduino:mbed:nano33ble
           - arduino:mbed_nano:nanorp2040connect
-
     steps:
       - uses: actions/checkout@v4
       - uses: arduino/compile-sketches@v1
@@ -39,9 +37,8 @@ jobs:
             - examples/Test
             - examples/Arrays
             
-  build-retro:
+  build-avr:
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
         fqbn:
@@ -53,7 +50,6 @@ jobs:
           - arduino:avr:leonardo
           - arduino:samd:nano_33_iot
           - arduino:megaavr:uno2018:mode=on
-
     steps:
       - uses: actions/checkout@v4
       - uses: arduino/compile-sketches@v1
@@ -62,17 +58,15 @@ jobs:
           fqbn: ${{ matrix.fqbn }}
           sketch-paths: |
             - examples/RetroCompatibility
-          
+
   build-for-esp32:
     runs-on: ubuntu-latest
-    
     strategy:
       matrix:
         fqbn:
           - esp32:esp32:esp32
           - esp32:esp32:esp32s3
           - esp32:esp32:esp32c3
-
     steps:
       - uses: actions/checkout@v4
       - uses: arduino/compile-sketches@v1
