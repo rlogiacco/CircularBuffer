@@ -125,12 +125,12 @@ void inline CircularBuffer<T,S,IT>::clear() {
 
 template<typename T, size_t S, typename IT>
 void inline CircularBuffer<T,S,IT>::copyToArray(T* out) const {
-    const T* bufEnd = buffer + capacity;
-    const T* outEnd = out + count;
-    for (const T* current = head; current < bufEnd && out < outEnd; current++, out++) {
+    const T* end = buffer + capacity;
+    const T* max = out + count;
+    for (const T* current = head; current < end && out < max; current++, out++) {
         *out = *current;
     }
-    for (const T* current = buffer; current <= tail && out < outEnd; current++, out++) {
+    for (const T* current = buffer; current <= tail && out < max; current++, out++) {
         *out = *current;
     }
 }
@@ -138,12 +138,12 @@ void inline CircularBuffer<T,S,IT>::copyToArray(T* out) const {
 template<typename T, size_t S, typename IT>
 template<typename R>
 void inline CircularBuffer<T,S,IT>::copyToArray(R* out, R (&convertFn)(const T&)) const {
-    const T* bufEnd = buffer + capacity;
-    const R* outEnd = out + count;
-    for (const T* current = head; current < bufEnd && out < outEnd; current++, out++) {
+    const T* end = buffer + capacity;
+    const T* max = out + count;
+    for (const T* current = head; current < end && out < max; current++, out++) {
         *out = convertFn(*current);
     }
-    for (const T* current = buffer; current <= tail && out < outEnd; current++, out++) {
+    for (const T* current = buffer; current <= tail && out < max; current++, out++) {
         *out = convertFn(*current);
     }
 }
