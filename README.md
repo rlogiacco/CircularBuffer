@@ -18,7 +18,7 @@
 [![License](https://img.shields.io/badge/license-LGPL%203-blue.svg)](https://github.com/rlogiacco/CircularBuffer/blob/master/LICENSE)
 
 
-The library itself has an implicit memory consumption of about *0.5Kb*: 580 bytes (max) of code and 8 bytes of memory, to my calculations. That does not consider the space used to store the items themselves, obviously.
+The library itself has an implicit memory consumption of about *0.5Kb*: 580 bytes (max) of code and 8 bytes of memory, according to my calculations. That does not consider the space used to store the items themselves, obviously.
 
 <!-- toc -->
 - [Usage](#usage)
@@ -94,7 +94,7 @@ buffer.push(-5);  // [2,3,2,1,-5] returns false
 
 ### Retrieve data
 
-Similarly to data addition, data retrieval can be performed at _tail_ via a `pop()` operation or from _head_ via an `shift()` operation: both cause the element being read to be removed from the buffer.
+Similarly to data addition, data retrieval can be performed at _tail_ via a `pop()` operation or from _head_ via a `shift``()`` operation: both cause the element being read to be removed from the buffer.
 
 > ⚠ Reading data beyond the actual buffer size has an undefined behaviour and is user's responsibility to prevent such boundary violations using the [_additional operations_](#additional-operations) listed in the next section. The library will behave differently depending on the data type and allocation method, but you can safely assume your program will crash if you don't watch your steps.
 
@@ -129,7 +129,7 @@ buffer[15]; // ['c','d','e'] returned value is unpredictable
 * `size()` returns the number of elements currently stored in the buffer; it should be used in conjunction with the `[]` operator to avoid boundary violations: the first element index is always `0` (if buffer is not empty), the last element index is always `size() - 1`
 * `available()` returns the number of elements that can be added before saturating the buffer
 * `capacity()` returns the number of elements the buffer can store, for completeness only as it's user-defined and never changes **REMOVED** from `1.3.0` replaced by the read-only member variable `capacity`
-* `clear()` resets the whole buffer to its initial state (pay attention though, if you had dynamically allocated objects in your buffer, memory used by such object is *not* released: iterate over the buffer contents and release object accordingly to their allocation method)
+* `clear()` resets the whole buffer to its initial state (pay attention though, if you had dynamically allocated objects in your buffer, memory used by such object is *not* released: iterate over the buffer contents and release objects accordingly to their allocation method)
 * `copyToArray(array)` copies the contents of the buffer to a standard array `array`. The array must be large enough to hold all the elements currently in the buffer.
 * `copyToArray(conversionFn, array)` copies the contents of the buffer to a standard array `array` executing a function on each element, usually a type conversion. The array must be large enough to hold all the elements currently in the buffer. 
 
@@ -137,10 +137,10 @@ buffer[15]; // ['c','d','e'] returned value is unpredictable
 
 ### Automatic optimization
 
-Starting from version `1.3.0` the library is capable to automatically detect which data type should be used for the index based on the buffer capacity: 
+Starting from version `1.3.0` the library is capable to automatically detecting which data type should be used for the index based on the buffer capacity: 
 * if you declare a buffer with a capacity greater than `65535` then your index is going to be an `unsigned long`
 * `unsigned int` for buffers with a declared capacity greater than `255`
-* otherwise a `byte` is going to suffice
+* otherwise, a `byte` is going to suffice
 
 In addition, you can mix in the same code buffers with small index and buffers with normal index: previously this was not possible.
 
@@ -194,11 +194,11 @@ void loop() {
 }
 ```
 
-**Please note**: this _macro switch_ forces the buffer to use an 8 bits data type as internal index, as such **all** your buffers will be limited to a maximum capacity of `255`.
+**Please note**: this _macro switch_ forces the buffer to use an 8 bits data type as the internal index, as such **all** your buffers will be limited to a maximum capacity of `255`.
 
 ### Interrupts
 
-The library does help working with interrupts defining the `CIRCULAR_BUFFER_INT_SAFE` macro switch, which introduces the `volatile` modifier to the `count` variable, making the whole library more interrupt friendly at the price of disabling some compiler optimizations. The `#define` statement needs to be put somewhere before the `#include` statement:
+The library does help to work with interrupts defining the `CIRCULAR_BUFFER_INT_SAFE` macro switch, which introduces the `volatile` modifier to the `count` variable, making the whole library more interrupt-friendly at the price of disabling some compiler optimizations. The `#define` statement needs to be put somewhere before the `#include` statement:
 
 ```cpp
 #define CIRCULAR_BUFFER_INT_SAFE
@@ -232,7 +232,7 @@ Multiple examples are available in the `examples` folder of the library:
  * [Queue.ino](https://github.com/rlogiacco/CircularBuffer/blob/master/examples/Queue/Queue.ino) is a classical example of a queue, or a FIFO data structure
  * [Stack.ino](https://github.com/rlogiacco/CircularBuffer/blob/master/examples/Stack/Stack.ino) on the other end shows how to use the library to represent a LIFO data structure
  * [Struct.ino](https://github.com/rlogiacco/CircularBuffer/blob/master/examples/Struct/Struct.ino) answers to the question _can this library store structured data?_
- * [Interrupts.ino](https://github.com/rlogiacco/CircularBuffer/blob/master/examples/Interrupts/Interrupts.ino) demonstrates the use of the library in interrupt driven code
+ * [Interrupts.ino](https://github.com/rlogiacco/CircularBuffer/blob/master/examples/Interrupts/Interrupts.ino) demonstrates the use of the library in interrupt-driven code
  * [Arrays.ino]() demonstrates the use of the `copyToArray()` functions. 
 
 ## Limitations
@@ -286,14 +286,14 @@ Most of the major improvements below have been contributed by [Erlkoenig90](http
 
 * Slightly reduced both flash and heap footprint
 * Introduced _instance based_ control over index data type
-* Replaced method `capacity()` in favour of the constant instance attribute `capacity`
+* Replaced method `capacity()` in favor of the constant instance attribute `capacity`
 * Added the `EventLogging` and `Interrupts` examples
 * Dropped the `CIRCULAT_BUFFER_XS` _macro switch_ in favor of automatic index type identification
 * Added support for very large buffers (capacity can go up to `UINT32_MAX`)
 
 ### 1.2.0
-* Added interrupt related macro switch `CIRCULAR_BUFFER_INT_SAFE`
-* Dropped unecessary call to `memset` when clearing
+* Added interrupt-related macro switch `CIRCULAR_BUFFER_INT_SAFE`
+* Dropped unnecessary call to `memset` when clearing
 
 ### 1.1.1
 * Added tests
@@ -305,7 +305,7 @@ Most of the major improvements below have been contributed by [Erlkoenig90](http
 * Fixed `pop()` and `shift()` implementations
 * Added test sketch
 * Added `capacity()` function
-* Added `debug()` function, disabled by pre processor by default
+* Added `debug()` function, disabled by pre-processor by default
 
 ### 1.0.0
 * Initial implementation
