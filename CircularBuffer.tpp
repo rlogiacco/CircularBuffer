@@ -146,21 +146,6 @@ void inline CircularBuffer<T,S,IT>::copyToArray(R* out, R (&convertFn)(const T&)
     }
 }
 
-template<typename T, size_t S, typename IT>
-void CircularBuffer<T,S,IT>::load(const T* data, size_t length) {
-	for (size_t i = 0; i < length; i++) {
-		push(data[i]);
-	}
-}
-
-template<typename T, size_t S, typename IT>
-void CircularBuffer<T,S,IT>::read(T* data, size_t length) {
-	for (size_t i = 0; i < length; i++) {
-		data[i] = shift();
-	}
-}
-
-
 #ifdef CIRCULAR_BUFFER_DEBUG
 #include <string.h>
 template<typename T, size_t S, typename IT>
