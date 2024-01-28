@@ -125,12 +125,11 @@ void inline CircularBuffer<T,S,IT>::clear() {
 
 template<typename T, size_t S, typename IT>
 void inline CircularBuffer<T,S,IT>::copyToArray(T* out) const {
-    const T* end = buffer + capacity;
-    const T* max = out + count;
-    for (const T* current = head; current < end && out < max; current++, out++) {
+    const T* finish = out + count;
+    for (const T* current = head; current < (buffer + capacity) && out < finish; current++, out++) {
         *out = *current;
     }
-    for (const T* current = buffer; current <= tail && out < max; current++, out++) {
+    for (const T* current = buffer; current <= tail && out < finish; current++, out++) {
         *out = *current;
     }
 }
@@ -138,15 +137,29 @@ void inline CircularBuffer<T,S,IT>::copyToArray(T* out) const {
 template<typename T, size_t S, typename IT>
 template<typename R>
 void inline CircularBuffer<T,S,IT>::copyToArray(R* out, R (&convertFn)(const T&)) const {
-    const T* end = buffer + capacity;
-    const T* max = out + count;
-    for (const T* current = head; current < end && out < max; current++, out++) {
+    const T* finish = out + count;
+    for (const T* current = head; current < (buffer + capacity) && out < finish; current++, out++) {
         *out = convertFn(*current);
     }
-    for (const T* current = buffer; current <= tail && out < max; current++, out++) {
+    for (const T* current = buffer; current <= tail && out < finish; current++, out++) {
         *out = convertFn(*current);
     }
 }
+
+template<typename T, size_t S, typename IT>
+void CircularBuffer<T,S,IT>::load(const T* data, size_t length) {
+	for (size_t i = 0; i < length; i++) {
+		push(data[i]);
+	}
+}
+
+template<typename T, size_t S, typename IT>
+void CircularBuffer<T,S,IT>::read(T* data, size_t length) {
+	for (size_t i = 0; i < length; i++) {
+		data[i] = shift();
+	}
+}
+
 
 #ifdef CIRCULAR_BUFFER_DEBUG
 #include <string.h>
