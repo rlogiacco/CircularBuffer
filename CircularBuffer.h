@@ -39,6 +39,16 @@ namespace Helper {
 	template<> struct Index<true, true> {
 		using Type = uint8_t;
 	};
+
+	/** @private */
+	template<typename T, bool USEREF> struct Input {
+		using Type = T;
+	};
+
+	/** @private */
+	template<typename T> struct Input<T, true> {
+		using Type = const T &;
+	};
 }
 
 /**
@@ -47,8 +57,11 @@ namespace Helper {
  * @tparam T The type of the data to store in the buffer.
  * @tparam S The maximum number of elements that can be stored in the buffer.
  * @tparam IT The data type of the index. Typically should be left as default.
+ * @tparam TIn Input type to push() and unshift().
  */
-template<typename T, size_t S, typename IT = typename Helper::Index<(S <= UINT8_MAX), (S <= UINT16_MAX)>::Type> class CircularBuffer {
+template<typename T, size_t S, typename IT = typename Helper::Index<(S <= UINT8_MAX), (S <= UINT16_MAX)>::Type,
+typename TIn = typename Helper::Input<T, (sizeof(T) > 2 * sizeof(void *))>::Type>
+class CircularBuffer {
 public:
 	/**
 	 * @brief The buffer capacity.
@@ -83,17 +96,21 @@ public:
 
 	/**
 	 * @brief Adds an element to the beginning of buffer.
+	 * 
+	 * Value is passed by reference if the type is bigger than 2 * sizeof(void *).
 	 *
 	 * @return `false` iff the addition caused overwriting to an existing element.
 	 */
-	bool unshift(T value);
+	bool unshift(TIn value);
 
 	/**
 	 * @brief Adds an element to the end of buffer.
+	 * 
+	 * Value is passed by reference if the type is bigger than 2 * sizeof(void *).
 	 *
 	 * @return `false` iff the addition caused overwriting to an existing element.
 	 */
-	bool push(T value);
+	bool push(TIn value);
 
 	/**
 	 * @brief Removes an element from the beginning of the buffer.
@@ -103,11 +120,25 @@ public:
 	T shift();
 
 	/**
+	 * @brief Removes an element from the beginning of the buffer.
+	 *
+	 * @warning Calling this operation on an empty buffer has an unpredictable behaviour.
+	 */
+	void shift(T &);
+
+	/**
 	 * @brief Removes an element from the end of the buffer.
 	 *
 	 * @warning Calling this operation on an empty buffer has an unpredictable behaviour.
 	 */
 	T pop();
+
+	/**
+	 * @brief Removes an element from the end of the buffer.
+	 *
+	 * @warning Calling this operation on an empty buffer has an unpredictable behaviour.
+	 */
+	void pop(T &);
 
 	/**
 	 * @brief Returns the element at the beginning of the buffer.
@@ -117,11 +148,25 @@ public:
 	T inline first() const;
 
 	/**
+	 * @brief Returns the element at the beginning of the buffer.
+	 *
+	 * @return The element at the beginning of the buffer.
+	 */
+	void inline first(T &) const;
+
+	/**
 	 * @brief Returns the element at the end of the buffer.
 	 *
 	 * @return The element at the end of the buffer.
 	 */
 	T inline last() const;
+
+	/**
+	 * @brief Returns the element at the end of the buffer.
+	 *
+	 * @return The element at the end of the buffer.
+	 */
+	void inline last(T &) const;
 
 	/**
 	 * @brief Array-like access to buffer.
