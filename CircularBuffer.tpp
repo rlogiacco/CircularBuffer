@@ -18,7 +18,7 @@
 
 template<typename T, size_t S, typename IT>
 constexpr CircularBuffer<T,S,IT>::CircularBuffer() :
-		buffer(new T[S]), head(buffer), tail(buffer), count(0) {
+	buffer(new T[S]), head(buffer), tail(buffer), count(0) {
 }
 
 template<typename T, size_t S, typename IT>
@@ -126,6 +126,29 @@ template<typename T, size_t S, typename IT>
 void inline CircularBuffer<T,S,IT>::clear() {
 	head = tail = buffer;
 	count = 0;
+}
+
+template<typename T, size_t S, typename IT>
+void inline CircularBuffer<T,S,IT>::copyToArray(T* dest) const {
+    const T* finish = dest + count;
+    for (const T* current = head; current < (buffer + capacity) && dest < finish; current++, dest++) {
+        *dest = *current;
+    }
+    for (const T* current = buffer; current <= tail && dest < finish; current++, dest++) {
+        *dest = *current;
+    }
+}
+
+template<typename T, size_t S, typename IT>
+template<typename R>
+void inline CircularBuffer<T,S,IT>::copyToArray(R* dest, R (&convertFn)(const T&)) const {
+    const R* finish = dest + count;
+    for (const T* current = head; current < (buffer + capacity) && dest < finish; current++, dest++) {
+        *dest = convertFn(*current);
+    }
+    for (const T* current = buffer; current <= tail && dest < finish; current++, dest++) {
+        *dest = convertFn(*current);
+    }
 }
 
 #ifdef CIRCULAR_BUFFER_DEBUG

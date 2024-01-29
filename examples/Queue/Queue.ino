@@ -1,15 +1,15 @@
-#include <CircularBuffer.h>
+#include <CircularBuffer.hpp>
 
 CircularBuffer<int, 100> queue;
 
-unsigned long time = 0;
+unsigned long _time = 0;
 
 #define BUTTON_PIN 3
 
 void setup() {
 	Serial.begin(9600);
 	pinMode(BUTTON_PIN, INPUT);
-	time = millis();
+	_time = millis();
 }
 
 // enqueue button press dequeueing every 2 seconds
@@ -17,8 +17,8 @@ void loop() {
 	if (digitalRead(BUTTON_PIN) == HIGH) {
 		queue.unshift(millis());
 	}
-	if (millis() - time >= 2000) {
-		time = millis();
+	if (millis() - _time >= 2000) {
+		_time = millis();
 		Serial.print("Button pressed ");
 		Serial.print(queue.size());
 		Serial.println("times (or more)");
