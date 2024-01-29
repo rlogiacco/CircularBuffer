@@ -1,4 +1,4 @@
-#include "CircularBuffer.h"
+#include "CircularBuffer.hpp"
 
 // Create a circular buffer with a capacity of 10
 const int bufferSize = 10;

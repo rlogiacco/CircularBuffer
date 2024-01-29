@@ -1,4 +1,4 @@
-#include <CircularBuffer.h>
+#include <CircularBuffer.hpp>
 
 namespace data {
 	typedef struct {

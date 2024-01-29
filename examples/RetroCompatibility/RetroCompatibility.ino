@@ -1,4 +1,5 @@
-#include <CircularBuffer.hpp>
+#define CIRCULAR_BUFFER_DEBUG
+#include <CircularBuffer.h>
 
 CircularBuffer<int, 100> buffer;
 

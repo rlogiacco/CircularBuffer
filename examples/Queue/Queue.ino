@@ -1,4 +1,4 @@
-#include <CircularBuffer.h>
+#include <CircularBuffer.hpp>
 
 CircularBuffer<int, 100> queue;
 

@@ -1,4 +1,4 @@
-#include <CircularBuffer.h>
+#include <CircularBuffer.hpp>
 
 CircularBuffer<unsigned int, 100> stack;
 

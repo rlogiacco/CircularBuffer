@@ -1,4 +1,4 @@
-#include "CircularBuffer.h"
+#include "CircularBuffer.hpp"
 
 // the type of the record is unsigned long: we intend to store milliseconds
 // the buffer can contain up to 10 records
