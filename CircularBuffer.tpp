@@ -137,7 +137,7 @@ void inline CircularBuffer<T,S,IT>::copyToArray(T* dest) const {
 template<typename T, size_t S, typename IT>
 template<typename R>
 void inline CircularBuffer<T,S,IT>::copyToArray(R* dest, R (&convertFn)(const T&)) const {
-    const T* finish = dest + count;
+    const R* finish = dest + count;
     for (const T* current = head; current < (buffer + capacity) && dest < finish; current++, dest++) {
         *dest = convertFn(*current);
     }

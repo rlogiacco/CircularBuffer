@@ -4,7 +4,7 @@ on:
   - pull_request
 
 jobs:
-  build:
+  build-arduino:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -59,7 +59,7 @@ jobs:
           sketch-paths: |
             - examples/RetroCompatibility
 
-  build-for-esp32:
+  build-esp32:
     runs-on: ubuntu-latest
     strategy:
       matrix:
