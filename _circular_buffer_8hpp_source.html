@@ -147,10 +147,10 @@ $(function() {
 <div class="line"><a id="l00169" name="l00169"></a><span class="lineno"><a class="line" href="class_circular_buffer.html#acef199d78df0e0d0ee3996ad251ad90c">  169</a></span>    <span class="keywordtype">void</span> inline clear();</div>
 <div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span> </div>
 <div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span> </div>
-<div class="line"><a id="l00178" name="l00178"></a><span class="lineno"><a class="line" href="class_circular_buffer.html#a4b21c32bc92aa54560a49c5fc72b2cf1">  178</a></span>    <span class="keywordtype">void</span> copyToArray(T* out) const;</div>
+<div class="line"><a id="l00178" name="l00178"></a><span class="lineno"><a class="line" href="class_circular_buffer.html#a43b630434aff1c4c4dfba1a09b9fab05">  178</a></span>    <span class="keywordtype">void</span> copyToArray(T* dest) const;</div>
 <div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span>    </div>
 <div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span>    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> R&gt;</div>
-<div class="line"><a id="l00189" name="l00189"></a><span class="lineno"><a class="line" href="class_circular_buffer.html#ae9b317d2673db8674924d686da31977d">  189</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_circular_buffer.html#ae9b317d2673db8674924d686da31977d">copyToArray</a>(R* out, R (&amp;convertFn)(<span class="keyword">const</span> T&amp;)) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00189" name="l00189"></a><span class="lineno"><a class="line" href="class_circular_buffer.html#a68529cb878f5b7929c02b2a34d754246">  189</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_circular_buffer.html#a68529cb878f5b7929c02b2a34d754246">copyToArray</a>(R* dest, R (&amp;convertFn)(<span class="keyword">const</span> T&amp;)) <span class="keyword">const</span>;</div>
 <div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span> </div>
 <div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span><span class="preprocessor">    #ifdef CIRCULAR_BUFFER_DEBUG</span></div>
 <div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span>    <span class="keywordtype">void</span> <span class="keyword">inline</span> debug(Print* out);</div>
@@ -170,7 +170,7 @@ $(function() {
 <div class="line"><a id="l00206" name="l00206"></a><span class="lineno">  206</span> </div>
 <div class="line"><a id="l00207" name="l00207"></a><span class="lineno">  207</span><span class="preprocessor">#include &lt;CircularBuffer.tpp&gt;</span></div>
 <div class="line"><a id="l00208" name="l00208"></a><span class="lineno">  208</span><span class="preprocessor">#endif</span></div>
-<div class="ttc" id="aclass_circular_buffer_html_ae9b317d2673db8674924d686da31977d"><div class="ttname"><a href="class_circular_buffer.html#ae9b317d2673db8674924d686da31977d">CircularBuffer::copyToArray</a></div><div class="ttdeci">void copyToArray(R *out, R(&amp;convertFn)(const T &amp;)) const</div><div class="ttdoc">Copies the buffer content into the provided array calling the provided conversion function for each a...</div></div>
+<div class="ttc" id="aclass_circular_buffer_html_a68529cb878f5b7929c02b2a34d754246"><div class="ttname"><a href="class_circular_buffer.html#a68529cb878f5b7929c02b2a34d754246">CircularBuffer::copyToArray</a></div><div class="ttdeci">void copyToArray(R *dest, R(&amp;convertFn)(const T &amp;)) const</div><div class="ttdoc">Copies the buffer content into the provided array calling the provided conversion function for each a...</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
