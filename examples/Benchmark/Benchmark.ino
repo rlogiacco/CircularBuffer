@@ -1,4 +1,4 @@
-#include <CircularBuffer.h>
+#include <CircularBuffer.hpp>
 
 volatile uint8_t dummyByte = 5;
 
