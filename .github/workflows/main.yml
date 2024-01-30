@@ -37,7 +37,6 @@ jobs:
             - examples/Test
             - examples/Arrays
             - examples/Embed
-          sketch-names: "*.ino,*.cpp"
             
   build-avr:
     runs-on: ubuntu-latest
@@ -92,7 +91,6 @@ jobs:
             - examples/Embed
           cli-compile-flags: |
             - --warnings="none"
-          sketch-names: "*.ino,*.cpp"
             
   lint:
     runs-on: ubuntu-latest
