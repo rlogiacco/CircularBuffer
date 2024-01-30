@@ -1,47 +1,68 @@
-#include <CircularBuffer.hpp>
+#include <CircularBuffer.h>
 
+#include <stdint.h>
+#include <stddef.h>
+#include <limits.h>
+#undef min
+#undef max
 
-template<size_t S> class Sensor {
+template<uint8_t S> class Sensor {
 public:
-    void update(const long val);
-    int max();
-    int min();
+    constexpr Sensor();
+    void update(const unsigned int val);
+    void reset();
+    unsigned int max();
+    unsigned int min();
     float avg();
-    long count();
-    int inline last() const;
+    unsigned long count();
+    unsigned int inline last() const;
 
 private:
-    int max;
-    int min;
-    int sum;
-    long count;
-    const CircularBuffer<int, S> buffer;
-}
+    unsigned int _max;
+    unsigned int _min;
+    unsigned long _sum;
+    unsigned int _count;
+    CircularBuffer<unsigned int, S> buffer;
+};
 
-template<size_t S>
-constexpr Sensor<S>::Sensor() : buffer(new CircularBuffer()) {
-}
 
-void Sensor::update(const long val) {
-    buffer.push(val);
-    if (val > max) max = val;
-    if (val < min) min = val;
-    sum =+ val;
-    count++;
+template<uint8_t S>
+constexpr Sensor<S>::Sensor() {
 }
-
-int Sensor::max() {
-    return this->max;
+template<uint8_t S>
+void Sensor<S>::update(const unsigned int val) {
+    buffer.unshift(val);
+    if (val > _max) _max = val;
+    if (val < _min) _min = val;
+    _sum =+ val;
+    _count++;
 }
+template<uint8_t S>
+void Sensor<S>::reset() {
+    buffer.clear();
+    _max = INT16_MIN;
+    _min = UINT16_MAX;
 
-int Sensor::min() {
-    return this->min;
+    _sum = 0;
+    _count = 0;
 }
-
-float Sensor::avg() {
-    return this->sum / this->count;
+template<uint8_t S>
+unsigned int Sensor<S>::max() {
+    return this->_max;
 }
-
-float Sensor::count() {
-    return this->count;
+template<uint8_t S>
+unsigned int Sensor<S>::min() {
+    return this->_min;
+}
+template<uint8_t S>
+float Sensor<S>::avg() {
+    return this->_sum / this->_count;
+}
+template<uint8_t S>
+unsigned int Sensor<S>::last() const {
+    return this->buffer.last();
+}
+template<uint8_t S>
+unsigned long Sensor<S>::count() {
+    return this->_count;
 }

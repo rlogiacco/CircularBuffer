@@ -1,3 +1,5 @@
+#include <Arduino.h>
+#include <CircularBuffer.h>
 #include <Sensor.cpp>
 
 Sensor<100> sensor;
@@ -14,7 +16,7 @@ void setup() {
 
 void loop() {
 	sensor.update(analogRead(A0));
-    sleep(100);
+    delay(100);
     Serial.print(".");
 	if (millis() - _time >= 1000) {
 		_time = millis();
@@ -29,6 +31,9 @@ void loop() {
 		Serial.print("Average on ");
 		Serial.print(sensor.count());
 		Serial.print(" samples is ");
-		Serial.println(sensor.avg());	
+		Serial.println(sensor.avg());
+
+		Serial.print("Most recent value is ");
+		Serial.println(sensor.last());
     }
 }
