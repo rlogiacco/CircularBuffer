@@ -1,5 +1,4 @@
 #include <Arduino.h>
-#include <CircularBuffer.h>
 #include "./Sensor.cpp"
 
 Sensor<100> sensor;
