@@ -94,7 +94,7 @@ buffer.push(-5);  // [2,3,2,1,-5] returns false
 
 ### Retrieve data
 
-Similarly to data addition, data retrieval can be performed at _tail_ via a `pop()` operation or from _head_ via a `shift``()`` operation: both cause the element being read to be removed from the buffer.
+Similarly to data addition, data retrieval can be performed at _tail_ via a `pop()` operation or from _head_ via a `shift()` operation: both cause the element being read to be removed from the buffer.
 
 > ⚠ Reading data beyond the actual buffer size has an undefined behaviour and is user's responsibility to prevent such boundary violations using the [_additional operations_](#additional-operations) listed in the next section. The library will behave differently depending on the data type and allocation method, but you can safely assume your program will crash if you don't watch your steps.
 
