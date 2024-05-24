@@ -142,7 +142,7 @@ Store data</h2>
 <div class="line">buffer.push(-5);  // [2,3,2,1,-5] returns false</div>
 </div><!-- fragment --><h2><a class="anchor" id="autotoc_md4"></a>
 Retrieve data</h2>
-<p >Similarly to data addition, data retrieval can be performed at <em>tail</em> via a <code>pop()</code> operation or from <em>head</em> via a <code>shift</code><code>()</code>` operation: both cause the element being read to be removed from the buffer.</p>
+<p >Similarly to data addition, data retrieval can be performed at <em>tail</em> via a <code>pop()</code> operation or from <em>head</em> via a <code>shift()</code> operation: both cause the element being read to be removed from the buffer.</p>
 <blockquote class="doxtable">
 <p >⚠ Reading data beyond the actual buffer size has an undefined behaviour and is user's responsibility to prevent such boundary violations using the <a href="#additional-operations"><em>additional operations</em></a> listed in the next section. The library will behave differently depending on the data type and allocation method, but you can safely assume your program will crash if you don't watch your steps. </p>
 </blockquote>
